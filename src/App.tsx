@@ -1,9 +1,28 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
+import {CssBaseline} from '@mui/material';
+import {
+  Routes,
+  Route,
+} from "react-router-dom";
+import NotFound from './pages/NotFound';
+import Home from './pages/home/Home';
 
 function App() {
   return (
-    <Button variant="contained">Hello World</Button>
+    <>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<Home />}>
+          {/* <Route index element={<Home />} />
+          <Route path="teams" element={<Teams />}>
+            <Route path=":teamId" element={<Team />} />
+            <Route path="new" element={<NewTeamForm />} />
+            <Route index element={<LeagueStandings />} />
+          </Route> */}
+        </Route>
+        <Route path='*' element={<NotFound/>} />
+      </Routes>
+    </>
   );
 }
 
