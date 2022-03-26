@@ -22,7 +22,6 @@ const Signin: React.FC<SigninProps> = () => {
   let navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
       if (data.get('email') === 'admin@gmail.com') {
@@ -52,7 +51,7 @@ const Signin: React.FC<SigninProps> = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
