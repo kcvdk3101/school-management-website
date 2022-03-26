@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="../school-management-website/src/assets/images/logo.png" alt="Logo" width="200">
+    <img src="./src/assets/images/logo.png" alt="Logo" width="200">
   </a>
   <h1>JOBHUB Website</h1>
   <h3 align="center">A website for students to find internships at corporations
