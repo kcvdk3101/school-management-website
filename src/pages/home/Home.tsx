@@ -16,6 +16,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
+import SearchFormManagement from './components/SearchFormManagement'
 
 const pages = ['Jobs', 'Blog', 'About']
 
@@ -34,32 +35,16 @@ const useStyles = makeStyles({
     maxHeight: 320,
     background: 'linear-gradient(180deg, #f05742 0%, #f05742 50%, #e53935 80%)',
   },
-  text: {
-    color: 'white',
-  },
 })
 
 type HomeProps = {}
 
-function TableHeading() {
-  const classes = useStyles()
+function Heading() {
   return (
     <Grid item xs={12} container>
-      <Grid item xs={6}>
-        <Typography
-          variant='h5'
-          marginBottom={3}
-          color='white'
-          fontWeight='700'
-        >
-          Đến sân bay không còn mệt mỏi
-        </Typography>
-        <Typography variant='body1' className={classes.text}>
-          Biến chuyến đi đến và từ sân bay đi trở nên tiện lợi nhất có thể! Với
-          nhiều lựa chọn phương tiện phù hợp với nhu cầu của bạn, hãy đặt ngay
-          xe đưa đón sân bay hôm nay để bớt đi một nỗi lo nhé.
-        </Typography>
-      </Grid>
+      <Typography variant='h4' marginBottom={3} color='white' fontWeight='700'>
+        Đến sân bay không còn mệt mỏi
+      </Typography>
     </Grid>
   )
 }
@@ -171,7 +156,9 @@ const Home: React.FC<HomeProps> = () => {
         <Container maxWidth='lg'>
           <Box component='div' paddingY={10}>
             <Grid container>
-              <TableHeading />
+              <Heading />
+              {/* Search Form */}
+              <SearchFormManagement />
             </Grid>
           </Box>
         </Container>

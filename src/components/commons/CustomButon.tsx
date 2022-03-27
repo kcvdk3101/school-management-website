@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import React from 'react'
+import React, { ReactElement } from 'react'
 
 type CustomButonProps = {
   color:
@@ -12,8 +12,8 @@ type CustomButonProps = {
     | 'warning'
     | undefined
   variant: 'text' | 'contained' | 'outlined' | undefined
-  sz: 'small' | 'medium' | 'large' | undefined
-  label: string
+  sz?: 'small' | 'medium' | 'large' | undefined
+  label: string | ReactElement
   handleOnClick: () => void
 }
 
@@ -25,7 +25,13 @@ const CustomButon: React.FC<CustomButonProps> = ({
   handleOnClick,
 }) => {
   return (
-    <Button size={sz} color={color} variant={variant} onClick={handleOnClick}>
+    <Button
+      fullWidth
+      size={sz}
+      color={color}
+      variant={variant}
+      onClick={handleOnClick}
+    >
       {label}
     </Button>
   )

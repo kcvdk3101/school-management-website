@@ -1,9 +1,10 @@
 import React from 'react'
+import SearchForm from './SearchForm'
 
-type Props = {}
+type SearchFormManagementProps = {}
 
-const SearchFormManagement = (props: Props) => {
-  return <div>SearchFormManagement</div>
+const SearchFormManagement: React.FC<SearchFormManagementProps> = () => {
+  return <SearchForm />
 }
 
 export default SearchFormManagement

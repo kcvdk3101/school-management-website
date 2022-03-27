@@ -1,22 +1,23 @@
-import React from 'react'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
+import { makeStyles } from '@mui/styles'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../app/hooks'
 import { signin } from '../../../features/authentication/authSlice'
-import { useNavigate } from 'react-router-dom'
-import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles({
   innerContainer: {
-    marginTop: 8,
+    height: '100vh',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 })
@@ -75,6 +76,7 @@ const Signin: React.FC<SigninProps> = () => {
           <Button
             type='submit'
             fullWidth
+            color='secondary'
             variant='contained'
             sx={{ mt: 3, mb: 2 }}
           >
