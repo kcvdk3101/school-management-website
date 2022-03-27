@@ -26,22 +26,16 @@ const useStyles = makeStyles({
   flex: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    paddingTop: 30,
-    paddingBottom: 30,
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
+    border: '1px solid red',
   },
   background: {
     maxHeight: 320,
-    background: 'linear-gradient(180deg, #1ba0e2 0%, #1ba0e2 50%, #0770cd 80%)',
+    background: 'linear-gradient(180deg, #f05742 0%, #f05742 50%, #e53935 80%)',
   },
-  heading: {
-    marginBottom: 10,
-    fontWeight: 700,
-    color: 'black',
-  },
-  color: {
-    color: 'black',
+  text: {
+    color: 'white',
   },
 })
 
@@ -52,16 +46,20 @@ function TableHeading() {
   return (
     <Grid item xs={12} container>
       <Grid item xs={6}>
-        <Typography variant='h5' className={classes.heading}>
+        <Typography
+          variant='h5'
+          marginBottom={3}
+          color='white'
+          fontWeight='700'
+        >
           Đến sân bay không còn mệt mỏi
         </Typography>
-        <Typography variant='body1' className={classes.color}>
+        <Typography variant='body1' className={classes.text}>
           Biến chuyến đi đến và từ sân bay đi trở nên tiện lợi nhất có thể! Với
           nhiều lựa chọn phương tiện phù hợp với nhu cầu của bạn, hãy đặt ngay
           xe đưa đón sân bay hôm nay để bớt đi một nỗi lo nhé.
         </Typography>
       </Grid>
-      <Grid item xs={6} />
     </Grid>
   )
 }
@@ -87,15 +85,12 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <div className={classes.container}>
       <Helmet>
-        <title>Đặt xe đưa đón sân bay tại Traveloka!</title>
+        <title>Home - JOBHUB</title>
       </Helmet>
       <AppBar position='static' color='transparent'>
         <Container maxWidth='lg' sx={{ paddingY: 1 }}>
           <Toolbar disableGutters>
-            <Box
-              component='div'
-              sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
-            >
+            <Box component='div' sx={{ display: { xs: 'none', md: 'flex' } }}>
               <img src={logo} alt='JOBHUB Logo' width={120} />
             </Box>
 
@@ -135,9 +130,10 @@ const Home: React.FC<HomeProps> = () => {
                 ))}
               </Menu>
             </Box>
+
             <Box
               component='div'
-              sx={{ flex: 1, display: { xs: 'flex', md: 'none' } }}
+              sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
             >
               <img src={logo} alt='JOBHUB Logo' width={120} />
             </Box>
@@ -173,7 +169,7 @@ const Home: React.FC<HomeProps> = () => {
 
       <Container maxWidth='xl' className={classes.background}>
         <Container maxWidth='lg'>
-          <Box component='div' className={classes.flex}>
+          <Box component='div' paddingY={10}>
             <Grid container>
               <TableHeading />
             </Grid>
