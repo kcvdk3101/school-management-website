@@ -13,10 +13,14 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import SearchFormManagement from './components/SearchFormManagement'
+import { useTranslation, Translation } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
+import JobCard from '../../components/card/JobCard'
+import LanguageButton from '../../components/commons/LanguageButton'
 
 const pages = ['Jobs', 'Blog', 'About']
 
@@ -53,6 +57,8 @@ const Home: React.FC<HomeProps> = () => {
   const classes = useStyles()
   let navigate = useNavigate()
 
+  const { t } = useTranslation()
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,7 +76,7 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <div className={classes.container}>
       <Helmet>
-        <title>Home - JOBHUB</title>
+        <title>{t('Home - JOBHUB')}</title>
       </Helmet>
       <AppBar position='static' color='transparent'>
         <Container maxWidth='lg' sx={{ paddingY: 1 }}>
@@ -116,10 +122,7 @@ const Home: React.FC<HomeProps> = () => {
               </Menu>
             </Box>
 
-            <Box
-              component='div'
-              sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-            >
+            <Box component='div' sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <img src={logo} alt='JOBHUB Logo' width={120} />
             </Box>
             <Box
@@ -141,13 +144,17 @@ const Home: React.FC<HomeProps> = () => {
               ))}
             </Box>
 
-            <Button
-              color='secondary'
-              variant='contained'
-              onClick={handleNavigateToAdmin}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+              }}
             >
-              Admin
-            </Button>
+              <LanguageButton />
+              <Button color='secondary' variant='contained' onClick={handleNavigateToAdmin}>
+                Admin
+              </Button>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
@@ -164,10 +171,21 @@ const Home: React.FC<HomeProps> = () => {
         </Container>
       </Container>
 
-      <Typography>Tin tức tuyển dụng Tháng 3/2022</Typography>
+      <Container maxWidth='lg'>
+        <Translation>{(t) => <h1>{t('Home - JOBHUB')}</h1>}</Translation>
+        <Typography alignSelf='center'>Tin tức tuyển dụng Tháng 3/2022</Typography>
+        <Grid container spacing={2}>
+          {([1, 2, 3, 4, 5] as const).map((_, index) => (
+            <Grid key={index} item xs={6}>
+              <JobCard />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
       <Typography>Đối tác của chúng tôi</Typography>
     </div>
   )
 }
 
-export default Home
+export default withTranslation()(Home)
