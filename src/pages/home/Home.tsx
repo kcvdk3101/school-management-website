@@ -17,12 +17,13 @@ import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import SearchFormManagement from './components/SearchFormManagement'
-import { useTranslation, Translation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { withTranslation } from 'react-i18next'
 import JobCard from '../../components/card/JobCard'
 import LanguageButton from '../../components/commons/LanguageButton'
-
-const pages = ['Jobs', 'Blog', 'About']
+import ImageList from '@mui/material/ImageList'
+import ImageListItem from '@mui/material/ImageListItem'
+import * as Constants from '../../constants/index'
 
 const useStyles = makeStyles({
   container: {
@@ -39,15 +40,25 @@ const useStyles = makeStyles({
     maxHeight: 320,
     background: 'linear-gradient(180deg, #f05742 0%, #f05742 50%, #e53935 80%)',
   },
+  headingContainer: {
+    marginTop: 28,
+    marginBottom: 28,
+  },
+  heading: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 })
 
 type HomeProps = {}
 
-function Heading() {
+function BannerHeading() {
+  const { t } = useTranslation()
+
   return (
     <Grid item xs={12} container>
       <Typography variant='h4' marginBottom={3} color='white' fontWeight='700'>
-        Đến sân bay không còn mệt mỏi
+        {t('Search for internship and work place')}
       </Typography>
     </Grid>
   )
@@ -114,7 +125,7 @@ const Home: React.FC<HomeProps> = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {pages.map((page) => (
+                {Constants.pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
                     <Typography textAlign='center'>{page}</Typography>
                   </MenuItem>
@@ -133,7 +144,7 @@ const Home: React.FC<HomeProps> = () => {
                 paddingRight: 4,
               }}
             >
-              {pages.map((page) => (
+              {Constants.pages.map((page) => (
                 <Button
                   key={page}
                   onClick={handleCloseNavMenu}
@@ -152,7 +163,7 @@ const Home: React.FC<HomeProps> = () => {
             >
               <LanguageButton />
               <Button color='secondary' variant='contained' onClick={handleNavigateToAdmin}>
-                Admin
+                {t('Admin')}
               </Button>
             </Box>
           </Toolbar>
@@ -163,7 +174,7 @@ const Home: React.FC<HomeProps> = () => {
         <Container maxWidth='lg'>
           <Box component='div' paddingY={10}>
             <Grid container>
-              <Heading />
+              <BannerHeading />
               {/* Search Form */}
               <SearchFormManagement />
             </Grid>
@@ -171,11 +182,15 @@ const Home: React.FC<HomeProps> = () => {
         </Container>
       </Container>
 
-      <Container maxWidth='lg'>
-        <Translation>{(t) => <h1>{t('Home - JOBHUB')}</h1>}</Translation>
-        <Typography alignSelf='center'>Tin tức tuyển dụng Tháng 3/2022</Typography>
+      <Container maxWidth='lg' className={classes.headingContainer}>
+        <Box className={classes.heading}>
+          <Typography variant='h5' color='#f05742'>
+            {t('Recruitment News March 2022')}
+          </Typography>
+        </Box>
+
         <Grid container spacing={2}>
-          {([1, 2, 3, 4, 5] as const).map((_, index) => (
+          {([1, 2, 3, 4, 5, 6] as const).map((_, index) => (
             <Grid key={index} item xs={6}>
               <JobCard />
             </Grid>
@@ -183,7 +198,26 @@ const Home: React.FC<HomeProps> = () => {
         </Grid>
       </Container>
 
-      <Typography>Đối tác của chúng tôi</Typography>
+      <Container maxWidth='lg' className={classes.headingContainer}>
+        <Box className={classes.heading}>
+          <Typography variant='h5' color='#f05742'>
+            {t('Our partners')}
+          </Typography>
+        </Box>
+
+        <ImageList variant='quilted' cols={4} rowHeight={150}>
+          {Constants.itemData.map((item) => (
+            <ImageListItem key={item.img} cols={1} rows={1}>
+              <img
+                src={`${item.img}?w=${150}&h=${150}&fit=crop&auto=format`}
+                alt={item.title}
+                loading='lazy'
+                style={{ objectFit: 'scale-down' }}
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </Container>
     </div>
   )
 }
