@@ -1,4 +1,8 @@
-export const pages = ['Jobs', 'Blog', 'About']
+export const pages = [
+  { title: 'Jobs', path: '/jobs' },
+  { title: 'Blog', path: '/blog' },
+  { title: 'About', path: '/about' },
+]
 
 export const itemData = [
   {

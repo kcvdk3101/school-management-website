@@ -74,9 +74,15 @@ const Layout: React.FC<LayoutProps> = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {Constants.pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign='center'>{t('Jobs')}</Typography>
+                {Constants.pages.map((page, index) => (
+                  <MenuItem
+                    key={index}
+                    onClick={() => {
+                      handleCloseNavMenu()
+                      navigate(`${page.path}`)
+                    }}
+                  >
+                    <Typography textAlign='center'>{t(`${page.title}`)}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -93,13 +99,16 @@ const Layout: React.FC<LayoutProps> = () => {
                 paddingRight: 4,
               }}
             >
-              {Constants.pages.map((page) => (
+              {Constants.pages.map((page, index) => (
                 <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
+                  key={index}
+                  onClick={() => {
+                    handleCloseNavMenu()
+                    navigate(`${page.path}`)
+                  }}
                   sx={{ my: 2, display: 'block', color: 'black', mr: 2 }}
                 >
-                  {t(`${page}`)}
+                  {t(`${page.title}`)}
                 </Button>
               ))}
             </Box>

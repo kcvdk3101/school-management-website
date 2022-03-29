@@ -77,7 +77,7 @@ const Home: React.FC<HomeProps> = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {([1, 2, 3, 4, 5, 6] as const).map((_, index) => (
             <Grid key={index} item xs={6}>
               <JobCard />
