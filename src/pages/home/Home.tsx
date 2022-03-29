@@ -1,29 +1,11 @@
-import MenuIcon from '@mui/icons-material/Menu'
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from '@mui/material'
+import { Box, Container, Grid, ImageList, ImageListItem, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useNavigate } from 'react-router-dom'
-import logo from '../../assets/images/logo.png'
-import SearchFormManagement from './components/SearchFormManagement'
-import { useTranslation } from 'react-i18next'
-import { withTranslation } from 'react-i18next'
+import { useTranslation, withTranslation } from 'react-i18next'
 import JobCard from '../../components/card/JobCard'
-import LanguageButton from '../../components/commons/LanguageButton'
-import ImageList from '@mui/material/ImageList'
-import ImageListItem from '@mui/material/ImageListItem'
 import * as Constants from '../../constants/index'
+import SearchFormManagement from './components/SearchFormManagement'
 
 const useStyles = makeStyles({
   container: {
@@ -47,6 +29,8 @@ const useStyles = makeStyles({
   heading: {
     display: 'flex',
     justifyContent: 'center',
+    marginBottom: 16,
+    fontWeight: 'bold',
   },
 })
 
@@ -66,109 +50,13 @@ function BannerHeading() {
 
 const Home: React.FC<HomeProps> = () => {
   const classes = useStyles()
-  let navigate = useNavigate()
-
   const { t } = useTranslation()
-
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget)
-  }
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
-  }
-
-  const handleNavigateToAdmin = () => {
-    navigate('/login')
-  }
 
   return (
     <div className={classes.container}>
       <Helmet>
         <title>{t('Home - JOBHUB')}</title>
       </Helmet>
-      <AppBar position='static' color='transparent'>
-        <Container maxWidth='lg' sx={{ paddingY: 1 }}>
-          <Toolbar disableGutters>
-            <Box component='div' sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <img src={logo} alt='JOBHUB Logo' width={120} />
-            </Box>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size='large'
-                aria-label='account of current user'
-                aria-controls='menu-appbar'
-                aria-haspopup='true'
-                onClick={handleOpenNavMenu}
-                color='inherit'
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id='menu-appbar'
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: 'block', md: 'none' },
-                }}
-              >
-                {Constants.pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign='center'>{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-
-            <Box component='div' sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-              <img src={logo} alt='JOBHUB Logo' width={120} />
-            </Box>
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: 'none', md: 'flex' },
-                justifyContent: 'flex-end',
-                paddingRight: 4,
-              }}
-            >
-              {Constants.pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, display: 'block', color: 'black' }}
-                >
-                  {page}
-                </Button>
-              ))}
-            </Box>
-
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}
-            >
-              <LanguageButton />
-              <Button color='secondary' variant='contained' onClick={handleNavigateToAdmin}>
-                {t('Admin')}
-              </Button>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
 
       <Container maxWidth='xl' className={classes.background}>
         <Container maxWidth='lg'>
@@ -184,7 +72,7 @@ const Home: React.FC<HomeProps> = () => {
 
       <Container maxWidth='lg' className={classes.headingContainer}>
         <Box className={classes.heading}>
-          <Typography variant='h5' color='#f05742'>
+          <Typography variant='h5' color='#f05742' fontWeight={700}>
             {t('Recruitment News March 2022')}
           </Typography>
         </Box>
@@ -200,7 +88,7 @@ const Home: React.FC<HomeProps> = () => {
 
       <Container maxWidth='lg' className={classes.headingContainer}>
         <Box className={classes.heading}>
-          <Typography variant='h5' color='#f05742'>
+          <Typography variant='h5' color='#f05742' fontWeight={700}>
             {t('Our partners')}
           </Typography>
         </Box>

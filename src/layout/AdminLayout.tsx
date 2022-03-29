@@ -6,9 +6,9 @@ import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { signout } from '../features/authentication/authSlice'
 import { useNavigate } from 'react-router-dom'
 
-type AdminHeaderProps = {}
+type AdminLayoutProps = {}
 
-const AdminHeader: React.FC<AdminHeaderProps> = () => {
+const AdminLayout: React.FC<AdminLayoutProps> = () => {
   const dispatch = useAppDispatch()
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
@@ -78,4 +78,4 @@ const AdminHeader: React.FC<AdminHeaderProps> = () => {
   )
 }
 
-export default AdminHeader
+export default AdminLayout
