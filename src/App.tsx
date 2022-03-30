@@ -7,6 +7,7 @@ import Admin from './pages/admin/Admin'
 import Dashboard from './pages/admin/dashboard/Dashboard'
 import Signin from './pages/admin/signin/Signin'
 import Home from './pages/home/Home'
+import Job from './pages/job/Job'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route path='/' element={<Home />} />
-          <Route path='/about' element={<About />} />
+          <Route path='job' element={<Job />} />
+          <Route path='about' element={<About />} />
         </Route>
 
         <Route path='/login' element={<Signin />} />

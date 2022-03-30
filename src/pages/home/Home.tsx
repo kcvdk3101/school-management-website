@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async'
 import { useTranslation, withTranslation } from 'react-i18next'
 import JobCard from '../../components/card/JobCard'
 import * as Constants from '../../constants/index'
-import SearchFormManagement from './components/SearchFormManagement'
+import SearchFormManagement from './components/searchForm/SearchFormManagement'
 
 const useStyles = makeStyles({
   container: {
