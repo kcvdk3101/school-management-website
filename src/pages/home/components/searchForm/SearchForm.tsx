@@ -39,10 +39,10 @@ const SearchForm: React.FC<SearchFormProps> = () => {
               margin='normal'
               required
               fullWidth
-              label='Email Address'
-              id='email'
-              name='email'
-              autoComplete='email'
+              label='Keyword'
+              id='keyword'
+              name='keyword'
+              autoComplete=''
               autoFocus
             />
           </Grid>
