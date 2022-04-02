@@ -1,16 +1,17 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../app/hooks'
-import { signin } from '../../../features/authentication/authSlice'
+import CustomButon from '../../../components/commons/CustomButon'
+import { signin } from '../../../features/authenticate/authSlice'
 
 const useStyles = makeStyles({
   innerContainer: {
@@ -44,13 +45,16 @@ const Signin: React.FC<SigninProps> = () => {
 
   return (
     <Container component='main' maxWidth='xs'>
+      <Helmet>
+        <title>Đăng nhập</title>
+      </Helmet>
       <CssBaseline />
       <Box className={classes.innerContainer}>
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Sign in
+          Đăng nhập
         </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
@@ -58,7 +62,7 @@ const Signin: React.FC<SigninProps> = () => {
             required
             fullWidth
             id='email'
-            label='Email Address'
+            placeholder='Email'
             name='email'
             autoComplete='email'
             autoFocus
@@ -68,20 +72,17 @@ const Signin: React.FC<SigninProps> = () => {
             required
             fullWidth
             name='password'
-            label='Password'
+            placeholder='Mật khẩu'
             type='password'
             id='password'
             autoComplete='current-password'
           />
-          <Button
-            type='submit'
-            fullWidth
+          <CustomButon
+            label='Đăng nhập'
             color='secondary'
             variant='contained'
             sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
+          />
         </Box>
       </Box>
     </Container>

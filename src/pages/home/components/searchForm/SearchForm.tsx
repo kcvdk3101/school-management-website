@@ -3,8 +3,8 @@ import { Box, Grid, MenuItem, TextField } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import CustomButon from '../../../../components/commons/CustomButon'
-import Majors from '../../../../utils/majors'
-import Provinces from '../../../../utils/provinces'
+import Majors from '../../../../constants/majors'
+import Provinces from '../../../../constants/provinces'
 
 type SearchFormProps = {}
 

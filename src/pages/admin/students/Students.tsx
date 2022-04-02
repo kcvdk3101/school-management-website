@@ -4,20 +4,19 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import Header from '../../../components/commons/Header'
 
-type DashboardProps = {}
-const Dashboard: React.FC<DashboardProps> = () => {
+type StudentsProps = {}
+const Students: React.FC<StudentsProps> = () => {
   return (
     <>
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
       <Box sx={{ display: 'flex' }}>
-        <Header title='Dashboard' />
+        <Header title='Students' />
+
         <Box
           component='main'
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
             flexGrow: 1,
             height: '100vh',
             overflow: 'auto',
@@ -30,4 +29,4 @@ const Dashboard: React.FC<DashboardProps> = () => {
   )
 }
 
-export default Dashboard
+export default Students

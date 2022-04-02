@@ -88,8 +88,8 @@ const SkillsData = {
   },
 }
 
-const Majors = Object.values(SkillsData).map((skill) => {
+const Skills = Object.values(SkillsData).map((skill) => {
   return { label: skill.name, value: skill.name }
 })
 
-export default Majors
+export default Skills

@@ -3,7 +3,7 @@ import { AppBar, Box, Toolbar, Typography, IconButton, MenuItem, Menu } from '@m
 import MenuIcon from '@mui/icons-material/Menu'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
-import { signout } from '../features/authentication/authSlice'
+import { signout } from '../features/authenticate/authSlice'
 import { useNavigate } from 'react-router-dom'
 
 type AdminLayoutProps = {}

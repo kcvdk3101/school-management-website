@@ -1,8 +1,9 @@
-import { Grid, MenuItem, Paper, TextField } from '@mui/material'
+import { Grid, MenuItem, Paper, TextField, Box } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
-import Majors from '../../../../utils/majors'
-import Provinces from '../../../../utils/provinces'
+import Levels from '../../../../constants/levels'
+import Majors from '../../../../constants/majors'
+import Provinces from '../../../../constants/provinces'
 
 type FilterFormProps = {}
 
@@ -17,22 +18,22 @@ const FilterForm: React.FC<FilterFormProps> = () => {
   const classes = useStyles()
 
   const [provices, setProvices] = useState('')
-  const [major, setMajor] = useState('')
+  const [levels, setLevels] = useState('')
 
   const handleChangeProvice = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProvices(event.target.value)
   }
 
-  const handleChangeMajor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMajor(event.target.value)
+  const handleChangeLevel = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLevels(event.target.value)
   }
 
   return (
     <Grid item xs={12}>
-      <Paper component='form' className={classes.box}>
-        <Grid container justifyContent='center' spacing={2}>
+      <Box component='form' className={classes.box}>
+        <Grid container justifyContent='flex-start' spacing={2}>
           {/* Search Form */}
-          <Grid item xs={3}>
+          {/* <Grid item xs={3}>
             <TextField
               margin='normal'
               fullWidth
@@ -43,7 +44,7 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               name='keyword'
               color='secondary'
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={3}>
             <TextField
               margin='normal'
@@ -67,21 +68,21 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               margin='normal'
               fullWidth
               select
-              id='major'
-              name='major'
-              label='Choose major'
-              value={major}
-              onChange={handleChangeMajor}
+              id='level'
+              name='level'
+              label='Choose level'
+              value={levels}
+              onChange={handleChangeLevel}
             >
-              {Majors.map((major) => (
-                <MenuItem key={major.value} value={major.value}>
-                  {major.label}
+              {Levels.map((level) => (
+                <MenuItem key={level.value} value={level.value}>
+                  {level.label}
                 </MenuItem>
               ))}
             </TextField>
           </Grid>
           <Grid item xs={3}>
-            <TextField
+            {/* <TextField
               margin='normal'
               fullWidth
               select
@@ -96,7 +97,7 @@ const FilterForm: React.FC<FilterFormProps> = () => {
                   {major.label}
                 </MenuItem>
               ))}
-            </TextField>
+            </TextField> */}
           </Grid>
           {/* Filter Form */}
 
@@ -111,7 +112,7 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               color='secondary'
             />
           </Grid>
-          <Grid item xs={4}>
+          {/* <Grid item xs={4}>
             <TextField
               fullWidth
               select
@@ -127,9 +128,9 @@ const FilterForm: React.FC<FilterFormProps> = () => {
                 </MenuItem>
               ))}
             </TextField>
-          </Grid>
+          </Grid> */}
         </Grid>
-      </Paper>
+      </Box>
     </Grid>
   )
 }
