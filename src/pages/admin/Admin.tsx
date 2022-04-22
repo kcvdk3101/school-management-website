@@ -7,7 +7,7 @@ type AdminProps = {}
 const Admin: React.FC<AdminProps> = () => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
-  return !isAuthenticated ? <Navigate to='/' /> : <Outlet />
+  return !isAuthenticated ? <Navigate to='/login' /> : <Outlet />
 }
 
 export default Admin
