@@ -1,12 +1,11 @@
 import axios from 'axios'
-// import { API_BASE_URL } from '../helpers/configs'
-import axiosClient from './axiosClient'
+import { API_BASE_URL } from '../constants/index'
 
-const url = 'students'
+const url = 'university'
 
 const studentsApi = {
   saveStudentsExcelFile(form: FormData) {
-    return axiosClient.post<string, FormData>(`http://localhost/${url}`, form)
+    return axios.post<string, FormData>(`${API_BASE_URL}/${url}`, form)
   },
 
   // getAllCouponsByCouponName(offset: number, couponName: string) {

@@ -18,9 +18,7 @@ export const saveStudentsExcelFile = createAsyncThunk(
 
 export const editInfoStudent = createAsyncThunk(
   'students/editInfoStudent',
-  async (data: { id: number; value: string | number }) => {
-    const { id, value } = data
-  }
+  async ({ id, value }: { id: number; value: string | number }) => {}
 )
 
 export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id: number) => {})

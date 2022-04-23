@@ -80,7 +80,7 @@ const Home: React.FC<HomeProps> = () => {
         <Grid container spacing={4}>
           {([1, 2, 3, 4, 5, 6] as const).map((_, index) => (
             <Grid key={index} item xs={6}>
-              <JobCard />
+              <JobCard isLoading={true} />
             </Grid>
           ))}
         </Grid>
