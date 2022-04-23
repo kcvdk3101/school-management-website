@@ -171,8 +171,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            px: [1],
+            justifyContent: 'center',
           }}
         >
           <Box component='div' sx={{ display: 'flex', alignItems: 'center' }}>
@@ -209,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             </ListItemIcon>
             <ListItemText primary='Reports' />
           </ListItemButton>
-          <Divider sx={{ my: 1 }} />
+          {/* <Divider sx={{ my: 1 }} /> */}
           {/* {secondaryListItems} */}
         </List>
       </Drawer>

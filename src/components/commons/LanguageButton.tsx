@@ -30,7 +30,6 @@ const LanguageButton: React.FC<LanguageButtonProps> = () => {
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
-  console.log('🚀 ~ file: LanguageButton.tsx ~ line 39 ~ selectedIndex', selectedIndex)
 
   const handleMenuItemClick = (key: string, index: number) => {
     localStorage.setItem('cft-language', key)

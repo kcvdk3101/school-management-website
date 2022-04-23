@@ -4,13 +4,15 @@ export interface StudentModel {
   lastName: string
   email: string
   identityNumber: string
+  address: string
+  phoneNumber: string
   class: string
   term: string
   status: string
   academicYear: string
   slug: string
   isActive: boolean
-  isRegistered?: boolean
-  createdAt?: string
-  updatedAt?: string
+  isRegistered: boolean
+  createdAt: string
+  updatedAt: string
 }

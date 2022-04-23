@@ -1,13 +1,16 @@
+import SaveIcon from '@mui/icons-material/Save'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 import { Box, Button, Toolbar, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import StudentTable from '../../../components/tables/StudentTable'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { getStudents, saveStudentsExcelFile } from '../../../features/student/studentsSlice'
+import NoData from './components/NoData'
 
 type StudentsProps = {}
 
@@ -33,9 +36,12 @@ const Students: React.FC<StudentsProps> = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
+  const [nameFile, setNameFile] = useState<string>()
+  console.log('selectedFile :>> ', selectedFile)
 
   const handleOnChange = (event: any) => {
-    setSelectedFile(event.target.files)
+    setNameFile(event.target.files[0].name)
+    setSelectedFile(event.target.files[0])
   }
 
   const saveExcelFile = async () => {
@@ -82,17 +88,40 @@ const Students: React.FC<StudentsProps> = () => {
                 onChange={handleOnChange}
               />
               <Button variant='contained' color='secondary' component='span'>
-                Upload
+                <UploadFileIcon />
+              </Button>
+              <Button
+                variant='contained'
+                color='info'
+                component='span'
+                sx={{ ml: 1 }}
+                disabled={selectedFile === undefined}
+                onClick={saveExcelFile}
+              >
+                <SaveIcon />
               </Button>
             </label>
+            {selectedFile && nameFile && (
+              <Typography
+                component='span'
+                sx={{
+                  ml: 1,
+                  textAlign: 'center',
+                }}
+              >
+                {nameFile}
+              </Typography>
+            )}
           </Box>
-          {isLoading ? (
+          <StudentTable />
+
+          {/* {isLoading ? (
             <SkeletonStudentTable columns={6} />
           ) : students && students.length > 0 ? (
             <StudentTable />
           ) : (
-            <Typography>Không có dữ liệu</Typography>
-          )}
+            <NoData />
+          )} */}
         </Box>
       </Box>
     </>

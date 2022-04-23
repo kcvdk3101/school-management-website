@@ -55,3 +55,7 @@ export const itemData = [
     title: 'Bike',
   },
 ]
+
+export type Order = 'asc' | 'desc'
+
+export const API_BASE_URL = 'http://localhost'
