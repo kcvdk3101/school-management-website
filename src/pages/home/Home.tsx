@@ -1,10 +1,13 @@
 import { Box, Container, Grid, ImageList, ImageListItem, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation, withTranslation } from 'react-i18next'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import JobCard from '../../components/card/JobCard'
+import SkeletonJobCard from '../../components/skeleton/SkeletonJobCard'
 import * as Constants from '../../constants/index'
+import { getJobs } from '../../features/job/jobSlice'
 import SearchFormManagement from './components/searchForm/SearchFormManagement'
 
 const useStyles = makeStyles({
@@ -51,6 +54,20 @@ function BannerHeading() {
 const Home: React.FC<HomeProps> = () => {
   const classes = useStyles()
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+
+  const fetchingJob = useAppSelector((state) => state.jobs.fetchingJob)
+  const jobs = useAppSelector((state) => state.jobs.jobs)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        dispatch(getJobs({ limit: 5, offset: 0 }))
+      } catch (error) {
+        console.log(error as any)
+      }
+    })()
+  }, [dispatch])
 
   return (
     <div className={classes.container}>
@@ -78,11 +95,23 @@ const Home: React.FC<HomeProps> = () => {
         </Box>
 
         <Grid container spacing={4}>
-          {([1, 2, 3, 4, 5, 6] as const).map((_, index) => (
-            <Grid key={index} item xs={6}>
-              <JobCard isLoading={true} />
-            </Grid>
-          ))}
+          {fetchingJob ? (
+            <>
+              {([1, 2, 3, 4, 5, 6] as const).map((_, index) => (
+                <Grid key={index} item xs={6}>
+                  <SkeletonJobCard />
+                </Grid>
+              ))}
+            </>
+          ) : (
+            <>
+              {jobs.map((job, index) => (
+                <Grid key={index} item xs={6}>
+                  <JobCard job={job} />
+                </Grid>
+              ))}
+            </>
+          )}
         </Grid>
       </Container>
 

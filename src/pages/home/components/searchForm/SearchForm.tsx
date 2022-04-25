@@ -1,12 +1,24 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Grid, MenuItem, TextField } from '@mui/material'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { makeStyles } from '@mui/styles'
-import React, { useState } from 'react'
+import React from 'react'
+import { FormState, UseFormRegister } from 'react-hook-form'
 import CustomButon from '../../../../components/commons/CustomButon'
-import Majors from '../../../../constants/majors'
 import Provinces from '../../../../constants/provinces'
 
-type SearchFormProps = {}
+type FieldProps = {
+  kw: string
+  location: string
+}
+
+type SearchFormProps = {
+  onSubmit: (e?: React.BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>
+  register: UseFormRegister<FieldProps>
+  formState: FormState<FieldProps>
+  city: string
+  handleChange: (e: SelectChangeEvent<string>) => void
+}
 
 const useStyles = makeStyles({
   box: {
@@ -15,72 +27,49 @@ const useStyles = makeStyles({
   },
 })
 
-const SearchForm: React.FC<SearchFormProps> = () => {
+const SearchForm: React.FC<SearchFormProps> = ({
+  onSubmit,
+  register,
+  formState: { errors },
+  city,
+  handleChange,
+}) => {
   const classes = useStyles()
 
-  const [provices, setProvices] = useState('')
-  const [major, setMajor] = useState('')
-
-  const handleChangeProvice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setProvices(event.target.value)
-  }
-
-  const handleChangeMajor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMajor(event.target.value)
-  }
+  // const handleChangeProvice = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setProvices(event.target.value)
+  // }
 
   return (
     <Grid item xs={12}>
-      <Box component='form' className={classes.box} padding={2}>
+      <Box component='form' className={classes.box} padding={2} onSubmit={onSubmit}>
         <Grid container justifyContent='center' spacing={2}>
           {/* Search Form */}
           <Grid item xs={4}>
             <TextField
-              margin='normal'
+              label='Keyword'
+              autoFocus
               required
               fullWidth
-              label='Keyword'
-              id='keyword'
-              name='keyword'
-              autoComplete=''
-              autoFocus
+              {...register('kw')}
+              helperText={errors.kw?.message}
             />
           </Grid>
           <Grid item xs={4}>
-            <TextField
-              margin='normal'
+            <Select
+              margin='none'
               fullWidth
-              select
-              id='city'
-              name='city'
-              label='Choose your city'
-              value={provices}
-              onChange={handleChangeProvice}
+              id='demo-simple-select'
+              value={city}
+              label='City'
+              onChange={handleChange}
             >
               {Provinces.map((provice) => (
                 <MenuItem key={provice.value} value={provice.value}>
                   {provice.label}
                 </MenuItem>
               ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              margin='normal'
-              fullWidth
-              select
-              id='major'
-              name='major'
-              label='Choose major'
-              value={major}
-              onChange={handleChangeMajor}
-            >
-              {Majors.map((major) => (
-                <MenuItem key={major.value} value={major.value}>
-                  {major.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            </Select>
           </Grid>
           <Grid
             item
@@ -95,8 +84,8 @@ const SearchForm: React.FC<SearchFormProps> = () => {
               color='primary'
               sz='large'
               variant='contained'
+              type='submit'
               label={<SearchIcon />}
-              handleOnClick={() => console.log('Clicked')}
             />
           </Grid>
         </Grid>

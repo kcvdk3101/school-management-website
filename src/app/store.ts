@@ -9,6 +9,10 @@ export const store = configureStore({
     students: studentsReducer,
     jobs: jobReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })
 
 export type AppDispatch = typeof store.dispatch

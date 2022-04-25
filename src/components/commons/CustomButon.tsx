@@ -5,7 +5,7 @@ type CustomButonProps = {
   color: 'inherit' | 'secondary' | 'primary' | 'success' | 'error' | 'info' | 'warning' | undefined
   variant: 'text' | 'contained' | 'outlined' | undefined
   label: string | ReactElement
-  type?: string
+  type: 'button' | 'submit'
   sx?: SxProps<Theme> | undefined
   sz?: 'small' | 'medium' | 'large' | undefined
   handleOnClick?: () => void
@@ -16,6 +16,7 @@ const CustomButon: React.FC<CustomButonProps> = ({
   variant,
   sz,
   label,
+  type,
   sx,
   handleOnClick,
 }) => {
@@ -27,7 +28,7 @@ const CustomButon: React.FC<CustomButonProps> = ({
       variant={variant}
       onClick={handleOnClick}
       sx={sx}
-      type='submit'
+      type={type}
     >
       {label}
     </Button>

@@ -78,6 +78,7 @@ const Signin: React.FC<SigninProps> = () => {
             autoComplete='current-password'
           />
           <CustomButon
+            type='submit'
             label='Đăng nhập'
             color='secondary'
             variant='contained'

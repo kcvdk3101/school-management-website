@@ -35,14 +35,11 @@ export const jobSlice = createSlice({
     builder.addCase(getJobs.pending, (state, action) => {
       state.fetchingJob = true
     })
-    builder.addCase(
-      getJobs.fulfilled,
-      (state, action: PayloadAction<{ data: JobModel[]; pagination: { total: number } }>) => {
-        state.fetchingJob = false
-        state.jobs = action.payload.data
-        state.pagination.total = action.payload.pagination.total
-      }
-    )
+    builder.addCase(getJobs.fulfilled, (state, action) => {
+      state.fetchingJob = false
+      state.jobs = action.payload.data.data
+      state.pagination.total = action.payload.data.pagination.total
+    })
     builder.addCase(getJobs.rejected, (state, action) => {
       state.fetchingJob = false
       state.jobs = []

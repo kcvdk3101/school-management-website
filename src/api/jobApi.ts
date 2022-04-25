@@ -6,7 +6,7 @@ const url = 'job'
 
 const jobApi = {
   getJobsByCondition(limit: number, offset: number) {
-    return axios.get<string, { data: JobModel[]; pagination: { total: number } }>(
+    return axios.get<string, { data: { data: JobModel[]; pagination: { total: number } } }>(
       `${API_CORPORATION_URL}/${url}/all?limit=${limit}&offset=${offset}`
     )
   },
