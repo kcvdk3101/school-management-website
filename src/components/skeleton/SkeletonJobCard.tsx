@@ -52,8 +52,8 @@ const SkeletonJobCard: React.FC<SkeletonJobCardProps> = () => {
             my: 1,
           }}
         >
-          <Skeleton variant='text' height={30} width={100} />
-          <Skeleton variant='text' height={30} width={100} sx={{ ml: 1 }} />
+          <Skeleton variant='text' height={40} width={100} />
+          <Skeleton variant='text' height={40} width={100} sx={{ ml: 1 }} />
         </Box>
       </CardContent>
     </Card>

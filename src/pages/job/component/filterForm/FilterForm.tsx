@@ -1,8 +1,9 @@
-import { Grid, MenuItem, Paper, TextField, Box } from '@mui/material'
+import FilterAltIcon from '@mui/icons-material/FilterAlt'
+import { Box, Grid, MenuItem, TextField } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
+import CustomButon from '../../../../components/commons/CustomButon'
 import Levels from '../../../../constants/levels'
-import Majors from '../../../../constants/majors'
 import Provinces from '../../../../constants/provinces'
 
 type FilterFormProps = {}
@@ -81,37 +82,7 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               ))}
             </TextField>
           </Grid>
-          <Grid item xs={3}>
-            {/* <TextField
-              margin='normal'
-              fullWidth
-              select
-              id='major'
-              name='major'
-              label='Choose major'
-              value={major}
-              onChange={handleChangeMajor}
-            >
-              {Majors.map((major) => (
-                <MenuItem key={major.value} value={major.value}>
-                  {major.label}
-                </MenuItem>
-              ))}
-            </TextField> */}
-          </Grid>
-          {/* Filter Form */}
 
-          <Grid item xs={4}>
-            <TextField
-              required
-              fullWidth
-              placeholder='Type keyword'
-              id='name'
-              name='name'
-              autoFocus
-              color='secondary'
-            />
-          </Grid>
           {/* <Grid item xs={4}>
             <TextField
               fullWidth
@@ -129,6 +100,37 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               ))}
             </TextField>
           </Grid> */}
+
+          {/* Filter Form */}
+          <Grid item xs={4}>
+            <TextField
+              required
+              fullWidth
+              margin='normal'
+              placeholder='Type keyword'
+              id='name'
+              name='name'
+              autoFocus
+              color='secondary'
+            />
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
+            <CustomButon
+              color='primary'
+              sz='large'
+              variant='contained'
+              type='submit'
+              label={<FilterAltIcon />}
+            />
+          </Grid>
         </Grid>
       </Box>
     </Grid>

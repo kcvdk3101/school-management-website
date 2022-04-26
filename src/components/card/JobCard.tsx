@@ -10,7 +10,6 @@ type JobCardProps = {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-  console.log(job)
   return (
     <Card sx={{ display: 'flex', minHeight: 300 }}>
       <CardMedia

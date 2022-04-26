@@ -1,5 +1,5 @@
 export const pages = [
-  { title: 'Job', path: '/job' },
+  { title: 'Job', path: '/job?limit=5&offset=0' },
   { title: 'Blog', path: '/blog' },
   { title: 'About', path: '/about' },
 ]

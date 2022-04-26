@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
 import LanguageButton from '../components/commons/LanguageButton'
 import * as Constants from '../constants/index'
@@ -42,7 +42,9 @@ const Layout: React.FC<LayoutProps> = () => {
         <Container maxWidth='lg' sx={{ paddingY: 1 }}>
           <Toolbar disableGutters>
             <Box component='div' sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <img src={logo} alt='JOBHUB Logo' width={120} />
+              <NavLink to='/'>
+                <img src={logo} alt='JOBHUB Logo' width={120} />
+              </NavLink>
             </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -75,14 +77,10 @@ const Layout: React.FC<LayoutProps> = () => {
                 }}
               >
                 {Constants.pages.map((page, index) => (
-                  <MenuItem
-                    key={index}
-                    onClick={() => {
-                      handleCloseNavMenu()
-                      navigate(`${page.path}`)
-                    }}
-                  >
-                    <Typography textAlign='center'>{t(`${page.title}`)}</Typography>
+                  <MenuItem key={index}>
+                    <NavLink to={`${page.path}`}>
+                      <Typography textAlign='center'>{t(`${page.title}`)}</Typography>
+                    </NavLink>
                   </MenuItem>
                 ))}
               </Menu>
