@@ -1,11 +1,12 @@
-import React from 'react'
-import { Box, Card, CardContent, CardMedia, Typography, Divider } from '@mui/material'
-import PaidIcon from '@mui/icons-material/Paid'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
-import CustomJobType from '../commons/CustomJobType'
 import DnsIcon from '@mui/icons-material/Dns'
-import { JobModel } from '../../models'
+import LocationOnIcon from '@mui/icons-material/LocationOn'
+import PaidIcon from '@mui/icons-material/Paid'
+import { Box, Card, CardContent, CardMedia, Divider, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { JobModel } from '../../models'
+import CustomJobType from '../commons/CustomJobType'
 
 type JobCardLargeProps = {
   job: JobModel
@@ -26,6 +27,13 @@ const useStyles = makeStyles({
     alignItems: 'center',
     marginTop: 5,
   },
+  link: {
+    textDecoration: 'none',
+    color: 'black',
+    '&:hover': {
+      color: '#e53935',
+    },
+  },
 })
 
 const JobCardLarge: React.FC<JobCardLargeProps> = ({ job }) => {
@@ -41,7 +49,9 @@ const JobCardLarge: React.FC<JobCardLargeProps> = ({ job }) => {
       />
       <CardContent style={{ flex: 1 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography variant='h4'>{job.title}</Typography>
+          <Link className={classes.link} to={`/job/${job.id}`} state={{ job: job }}>
+            <Typography variant='h4'>{job.title}</Typography>
+          </Link>
           <Typography variant='h6' color='text.secondary' component='div' sx={{ mt: 1 }}>
             @{job.details.corporation[0].name}
           </Typography>

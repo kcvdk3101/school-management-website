@@ -18,7 +18,6 @@ const CustomJobType: React.FC<CustomJobTypeProps> = ({ type }) => {
         boxShadow: 1,
         borderColor: type === 'fulltime' ? 'green' : 'red',
         marginRight: 1,
-        // marginBottom: 1,
       }}
     >
       <Typography

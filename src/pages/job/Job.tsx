@@ -34,8 +34,6 @@ const Job: React.FC<JobProps> = () => {
   const limit = query.limit ? +query.limit : 0
   const offset = query.offset ? +query.offset : 0
 
-  console.log(limit, offset)
-
   const fetchingJob = useAppSelector((state) => state.jobs.fetchingJob)
   const jobs = useAppSelector((state) => state.jobs.jobs)
 
