@@ -33,28 +33,11 @@ const Students: React.FC<StudentsProps> = () => {
 
   const dispatch = useAppDispatch()
   const students = useAppSelector((state) => state.students.students)
+  console.log(students)
 
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
-  console.log('selectedFile :>> ', selectedFile)
-
-  const handleOnChange = (event: any) => {
-    setNameFile(event.target.files[0].name)
-    setSelectedFile(event.target.files[0])
-  }
-
-  const saveExcelFile = async () => {
-    const formData = new FormData()
-
-    formData.append('files', selectedFile as Blob)
-
-    try {
-      dispatch(saveStudentsExcelFile(formData))
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   useEffect(() => {
     ;(async () => {
@@ -68,11 +51,28 @@ const Students: React.FC<StudentsProps> = () => {
     })()
   }, [dispatch])
 
+  const handleOnChange = (event: any) => {
+    setNameFile(event.target.files[0].name)
+    setSelectedFile(event.target.files[0])
+  }
+
+  const saveExcelFile = async () => {
+    const formData = new FormData()
+    formData.append('files', selectedFile as Blob)
+
+    try {
+      await dispatch(saveStudentsExcelFile(formData))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       <Helmet>
         <title>Students</title>
       </Helmet>
+
       <Box sx={{ display: 'flex' }}>
         <Header title='Students' />
 
@@ -90,17 +90,17 @@ const Students: React.FC<StudentsProps> = () => {
               <Button variant='contained' color='secondary' component='span'>
                 <UploadFileIcon />
               </Button>
-              <Button
-                variant='contained'
-                color='info'
-                component='span'
-                sx={{ ml: 1 }}
-                disabled={selectedFile === undefined}
-                onClick={saveExcelFile}
-              >
-                <SaveIcon />
-              </Button>
             </label>
+            <Button
+              variant='contained'
+              color='info'
+              component='span'
+              sx={{ ml: 1 }}
+              disabled={selectedFile === undefined}
+              onClick={saveExcelFile}
+            >
+              <SaveIcon />
+            </Button>
             {selectedFile && nameFile && (
               <Typography
                 component='span'
@@ -113,15 +113,14 @@ const Students: React.FC<StudentsProps> = () => {
               </Typography>
             )}
           </Box>
-          <StudentTable />
 
-          {/* {isLoading ? (
+          {isLoading ? (
             <SkeletonStudentTable columns={6} />
           ) : students && students.length > 0 ? (
-            <StudentTable />
+            <StudentTable students={students} />
           ) : (
             <NoData />
-          )} */}
+          )}
         </Box>
       </Box>
     </>

@@ -10,6 +10,8 @@ import Home from './pages/home/Home'
 import Job from './pages/job/Job'
 import JobDetail from './pages/jobDetail/JobDetail'
 import NotFound from './pages/NotFound'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   return (
@@ -32,6 +34,17 @@ function App() {
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
+      <ToastContainer
+        position='top-right'
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }

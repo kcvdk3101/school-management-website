@@ -1,7 +1,6 @@
 import DoneIcon from '@mui/icons-material/Done'
 import EditIcon from '@mui/icons-material/Edit'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
-import { makeStyles } from '@mui/styles'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Input from '@mui/material/Input'
@@ -14,11 +13,15 @@ import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
+import { makeStyles } from '@mui/styles'
 import { visuallyHidden } from '@mui/utils'
 import React, { useState } from 'react'
 import { Order } from '../../constants'
-import { studentData } from '../../db/StudentData'
 import { StudentModel } from '../../models/student.model'
+
+interface StudentTableProps {
+  students: StudentModel[]
+}
 
 interface RowData extends StudentModel {
   isEditMode?: boolean
@@ -192,13 +195,13 @@ function EnhancedTableCell(props: EnhancedTableCellProps) {
   )
 }
 
-export default function StudentTable() {
+const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
   const [order, setOrder] = useState<Order>('asc')
   const [orderBy, setOrderBy] = useState<keyof RowData>('firstName')
   const [selected, setSelected] = useState<string[]>([])
   const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [rowsData, setRowsData] = useState<any[]>(studentData)
+  const [rowsPerPage, setRowsPerPage] = useState(8)
+  const [rowsData, setRowsData] = useState<any[]>(students)
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof StudentModel) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -364,7 +367,7 @@ export default function StudentTable() {
       </TableContainer>
       <TablePagination
         padding='none'
-        rowsPerPageOptions={[5, 10]}
+        rowsPerPageOptions={[8]}
         component='div'
         count={rowsData.length}
         rowsPerPage={rowsPerPage}
@@ -375,3 +378,5 @@ export default function StudentTable() {
     </Paper>
   )
 }
+
+export default StudentTable

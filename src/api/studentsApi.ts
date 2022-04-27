@@ -1,11 +1,18 @@
-import axios from 'axios'
 import { API_BASE_URL } from '../constants/index'
+import { StudentModel } from '../models'
+import axiosClient from './axiosClien'
 
 const url = 'university'
 
 const studentsApi = {
   saveStudentsExcelFile(form: FormData) {
-    return axios.post<string, FormData>(`${API_BASE_URL}/${url}`, form)
+    return axiosClient.post<string, FormData>(`${API_BASE_URL}/${url}/import`, form)
+  },
+
+  getAllStudents() {
+    return axiosClient.get<string, { data: StudentModel[]; pagination: { total: number } }>(
+      `${API_BASE_URL}/${url}/student/all?limit=100&offset=0`
+    )
   },
 
   // getAllCouponsByCouponName(offset: number, couponName: string) {
