@@ -4,6 +4,7 @@ export interface StudentModel {
   lastName: string
   email: string
   identityNumber: string
+  birthDate: string
   address: string
   phoneNumber: string
   class: string

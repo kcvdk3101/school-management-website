@@ -33,18 +33,23 @@ const Students: React.FC<StudentsProps> = () => {
 
   const dispatch = useAppDispatch()
   const students = useAppSelector((state) => state.students.students)
-  console.log(students)
 
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
 
+  console.log(isLoading)
+
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
       try {
-        dispatch(getStudents())
+        const response = await dispatch(getStudents())
+        if (response.payload) {
+          setIsLoading(false)
+        }
       } catch (error) {
+        console.log(error)
       } finally {
         setIsLoading(false)
       }
@@ -61,7 +66,24 @@ const Students: React.FC<StudentsProps> = () => {
     formData.append('files', selectedFile as Blob)
 
     try {
-      await dispatch(saveStudentsExcelFile(formData))
+      const response = await dispatch(saveStudentsExcelFile(formData))
+      if (response.meta.requestStatus === 'fulfilled') {
+        ;(async () => {
+          setIsLoading(true)
+          try {
+            const response = await dispatch(getStudents())
+            if (response.payload) {
+              setIsLoading(false)
+            }
+          } catch (error) {
+            console.log(error)
+          } finally {
+            setIsLoading(false)
+          }
+        })()
+      } else {
+        console.log('Error')
+      }
     } catch (error) {
       console.log(error)
     }

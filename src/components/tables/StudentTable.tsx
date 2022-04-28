@@ -1,9 +1,7 @@
-import DoneIcon from '@mui/icons-material/Done'
 import EditIcon from '@mui/icons-material/Edit'
-import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
-import Input from '@mui/material/Input'
+import Modal from '@mui/material/Modal'
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -13,11 +11,11 @@ import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
-import { makeStyles } from '@mui/styles'
 import { visuallyHidden } from '@mui/utils'
 import React, { useState } from 'react'
 import { Order } from '../../constants'
 import { StudentModel } from '../../models/student.model'
+import EditStudentFormManagement from '../form/student/edit/EditStudentFormManagement'
 
 interface StudentTableProps {
   students: StudentModel[]
@@ -41,22 +39,6 @@ interface EnhancedTableProps {
   orderBy: string
   rowCount: number
 }
-
-interface EnhancedTableCellProps {
-  row: RowData | any
-  inputName: string
-  // onChange: (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  //   row: RowData | any
-  // ) => void
-}
-
-const useStyles = makeStyles({
-  input: {
-    width: '100%',
-    height: 20,
-  },
-})
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -168,40 +150,23 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   )
 }
 
-function EnhancedTableCell(props: EnhancedTableCellProps) {
-  const { row, inputName } = props
-  const { isEditMode } = row
-  const classes = useStyles()
-
-  return (
-    <TableCell
-      align='left'
-      sx={{
-        py: 1,
-      }}
-    >
-      {isEditMode ? (
-        <Input
-          type='text'
-          className={classes.input}
-          value={row[inputName]}
-          name={inputName}
-          // onChange={(e) => onChange(e, row)}
-        />
-      ) : (
-        row[inputName]
-      )}
-    </TableCell>
-  )
-}
-
 const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
   const [order, setOrder] = useState<Order>('asc')
-  const [orderBy, setOrderBy] = useState<keyof RowData>('firstName')
+  const [orderBy, setOrderBy] = useState<keyof RowData>('identityNumber')
+  const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<string[]>([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(8)
+  const [currentId, setCurrentId] = useState<number>(-1)
   const [rowsData, setRowsData] = useState<any[]>(students)
+
+  function handleOpen(id: number) {
+    console.log(id)
+    setCurrentId(id)
+    setOpen(true)
+  }
+
+  const handleClose = () => setOpen(false)
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof StudentModel) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -247,32 +212,21 @@ const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
     setPage(0)
   }
 
-  const handleChangeInfo = (e: React.ChangeEvent<HTMLInputElement>, row: RowData | any) => {
-    // if (!previous[row.id]) {
-    //   setPrevious((state) => ({ ...state, [row.id]: row }))
-    // }
-    const value = e.target.value
-    const name = e.target.name
-    const { id } = row
-    const newRows = rowsData.map((row) => {
-      if (row.id === id) {
-        return { ...row, [name]: value }
-      }
-      return row
-    })
-    setRowsData(newRows)
-  }
-
-  const onToggleEditMode = (id: string) => {
-    setRowsData((state) => {
-      return rowsData.map((row) => {
-        if (row.identityNumber === id) {
-          return { ...row, isEditMode: !row.isEditMode }
-        }
-        return row
-      })
-    })
-  }
+  // const handleChangeInfo = (e: React.ChangeEvent<HTMLInputElement>, row: RowData | any) => {
+  //   // if (!previous[row.id]) {
+  //   //   setPrevious((state) => ({ ...state, [row.id]: row }))
+  //   // }
+  //   const value = e.target.value
+  //   const name = e.target.name
+  //   const { id } = row
+  //   const newRows = rowsData.map((row) => {
+  //     if (row.id === id) {
+  //       return { ...row, [name]: value }
+  //     }
+  //     return row
+  //   })
+  //   setRowsData(newRows)
+  // }
 
   // const isSelected = (name: string | number | boolean | undefined) => selected.indexOf(name) !== -1
 
@@ -318,37 +272,20 @@ const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
                     >
                       {row.identityNumber}
                     </TableCell>
-                    <EnhancedTableCell {...{ row, inputName: 'lastName' }} />
-                    <EnhancedTableCell {...{ row, inputName: 'firstName' }} />
-                    <EnhancedTableCell {...{ row, inputName: 'email' }} />
-                    <EnhancedTableCell {...{ row, inputName: 'phoneNumber' }} />
-                    <EnhancedTableCell {...{ row, inputName: 'address' }} />
+                    <TableCell align='left'>{row.lastName}</TableCell>
+                    <TableCell align='left'>{row.firstName}</TableCell>
+                    <TableCell align='left'>{row.email}</TableCell>
+                    <TableCell align='left'>{row.phoneNumber}</TableCell>
+                    <TableCell align='left'>{row.address}</TableCell>
                     <TableCell
                       align='left'
                       sx={{
                         py: 1,
                       }}
                     >
-                      {row.isEditMode ? (
-                        <>
-                          <IconButton aria-label='done'>
-                            <DoneIcon />
-                          </IconButton>
-                          <IconButton
-                            aria-label='cancel'
-                            onClick={() => onToggleEditMode(row.identityNumber as string)}
-                          >
-                            <NotInterestedIcon />
-                          </IconButton>
-                        </>
-                      ) : (
-                        <IconButton
-                          aria-label='edit'
-                          onClick={() => onToggleEditMode(row.identityNumber as string)}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      )}
+                      <IconButton aria-label='edit' onClick={() => handleOpen(index)}>
+                        <EditIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 )
@@ -367,7 +304,7 @@ const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
       </TableContainer>
       <TablePagination
         padding='none'
-        rowsPerPageOptions={[8]}
+        rowsPerPageOptions={[10]}
         component='div'
         count={rowsData.length}
         rowsPerPage={rowsPerPage}
@@ -375,6 +312,9 @@ const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Modal open={open} onClose={handleClose}>
+        <EditStudentFormManagement student={rowsData[currentId]} handleClose={handleClose} />
+      </Modal>
     </Paper>
   )
 }

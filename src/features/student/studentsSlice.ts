@@ -22,7 +22,6 @@ export const saveStudentsExcelFile = createAsyncThunk(
   'students/saveExcelFile',
   async (file: FormData) => {
     const savedFile = await studentsApi.saveStudentsExcelFile(file)
-    console.log(savedFile)
     return savedFile
   }
 )
