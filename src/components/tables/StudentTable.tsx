@@ -15,6 +15,7 @@ import { visuallyHidden } from '@mui/utils'
 import React, { useState } from 'react'
 import { Order } from '../../constants'
 import { StudentModel } from '../../models/student.model'
+import { convertDateString } from '../../utils'
 import EditStudentFormManagement from '../form/student/edit/EditStudentFormManagement'
 
 interface StudentTableProps {
@@ -90,7 +91,16 @@ const headCells: HeadCell[] = [
     disablePadding: false,
     label: 'First Name',
   },
-
+  {
+    id: 'class',
+    disablePadding: false,
+    label: 'Class',
+  },
+  {
+    id: 'birthDate',
+    disablePadding: false,
+    label: 'Birth Date',
+  },
   {
     id: 'email',
     disablePadding: false,
@@ -102,9 +112,9 @@ const headCells: HeadCell[] = [
     label: 'Phone Number',
   },
   {
-    id: 'address',
+    id: 'status',
     disablePadding: false,
-    label: 'Address',
+    label: 'Status',
   },
   {
     id: 'isEditMode',
@@ -152,7 +162,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
   const [order, setOrder] = useState<Order>('asc')
-  const [orderBy, setOrderBy] = useState<keyof RowData>('identityNumber')
+  const [orderBy, setOrderBy] = useState<keyof RowData | ''>('')
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState<string[]>([])
   const [page, setPage] = useState(0)
@@ -161,7 +171,6 @@ const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
   const [rowsData, setRowsData] = useState<any[]>(students)
 
   function handleOpen(id: number) {
-    console.log(id)
     setCurrentId(id)
     setOpen(true)
   }
@@ -274,9 +283,11 @@ const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
                     </TableCell>
                     <TableCell align='left'>{row.lastName}</TableCell>
                     <TableCell align='left'>{row.firstName}</TableCell>
+                    <TableCell align='left'>{row.class}</TableCell>
+                    <TableCell align='left'>{convertDateString(row.birthDate as string)}</TableCell>
                     <TableCell align='left'>{row.email}</TableCell>
                     <TableCell align='left'>{row.phoneNumber}</TableCell>
-                    <TableCell align='left'>{row.address}</TableCell>
+                    <TableCell align='left'>{row.status}</TableCell>
                     <TableCell
                       align='left'
                       sx={{

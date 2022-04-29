@@ -2,26 +2,35 @@ import { Button, Grid, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import React, { useState } from 'react'
+import React from 'react'
 import { FormState, UseFormRegister } from 'react-hook-form'
 import { StudentModel } from '../../../../models'
 
+type Input = {
+  lastName: string
+  firstName: string
+  identityNumber: string
+  phoneNumber: string
+}
+
 type EditStudentFormProps = {
-  register: UseFormRegister<StudentModel>
-  formState: FormState<StudentModel>
+  register: UseFormRegister<Input>
+  formState: FormState<Input>
   student: StudentModel
+  value: string | null
   handleClose: () => void
+  handleChangeValue: (value: string | null) => void
 }
 
 const EditStudentForm: React.FC<EditStudentFormProps> = ({
   register,
-  formState: { errors },
+  formState: { errors, isSubmitting },
   student,
+  value,
   handleClose,
+  handleChangeValue,
 }) => {
   // const classes = useStyles()
-  const [value, setValue] = useState<string | Date | null>(null)
-  console.log(value)
 
   return (
     <Grid container spacing={2}>
@@ -47,21 +56,21 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       </Grid>
       <Grid item xs={12}>
         <TextField
-          label='email'
+          label='identityNumber'
           required
           fullWidth
-          defaultValue={student.email}
-          {...register('email')}
-          helperText={errors.email?.message}
+          defaultValue={student.identityNumber}
+          {...register('identityNumber')}
+          helperText={errors.identityNumber?.message}
         />
       </Grid>
       <Grid item xs={6}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label='birdDate'
-            value={student.birthDate}
+            value={value}
             onChange={(newValue) => {
-              setValue(newValue)
+              handleChangeValue(newValue)
             }}
             renderInput={(params) => <TextField {...params} />}
           />
@@ -81,7 +90,7 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
         <Button type='button' variant='outlined' color='secondary' onClick={handleClose}>
           Cancel
         </Button>
-        <Button type='submit' variant='contained' sx={{ ml: 1 }} disabled={true}>
+        <Button type='submit' variant='contained' sx={{ ml: 1 }} disabled={isSubmitting}>
           Edit
         </Button>
       </Grid>

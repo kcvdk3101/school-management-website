@@ -38,8 +38,6 @@ const Students: React.FC<StudentsProps> = () => {
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
 
-  console.log(isLoading)
-
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)

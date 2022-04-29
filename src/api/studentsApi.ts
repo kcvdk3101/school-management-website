@@ -4,6 +4,14 @@ import axiosClient from './axiosClien'
 
 const url = 'university'
 
+export interface EditStudentData {
+  firstName: string
+  lastName: string
+  identityNumber: string
+  birthDate: string
+  phoneNumber: string
+}
+
 const studentsApi = {
   saveStudentsExcelFile(form: FormData) {
     return axiosClient.post<string, FormData>(`${API_BASE_URL}/${url}/import`, form)
@@ -15,6 +23,10 @@ const studentsApi = {
     )
   },
 
+  editInfoStudent(id: string, data: EditStudentData) {
+    return axiosClient.patch<string, StudentModel>(`${API_BASE_URL}/${url}/student?id=${id}`, data)
+  },
+
   // getAllCouponsByCouponName(offset: number, couponName: string) {
   //   return axiosClient.get<string, { data: Coupon[]; pagination: any }>(
   //     `${url}/name/details?couponName=${couponName}&limit=6&offset=${offset}`
@@ -23,10 +35,6 @@ const studentsApi = {
 
   // addNewCoupon(data: FormData) {
   //   return axiosClient.post<string, Coupon>(`${url}`, data)
-  // },
-
-  // updateCouponStatus(id: string | undefined) {
-  //   return axiosClient.patch<string, Coupon>(`${url}/status?id=${id}`)
   // },
 
   // deleteCouponById(id: string) {
