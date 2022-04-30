@@ -28,8 +28,8 @@ export const saveStudentsExcelFile = createAsyncThunk(
   }
 )
 
-export const getStudents = createAsyncThunk('students/getStudents', async () => {
-  const students = await studentsApi.getAllStudents()
+export const getStudents = createAsyncThunk('students/getStudents', async (offset: number) => {
+  const students = await studentsApi.getAllStudents(offset)
   return students
 })
 
@@ -62,11 +62,11 @@ export const studentSlice = createSlice({
 
     // Get all students
     builder.addCase(getStudents.pending, (state, action) => {
-      state.fetchingStudent = false
+      state.fetchingStudent = true
       state.students = []
     })
     builder.addCase(getStudents.fulfilled, (state, action) => {
-      state.fetchingStudent = true
+      state.fetchingStudent = false
       state.students = action.payload.data
       state.pagination.total = action.payload.pagination.total
     })

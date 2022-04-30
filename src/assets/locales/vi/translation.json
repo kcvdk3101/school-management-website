@@ -8,5 +8,19 @@
   "Blog": "Tin tức",
   "About": "Về chúng tôi",
 
-  "Edit student title": "Chỉnh sửa thông tin sinh viên"
+  "Student information": "Thông tin sinh viên",
+  "Edit student title": "Chỉnh sửa thông tin sinh viên",
+
+  "Last name": "Họ và tên đệm",
+  "First name": "Tên",
+  "Identity number": "Mã số sinh viên",
+  "Email": "Địa chỉ email",
+  "Address": "Địa chỉ",
+  "Class": "Lớp",
+  "Phone": "Số điện thoại",
+  "Birthday": "Ngày sinh",
+
+  "Haven't practiced": "Chưa thực tập",
+  "Practicing": "Đang thực tập",
+  "Trained": "Đã thực tập"
 }

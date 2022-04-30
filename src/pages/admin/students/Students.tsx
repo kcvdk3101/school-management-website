@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
+import NewStudentFormManagement from '../../../components/form/student/new/NewStudentFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import StudentTable from '../../../components/tables/StudentTable'
 import { getStudents, saveStudentsExcelFile } from '../../../features/student/studentsSlice'
@@ -32,31 +33,33 @@ const Students: React.FC<StudentsProps> = () => {
   const classes = useStyles()
 
   const dispatch = useAppDispatch()
-  const students = useAppSelector((state) => state.students.students)
+  const { fetchingStudent, students } = useAppSelector((state) => state.students)
 
-  const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
-
+  const [openNewStudent, setOpenNewStudent] = useState(false)
+  const [page, setPage] = useState(0)
   useEffect(() => {
     ;(async () => {
-      setIsLoading(true)
       try {
-        const response = await dispatch(getStudents())
-        if (response.payload) {
-          setIsLoading(false)
-        }
+        await dispatch(getStudents(page))
       } catch (error) {
         console.log(error)
-      } finally {
-        setIsLoading(false)
       }
     })()
-  }, [dispatch])
+  }, [dispatch, page])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
     setSelectedFile(event.target.files[0])
+  }
+
+  const handleOpenNewStudent = () => {
+    setOpenNewStudent(true)
+  }
+
+  const handleCloseNewStudent = () => {
+    setOpenNewStudent(false)
   }
 
   const saveExcelFile = async () => {
@@ -67,16 +70,10 @@ const Students: React.FC<StudentsProps> = () => {
       const response = await dispatch(saveStudentsExcelFile(formData))
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
-          setIsLoading(true)
           try {
-            const response = await dispatch(getStudents())
-            if (response.payload) {
-              setIsLoading(false)
-            }
+            await dispatch(getStudents(0))
           } catch (error) {
             console.log(error)
-          } finally {
-            setIsLoading(false)
           }
         })()
       } else {
@@ -85,6 +82,10 @@ const Students: React.FC<StudentsProps> = () => {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage)
   }
 
   return (
@@ -98,51 +99,74 @@ const Students: React.FC<StudentsProps> = () => {
 
         <Box component='main' className={classes.container}>
           <Toolbar />
-          <Box sx={{ mb: 1 }}>
-            <label htmlFor='button-file'>
-              <Input
-                accept='*.xlsx'
-                id='button-file'
-                multiple
-                type='file'
-                onChange={handleOnChange}
-              />
-              <Button variant='contained' color='secondary' component='span'>
-                <UploadFileIcon />
-              </Button>
-            </label>
-            <Button
-              variant='contained'
-              color='info'
-              component='span'
-              sx={{ ml: 1 }}
-              disabled={selectedFile === undefined}
-              onClick={saveExcelFile}
-            >
-              <SaveIcon />
-            </Button>
-            {selectedFile && nameFile && (
-              <Typography
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 2,
+            }}
+            component='div'
+          >
+            <Box component='div'>
+              <label htmlFor='button-file'>
+                <Input
+                  accept='*.xlsx'
+                  id='button-file'
+                  multiple
+                  type='file'
+                  onChange={handleOnChange}
+                />
+                <Button variant='contained' color='secondary' component='span'>
+                  <UploadFileIcon />
+                </Button>
+              </label>
+              <Button
+                variant='contained'
+                color='info'
                 component='span'
-                sx={{
-                  ml: 1,
-                  textAlign: 'center',
-                }}
+                sx={{ ml: 1 }}
+                disabled={selectedFile === undefined}
+                onClick={saveExcelFile}
               >
-                {nameFile}
-              </Typography>
-            )}
+                <SaveIcon />
+              </Button>
+              {selectedFile && nameFile && (
+                <Typography
+                  component='span'
+                  sx={{
+                    ml: 1,
+                    textAlign: 'center',
+                  }}
+                >
+                  {nameFile}
+                </Typography>
+              )}
+            </Box>
+            <Box component='div'>
+              <Button
+                variant='contained'
+                color='secondary'
+                type='button'
+                onClick={handleOpenNewStudent}
+              >
+                Add new student
+              </Button>
+            </Box>
           </Box>
-
-          {isLoading ? (
+          {fetchingStudent ? (
             <SkeletonStudentTable columns={6} />
-          ) : students && students.length > 0 ? (
-            <StudentTable students={students} />
-          ) : (
+          ) : students.length === 0 ? (
             <NoData />
+          ) : (
+            <StudentTable students={students} handleChangePage={handleChangePage} page={page} />
           )}
         </Box>
       </Box>
+
+      {/* New Student Form */}
+      <NewStudentFormManagement open={openNewStudent} handleClose={handleCloseNewStudent} />
     </>
   )
 }

@@ -7,7 +7,7 @@ const url = 'university'
 export interface EditStudentData {
   firstName: string
   lastName: string
-  identityNumber: string
+  address: string
   birthDate: string
   phoneNumber: string
 }
@@ -17,9 +17,9 @@ const studentsApi = {
     return axiosClient.post<string, FormData>(`${API_BASE_URL}/${url}/import`, form)
   },
 
-  getAllStudents() {
+  getAllStudents(offset: number) {
     return axiosClient.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${API_BASE_URL}/${url}/student/all?limit=100&offset=0`
+      `${API_BASE_URL}/${url}/student/all?limit=8&offset=${offset}`
     )
   },
 

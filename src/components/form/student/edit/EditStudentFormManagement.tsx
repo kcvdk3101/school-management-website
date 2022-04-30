@@ -7,19 +7,20 @@ import { StudentModel } from '../../../../models'
 import { useTranslation } from 'react-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { editInfoStudent } from '../../../../features/student/studentsSlice'
+import { editInfoStudent, getStudents } from '../../../../features/student/studentsSlice'
 import { useAppDispatch } from '../../../../app/hooks'
 import { toast } from 'react-toastify'
 
 type EditStudentFormManagementProps = {
   student: StudentModel
   handleClose: () => void
+  page: number
 }
 
-type Input = {
+type EditFormInput = {
   lastName: string
   firstName: string
-  identityNumber: string
+  address: string
   phoneNumber: string
 }
 
@@ -36,7 +37,7 @@ const editSchema = yup
   .object({
     lastName: yup.string().trim(),
     firstName: yup.string().trim(),
-    identityNumber: yup.string().trim(),
+    address: yup.string().trim(),
     phoneNumber: yup
       .string()
       .matches(
@@ -48,13 +49,14 @@ const editSchema = yup
 
 const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   student,
+  page,
   handleClose,
 }) => {
   const { t } = useTranslation()
   const classes = useStyles()
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, formState } = useForm<Input>({
+  const { register, handleSubmit, formState } = useForm<EditFormInput>({
     resolver: yupResolver(editSchema),
   })
 
@@ -65,16 +67,6 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   }
 
   const onSubmit = handleSubmit(async (data) => {
-    // let editInfo = {
-    //   id: student.id,
-    //   data: {
-    //     firstName: data.firstName,
-    //     lastName: data.lastName,
-    //     identityNumber: data.identityNumber,
-    //     birthDate: value as string,
-    //     phoneNumber: data.phoneNumber,
-    //   },
-    // }
     try {
       await dispatch(
         editInfoStudent({
@@ -82,12 +74,13 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
           data: {
             firstName: data.firstName,
             lastName: data.lastName,
-            identityNumber: data.identityNumber,
+            address: data.address,
             birthDate: value as string,
             phoneNumber: data.phoneNumber,
           },
         })
       )
+      await dispatch(getStudents(page))
       toast.success('Update succeed!')
     } catch (error) {
       toast.error(error as Error)

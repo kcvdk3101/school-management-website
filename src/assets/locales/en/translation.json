@@ -8,5 +8,19 @@
   "Blog": "Blog",
   "About": "About",
 
-  "Edit student title": "Edit student information"
+  "Student information": "Student Information",
+  "Edit student title": "Edit student information",
+
+  "Last name": "Last name",
+  "First name": "First name",
+  "Identity number": "Identity number",
+  "Email": "Email",
+  "Address": "Address",
+  "Class": "Class",
+  "Phone": "Phone number",
+  "Birthday": "Birthday",
+
+  "Haven't practiced": "Haven't practiced",
+  "Practicing": "Practicing",
+  "Trained": "Trained"
 }

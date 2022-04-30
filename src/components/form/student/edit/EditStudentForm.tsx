@@ -9,7 +9,7 @@ import { StudentModel } from '../../../../models'
 type Input = {
   lastName: string
   firstName: string
-  identityNumber: string
+  address: string
   phoneNumber: string
 }
 
@@ -36,7 +36,7 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
     <Grid container spacing={2}>
       <Grid item xs={6}>
         <TextField
-          label='lastName'
+          label='Last Name'
           required
           fullWidth
           defaultValue={student.lastName}
@@ -46,7 +46,7 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       </Grid>
       <Grid item xs={6}>
         <TextField
-          label='firstName'
+          label='First Name'
           required
           fullWidth
           defaultValue={student.firstName}
@@ -54,20 +54,10 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
           helperText={errors.firstName?.message}
         />
       </Grid>
-      <Grid item xs={12}>
-        <TextField
-          label='identityNumber'
-          required
-          fullWidth
-          defaultValue={student.identityNumber}
-          {...register('identityNumber')}
-          helperText={errors.identityNumber?.message}
-        />
-      </Grid>
       <Grid item xs={6}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
-            label='birdDate'
+            label='Birth Date'
             value={value}
             onChange={(newValue) => {
               handleChangeValue(newValue)
@@ -78,12 +68,22 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       </Grid>
       <Grid item xs={6}>
         <TextField
-          label='phoneNumber'
+          label='Phone Number'
           required
           fullWidth
           defaultValue={student.phoneNumber}
           {...register('phoneNumber')}
           helperText={errors.phoneNumber?.message}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          label='Address'
+          required
+          fullWidth
+          defaultValue={student.address}
+          {...register('address')}
+          helperText={errors.address?.message}
         />
       </Grid>
       <Grid item xs={12}>
