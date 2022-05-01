@@ -27,6 +27,7 @@ import { useNavigate } from 'react-router-dom'
 import { signout } from '../../features/authenticate/authSlice'
 import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
+import { useTranslation } from 'react-i18next'
 
 type HeaderProps = {
   title: string
@@ -84,6 +85,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   let navigate = useNavigate()
+  const { t } = useTranslation()
+
   const dispatch = useAppDispatch()
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
@@ -129,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             <MenuIcon />
           </IconButton>
           <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
-            {title}
+            {t(`${title}`)}
           </Typography>
           {isAuthenticated && (
             <div>
@@ -190,7 +193,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             </ListItemIcon>
             <ListItemText primary='Dashboard' />
           </ListItemButton>
-          <ListItemButton onClick={() => navigate('/admin/students')}>
+          <ListItemButton onClick={() => navigate('/admin/students?limit=8&offset=0')}>
             <ListItemIcon>
               <GroupsIcon />
             </ListItemIcon>

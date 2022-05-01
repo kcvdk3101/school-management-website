@@ -33,11 +33,26 @@ export const getStudents = createAsyncThunk('students/getStudents', async (offse
   return students
 })
 
+export const getStudentsByFilter = createAsyncThunk(
+  'students/getStudentsByFilter',
+  async ({ offset, status, fullName }: { offset: number; status: string; fullName: string }) => {
+    const students = await studentsApi.filterByCondition(offset, status, fullName)
+    return students
+  }
+)
+
 export const editInfoStudent = createAsyncThunk(
   'students/editInfoStudent',
   async ({ id, data }: { id: string; data: EditStudentData }) => {
     const response = await studentsApi.editInfoStudent(id, data)
-    console.log(response)
+    return response
+  }
+)
+
+export const addNewStudent = createAsyncThunk(
+  'students/addNewStudent',
+  async (data: StudentModel[]) => {
+    const response = await studentsApi.addNewStudent(data)
     return response
   }
 )
@@ -75,13 +90,39 @@ export const studentSlice = createSlice({
       state.students = []
     })
 
+    // Get students by filter
+    builder.addCase(getStudentsByFilter.pending, (state, action) => {
+      state.fetchingStudent = true
+      state.students = []
+    })
+    builder.addCase(getStudentsByFilter.fulfilled, (state, action) => {
+      state.fetchingStudent = false
+      state.students = action.payload.data
+      state.pagination.total = action.payload.pagination.total
+    })
+    builder.addCase(getStudentsByFilter.rejected, (state, action) => {
+      state.fetchingStudent = false
+      state.students = []
+    })
+
+    // Add student
+    builder.addCase(addNewStudent.pending, (state, action) => {
+      state.fetchingStudent = true
+    })
+    builder.addCase(addNewStudent.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.fetchingStudent = false
+    })
+    builder.addCase(addNewStudent.rejected, (state, action) => {
+      state.fetchingStudent = false
+    })
+
     // Edit students
     builder.addCase(editInfoStudent.pending, (state, action) => {
       state.fetchingStudent = true
     })
     builder.addCase(editInfoStudent.fulfilled, (state, action) => {
       let currentStudent = state.students.findIndex((student) => student.id === action.payload.id)
-      console.log(currentStudent)
       state.fetchingStudent = false
       state.students[currentStudent] = action.payload
     })
@@ -91,5 +132,4 @@ export const studentSlice = createSlice({
   },
 })
 
-export const {} = studentSlice.actions
 export default studentSlice.reducer

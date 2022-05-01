@@ -7,20 +7,33 @@
   "Job": "Công việc",
   "Blog": "Tin tức",
   "About": "Về chúng tôi",
+  "Student": "Sinh viên",
+
+  "Signin": "Đăng nhập",
+  "Signout": "Đăng xuất",
+
+  "Add new": "Thêm mới sinh viên",
 
   "Student information": "Thông tin sinh viên",
   "Edit student title": "Chỉnh sửa thông tin sinh viên",
 
   "Last name": "Họ và tên đệm",
   "First name": "Tên",
+  "Password": "Mật khẩu",
   "Identity number": "Mã số sinh viên",
   "Email": "Địa chỉ email",
   "Address": "Địa chỉ",
   "Class": "Lớp",
   "Phone": "Số điện thoại",
   "Birthday": "Ngày sinh",
+  "Status": "Trạng thái",
+  "Action": "Tác vụ",
 
   "Haven't practiced": "Chưa thực tập",
   "Practicing": "Đang thực tập",
-  "Trained": "Đã thực tập"
+  "Trained": "Đã thực tập",
+
+  "Cancel": "Hủy",
+  "Save": "Lưu",
+  "Edit": "Chỉnh sửa"
 }

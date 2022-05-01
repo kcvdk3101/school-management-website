@@ -3,7 +3,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import React from 'react'
-import { FormState, UseFormRegister } from 'react-hook-form'
+import { FormState, UseFormRegister, UseFormReset } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { StudentModel } from '../../../../models'
 
 type Input = {
@@ -31,12 +32,13 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
   handleChangeValue,
 }) => {
   // const classes = useStyles()
+  const { t } = useTranslation()
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>
         <TextField
-          label='Last Name'
+          label={t('Last name')}
           required
           fullWidth
           defaultValue={student.lastName}
@@ -46,7 +48,7 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       </Grid>
       <Grid item xs={6}>
         <TextField
-          label='First Name'
+          label={t('First name')}
           required
           fullWidth
           defaultValue={student.firstName}
@@ -57,18 +59,18 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       <Grid item xs={6}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
-            label='Birth Date'
+            label={t('Birthday')}
             value={value}
             onChange={(newValue) => {
               handleChangeValue(newValue)
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField fullWidth {...params} />}
           />
         </LocalizationProvider>
       </Grid>
       <Grid item xs={6}>
         <TextField
-          label='Phone Number'
+          label={t('Phone')}
           required
           fullWidth
           defaultValue={student.phoneNumber}
@@ -78,7 +80,7 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       </Grid>
       <Grid item xs={12}>
         <TextField
-          label='Address'
+          label={t('Address')}
           required
           fullWidth
           defaultValue={student.address}
@@ -88,10 +90,10 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       </Grid>
       <Grid item xs={12}>
         <Button type='button' variant='outlined' color='secondary' onClick={handleClose}>
-          Cancel
+          {t('Cancel')}
         </Button>
         <Button type='submit' variant='contained' sx={{ ml: 1 }} disabled={isSubmitting}>
-          Edit
+          {t('Edit')}
         </Button>
       </Grid>
     </Grid>

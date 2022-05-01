@@ -1,14 +1,24 @@
-import React, { useState } from 'react'
-import IconButton from '@mui/material/IconButton'
 import FilterListIcon from '@mui/icons-material/FilterList'
+import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { useNavigate } from 'react-router-dom'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 
-type FilterButtonProps = {}
+type FilterButtonProps = {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+}
 
-const FilterButton: React.FC<FilterButtonProps> = () => {
+const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
+  const { t } = useTranslation()
   let navigate = useNavigate()
+  let { search } = useLocation()
+
+  let paginationQuery = queryString.parse(search)
+  const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -19,15 +29,16 @@ const FilterButton: React.FC<FilterButtonProps> = () => {
     setAnchorEl(null)
   }
 
-  function handleChangeFilter(filter: string) {
-    if (filter === 'all')
+  function handleChangeFilter(status: string) {
+    setPage(0)
+    if (status === 'all')
       return navigate({
         pathname: '/admin/students',
       })
 
     navigate({
       pathname: '/admin/students',
-      search: `?status=${filter}`,
+      search: `?limit=8&offset=0&status=${status}&fullName=${fullName}`,
     })
   }
 
@@ -45,9 +56,12 @@ const FilterButton: React.FC<FilterButtonProps> = () => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilter('Chưa thực tập')}>Chưa thực tập</MenuItem>
-        <MenuItem onClick={() => handleChangeFilter('Đang thực tập')}>Đang thực tập</MenuItem>
-        <MenuItem onClick={() => handleChangeFilter('Đã thực tập')}>Đã thực tập</MenuItem>
+        <MenuItem onClick={() => handleChangeFilter('all')}>-----</MenuItem>
+        <MenuItem onClick={() => handleChangeFilter('Chưa thực tập')}>
+          {t("Haven't practiced")}
+        </MenuItem>
+        <MenuItem onClick={() => handleChangeFilter('Đang thực tập')}>{t('Practicing')}</MenuItem>
+        <MenuItem onClick={() => handleChangeFilter('Đã thực tập')}>{t('Trained')}</MenuItem>
       </Menu>
     </>
   )

@@ -5,13 +5,20 @@ import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
 import NewStudentFormManagement from '../../../components/form/student/new/NewStudentFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import StudentTable from '../../../components/tables/StudentTable'
-import { getStudents, saveStudentsExcelFile } from '../../../features/student/studentsSlice'
+import {
+  getStudents,
+  saveStudentsExcelFile,
+  getStudentsByFilter,
+} from '../../../features/student/studentsSlice'
 import NoData from './components/NoData'
+import { useNavigate, useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 
 type StudentsProps = {}
 
@@ -31,6 +38,15 @@ const Input = styled('input')({
 
 const Students: React.FC<StudentsProps> = () => {
   const classes = useStyles()
+  const { t } = useTranslation()
+
+  let navigate = useNavigate()
+  let { search } = useLocation()
+
+  let paginationQuery = queryString.parse(search)
+  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
+  const status = paginationQuery.status ? (paginationQuery.status as string) : ''
+  const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
 
   const dispatch = useAppDispatch()
   const { fetchingStudent, students } = useAppSelector((state) => state.students)
@@ -39,15 +55,19 @@ const Students: React.FC<StudentsProps> = () => {
   const [nameFile, setNameFile] = useState<string>()
   const [openNewStudent, setOpenNewStudent] = useState(false)
   const [page, setPage] = useState(0)
+
   useEffect(() => {
     ;(async () => {
       try {
-        await dispatch(getStudents(page))
+        if (status || fullName) {
+          return await dispatch(getStudentsByFilter({ offset, status, fullName }))
+        }
+        await dispatch(getStudents(offset))
       } catch (error) {
         console.log(error)
       }
     })()
-  }, [dispatch, page])
+  }, [dispatch, fullName, offset, status])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
@@ -84,18 +104,32 @@ const Students: React.FC<StudentsProps> = () => {
     }
   }
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = async (event: unknown, newPage: number) => {
     setPage(newPage)
+    try {
+      if (status || fullName) {
+        await dispatch(getStudentsByFilter({ offset: newPage, status, fullName }))
+      } else {
+        await dispatch(getStudents(newPage))
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      navigate({
+        pathname: '/admin/students',
+        search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
+      })
+    }
   }
 
   return (
     <>
       <Helmet>
-        <title>Students</title>
+        <title>{t('Student')}</title>
       </Helmet>
 
       <Box sx={{ display: 'flex' }}>
-        <Header title='Students' />
+        <Header title='Student' />
 
         <Box component='main' className={classes.container}>
           <Toolbar />
@@ -151,7 +185,7 @@ const Students: React.FC<StudentsProps> = () => {
                 type='button'
                 onClick={handleOpenNewStudent}
               >
-                Add new student
+                {t('Add new')}
               </Button>
             </Box>
           </Box>
@@ -160,7 +194,12 @@ const Students: React.FC<StudentsProps> = () => {
           ) : students.length === 0 ? (
             <NoData />
           ) : (
-            <StudentTable students={students} handleChangePage={handleChangePage} page={page} />
+            <StudentTable
+              students={students}
+              handleChangePage={handleChangePage}
+              page={page}
+              setPage={setPage}
+            />
           )}
         </Box>
       </Box>

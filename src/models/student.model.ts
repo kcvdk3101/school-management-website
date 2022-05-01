@@ -1,19 +1,19 @@
 export interface StudentModel {
-  id: string
+  id?: string
   firstName: string
   lastName: string
-  email: string
+  email?: string
   identityNumber: string
   birthDate: string
   address: string
   phoneNumber: string
   class: string
-  term: string
+  term?: string
   status: string
-  academicYear: string
-  slug: string
-  isActive: boolean
-  isRegistered: boolean
-  createdAt: string
-  updatedAt: string
+  academicYear?: string
+  slug?: string
+  isActive?: boolean
+  isRegistered?: boolean
+  createdAt?: string
+  updatedAt?: string
 }

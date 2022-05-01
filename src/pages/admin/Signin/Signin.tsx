@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../app/hooks'
 import CustomButon from '../../../components/commons/CustomButon'
@@ -27,9 +28,10 @@ type SigninProps = {}
 
 const Signin: React.FC<SigninProps> = () => {
   const classes = useStyles()
-  const dispatch = useAppDispatch()
+  const { t } = useTranslation()
 
   let navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const data = new FormData(event.currentTarget)
@@ -46,7 +48,7 @@ const Signin: React.FC<SigninProps> = () => {
   return (
     <Container component='main' maxWidth='xs'>
       <Helmet>
-        <title>Đăng nhập</title>
+        <title>{t('Signin')}</title>
       </Helmet>
       <CssBaseline />
       <Box className={classes.innerContainer}>
@@ -54,7 +56,7 @@ const Signin: React.FC<SigninProps> = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Đăng nhập
+          {t('Signin')}
         </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField
@@ -62,7 +64,7 @@ const Signin: React.FC<SigninProps> = () => {
             required
             fullWidth
             id='email'
-            placeholder='Email'
+            placeholder={t('Email')}
             name='email'
             autoComplete='email'
             autoFocus
@@ -72,14 +74,14 @@ const Signin: React.FC<SigninProps> = () => {
             required
             fullWidth
             name='password'
-            placeholder='Mật khẩu'
+            placeholder={t('Password')}
             type='password'
             id='password'
             autoComplete='current-password'
           />
           <CustomButon
             type='submit'
-            label='Đăng nhập'
+            label={t('Signin')}
             color='secondary'
             variant='contained'
             sx={{ mt: 3, mb: 2 }}

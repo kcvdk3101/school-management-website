@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '../constants/index'
 import { StudentModel } from '../models'
-import axiosClient from './axiosClien'
+import axiosClient from './axiosClient'
 
 const url = 'university'
 
@@ -23,23 +23,21 @@ const studentsApi = {
     )
   },
 
+  filterByCondition(offset: number, status: string, fullName: string) {
+    return axiosClient.get<string, { data: StudentModel[]; pagination: { total: number } }>(
+      `${API_BASE_URL}/${url}/student/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&firstName=&lastName=`
+    )
+  },
+
   editInfoStudent(id: string, data: EditStudentData) {
     return axiosClient.patch<string, StudentModel>(`${API_BASE_URL}/${url}/student?id=${id}`, data)
   },
 
-  // getAllCouponsByCouponName(offset: number, couponName: string) {
-  //   return axiosClient.get<string, { data: Coupon[]; pagination: any }>(
-  //     `${url}/name/details?couponName=${couponName}&limit=6&offset=${offset}`
-  //   )
-  // },
-
-  // addNewCoupon(data: FormData) {
-  //   return axiosClient.post<string, Coupon>(`${url}`, data)
-  // },
-
-  // deleteCouponById(id: string) {
-  //   return axiosClient.delete<string, Coupon>(`${url}/remove?id=${id}`)
-  // },
+  addNewStudent(data: StudentModel[]) {
+    return axiosClient.post<string, StudentModel[]>(`${API_BASE_URL}/${url}/student`, {
+      students: data,
+    })
+  },
 }
 
 export default studentsApi

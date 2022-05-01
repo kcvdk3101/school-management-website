@@ -1,12 +1,10 @@
 import React from 'react'
-import { Grid, TextField, Button, FormControl } from '@mui/material'
+import { Grid, TextField, Button } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { FormState, UseFormRegister } from 'react-hook-form'
+import { FormState, UseFormRegister, UseFormResetField } from 'react-hook-form'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
-import InputLabel from '@mui/material/InputLabel'
+import { useTranslation } from 'react-i18next'
 
 type Input = {
   lastName: string
@@ -14,98 +12,107 @@ type Input = {
   identityNumber: string
   address: string
   phoneNumber: string
+  class: string
 }
 
 type NewStudentFormProps = {
-  classSelection: string
+  birth: string | null
   register: UseFormRegister<Input>
+  resetField: UseFormResetField<Input>
   formState: FormState<Input>
   handleClose: () => void
+  handleChangeBirth: (value: string | null) => void
 }
 
 const NewStudentForm: React.FC<NewStudentFormProps> = ({
-  classSelection,
+  resetField,
+  birth,
   register,
   formState: { errors },
   handleClose,
+  handleChangeBirth,
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Grid container columnSpacing={6} rowSpacing={3}>
       <Grid item xs={6} container spacing={2}>
         <Grid item xs={6}>
           <TextField
-            label='lastName'
+            label={t('Last name')}
             required
             fullWidth
-            // defaultValue={student.lastName}
+            autoComplete='off'
             {...register('lastName')}
+            error={Boolean(errors.lastName)}
             helperText={errors.lastName?.message}
           />
         </Grid>
         <Grid item xs={6}>
           <TextField
-            label='firstName'
+            label={t('First name')}
             required
             fullWidth
-            // defaultValue={student.firstName}
+            autoComplete='off'
             {...register('firstName')}
+            error={Boolean(errors.firstName)}
             helperText={errors.firstName?.message}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label='identityNumber'
+            label={t('Identity number')}
             required
             fullWidth
-            // defaultValue={student.identityNumber}
+            autoComplete='off'
             {...register('identityNumber')}
-            // helperText={errors.identityNumber?.message}
+            error={Boolean(errors.identityNumber)}
+            helperText={errors.identityNumber?.message}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label='phoneNumber'
+            label={t('Phone')}
             required
             fullWidth
-            // defaultValue={student.phoneNumber}
+            autoComplete='off'
             {...register('phoneNumber')}
-            // helperText={errors.phoneNumber?.message}
+            error={Boolean(errors.phoneNumber)}
+            helperText={errors.phoneNumber?.message}
           />
         </Grid>
       </Grid>
       <Grid item xs={6} container spacing={2}>
         <Grid item xs={12}>
-          <FormControl fullWidth>
-            <InputLabel id='demo-simple-select-label'>Select Class</InputLabel>
-            <Select
-              value={classSelection}
-              label='Select Class'
-              // onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          <TextField
+            label={t('Class')}
+            required
+            fullWidth
+            autoComplete='off'
+            {...register('class')}
+            error={Boolean(errors.class)}
+            helperText={errors.class?.message}
+          />
         </Grid>
 
         <Grid item xs={12}>
           <TextField
-            label='address'
+            label={t('Address')}
             required
             fullWidth
-            // defaultValue={student.identityNumber}
+            autoComplete='off'
             {...register('address')}
-            // helperText={errors.identityNumber?.message}
+            error={Boolean(errors.address)}
+            helperText={errors.address?.message}
           />
         </Grid>
         <Grid item xs={12}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
-              label='birdDate'
-              value={new Date().getDate()}
+              label={t('Birthday')}
+              value={birth}
               onChange={(newValue) => {
-                console.log(newValue)
+                handleChangeBirth(newValue)
               }}
               renderInput={(params) => <TextField fullWidth {...params} />}
             />
@@ -113,11 +120,24 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
         </Grid>
       </Grid>
       <Grid item xs={6}>
-        <Button type='button' variant='outlined' color='secondary' onClick={handleClose}>
-          Cancel
+        <Button
+          type='button'
+          variant='outlined'
+          color='secondary'
+          onClick={() => {
+            handleClose()
+            resetField('firstName')
+            resetField('lastName')
+            resetField('address')
+            resetField('identityNumber')
+            resetField('phoneNumber')
+            resetField('class')
+          }}
+        >
+          {t('Cancel')}
         </Button>
         <Button type='submit' variant='contained' sx={{ ml: 1 }}>
-          Save
+          {t('Save')}
         </Button>
       </Grid>
     </Grid>

@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Container, Paper, Typography } from '@mui/material'
+import { Box, Paper, Typography } from '@mui/material'
 import EditStudentForm from './EditStudentForm'
 import { StudentModel } from '../../../../models'
 import { useTranslation } from 'react-i18next'
@@ -70,7 +70,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
     try {
       await dispatch(
         editInfoStudent({
-          id: student.id,
+          id: student.id as string,
           data: {
             firstName: data.firstName,
             lastName: data.lastName,
@@ -90,7 +90,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   })
 
   return (
-    <Container maxWidth='sm' className={classes.modal}>
+    <Box maxWidth='sm' className={classes.modal}>
       <Paper
         sx={{
           p: 2,
@@ -110,7 +110,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
           />
         </form>
       </Paper>
-    </Container>
+    </Box>
   )
 }
 

@@ -11,6 +11,7 @@ import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { StudentModel } from '../../models/student.model'
 import FilterButton from '../../pages/admin/students/components/FilterButton'
@@ -22,6 +23,7 @@ interface StudentTableProps {
   students: StudentModel[]
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
+  setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 interface RowData extends StudentModel {
@@ -38,17 +40,17 @@ const headCells: HeadCell[] = [
   {
     id: 'identityNumber',
     disablePadding: true,
-    label: 'Identity Number',
+    label: 'Identity number',
   },
   {
     id: 'lastName',
     disablePadding: false,
-    label: 'Last Name',
+    label: 'Last name',
   },
   {
     id: 'firstName',
     disablePadding: false,
-    label: 'First Name',
+    label: 'First name',
   },
   {
     id: 'class',
@@ -68,7 +70,7 @@ const headCells: HeadCell[] = [
   {
     id: 'phoneNumber',
     disablePadding: false,
-    label: 'Phone Number',
+    label: 'Phone',
   },
   {
     id: 'status',
@@ -82,9 +84,15 @@ const headCells: HeadCell[] = [
   },
 ]
 
-const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChangePage }) => {
+const StudentTable: React.FC<StudentTableProps> = ({
+  students,
+  page,
+  setPage,
+  handleChangePage,
+}) => {
+  const { t } = useTranslation()
+
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState<string[]>([])
   const [currentId, setCurrentId] = useState<number>(-1)
 
   const totalStudents = useAppSelector((state) => state.students.pagination.total)
@@ -129,7 +137,7 @@ const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChang
   return (
     <Paper>
       <Toolbar>
-        <FilterButton />
+        <FilterButton setPage={setPage} />
         <SearchButton />
       </Toolbar>
       <TableContainer>
@@ -144,7 +152,7 @@ const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChang
                     py: 1,
                   }}
                 >
-                  {headCell.label}
+                  {t(`${headCell.label}`)}
                 </TableCell>
               ))}
             </TableRow>
