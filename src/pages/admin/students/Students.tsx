@@ -1,24 +1,29 @@
 import SaveIcon from '@mui/icons-material/Save'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 import { Box, Button, Toolbar, Typography } from '@mui/material'
+import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
+import axios from 'axios'
+import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
 import NewStudentFormManagement from '../../../components/form/student/new/NewStudentFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import StudentTable from '../../../components/tables/StudentTable'
+import { API_BASE_URL } from '../../../constants'
 import {
   getStudents,
-  saveStudentsExcelFile,
   getStudentsByFilter,
+  saveStudentsExcelFile,
 } from '../../../features/student/studentsSlice'
+import FilterButton from './components/FilterButton'
 import NoData from './components/NoData'
-import { useNavigate, useLocation } from 'react-router-dom'
-import queryString from 'query-string'
+import SearchButton from './components/SearchButton'
 
 type StudentsProps = {}
 
@@ -53,21 +58,24 @@ const Students: React.FC<StudentsProps> = () => {
 
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
-  const [openNewStudent, setOpenNewStudent] = useState(false)
+  const [selectedName, setSelectedName] = useState<string>('')
+
   const [page, setPage] = useState(0)
+  const [openNewStudent, setOpenNewStudent] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       try {
-        if (status || fullName) {
-          return await dispatch(getStudentsByFilter({ offset, status, fullName }))
+        if (status || selectedName) {
+          return await dispatch(getStudentsByFilter({ offset, status, fullName: selectedName }))
         }
+
         await dispatch(getStudents(offset))
       } catch (error) {
         console.log(error)
       }
     })()
-  }, [dispatch, fullName, offset, status])
+  }, [dispatch, selectedName, offset, status])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
@@ -78,8 +86,12 @@ const Students: React.FC<StudentsProps> = () => {
     setOpenNewStudent(true)
   }
 
-  const handleCloseNewStudent = () => {
+  function handleCloseNewStudent() {
     setOpenNewStudent(false)
+  }
+
+  const handleChangeSelectedName = (value: string) => {
+    setSelectedName(value)
   }
 
   const saveExcelFile = async () => {
@@ -189,23 +201,32 @@ const Students: React.FC<StudentsProps> = () => {
               </Button>
             </Box>
           </Box>
-          {fetchingStudent ? (
-            <SkeletonStudentTable columns={6} />
-          ) : students.length === 0 ? (
-            <NoData />
-          ) : (
-            <StudentTable
-              students={students}
-              handleChangePage={handleChangePage}
-              page={page}
-              setPage={setPage}
-            />
-          )}
+
+          <Paper sx={{ p: 1, height: 'auto' }}>
+            <Box
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
+              <FilterButton setPage={setPage} />
+            </Box>
+            {fetchingStudent ? (
+              <SkeletonStudentTable columns={6} />
+            ) : students.length === 0 ? (
+              <NoData />
+            ) : (
+              <StudentTable page={page} students={students} handleChangePage={handleChangePage} />
+            )}
+          </Paper>
         </Box>
       </Box>
 
       {/* New Student Form */}
-      <NewStudentFormManagement open={openNewStudent} handleClose={handleCloseNewStudent} />
+      <NewStudentFormManagement open={openNewStudent} handleClose={() => handleCloseNewStudent()} />
     </>
   )
 }

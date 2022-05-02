@@ -1,7 +1,7 @@
 {
   "Admin": "Quản trị viên",
   "Home - JOBHUB": "Trang chủ - JOBHUB",
-  "Recruitment News March 2022": "Tin tức tuyển dụng Tháng 3/2022",
+  "Recruitment News": "Tin tức tuyển dụng",
   "Our partners": "Đối tác của chúng tôi",
   "Search for internship and work place": "Tìm kiếm nơi thực tập và làm việc",
   "Job": "Công việc",
@@ -13,6 +13,7 @@
   "Signout": "Đăng xuất",
 
   "Add new": "Thêm mới sinh viên",
+  "Search fullname": "Tìm kiếm tên sinh viên...",
 
   "Student information": "Thông tin sinh viên",
   "Edit student title": "Chỉnh sửa thông tin sinh viên",
@@ -35,5 +36,13 @@
 
   "Cancel": "Hủy",
   "Save": "Lưu",
-  "Edit": "Chỉnh sửa"
+  "Edit": "Chỉnh sửa",
+
+  "This field is required": "Trường này bắt buộc",
+  "Phone number is invalid": "Số điện thoại không hợp lệ",
+  "Phone number must be exactly 10 numbers": "Điện thoại phải có chính xác 10 số",
+  "Identity number is invalid": "Mã số không hợp lệ",
+  "Identity number has existed": "Mã số đã tồn tại",
+  "Class must be exactly 6 characters": "Tên lớp học phải có chính xác 6 ký tự",
+  "Class is invalid": "Tên lớp học không hợp lệ"
 }

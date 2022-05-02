@@ -1,61 +1,98 @@
-import React from 'react'
-import InputBase from '@mui/material/InputBase'
-import { styled, alpha } from '@mui/material/styles'
-import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
+import Autocomplete from '@mui/material/Autocomplete'
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
+import axios from 'axios'
+import queryString from 'query-string'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../../../../constants'
+import { StudentModel } from '../../../../models'
 
-type SearchButtonProps = {}
+type SearchButtonProps = {
+  setPage: React.Dispatch<React.SetStateAction<number>>
+  handleChangeSelectedName: (value: string) => void
+}
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}))
+const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelectedName }) => {
+  const { t } = useTranslation()
+  let { search } = useLocation()
+  let navigate = useNavigate()
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}))
+  let paginationQuery = queryString.parse(search)
+  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
+  const status = paginationQuery.status ? (paginationQuery.status as string) : ''
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}))
+  const [searchInput, setSearchInput] = useState<string>('')
+  const [results, setResults] = useState<StudentModel[]>([])
 
-const SearchButton: React.FC<SearchButtonProps> = () => {
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/university/student/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${searchInput}`
+        )
+        setResults(response.data.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [searchInput])
+
   return (
-    <Search>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase placeholder='Search…' inputProps={{ 'aria-label': 'search' }} />
-    </Search>
+    <Box component='div' sx={{ mx: 1 }}>
+      <Stack sx={{ minWidth: 300, maxWidth: 350 }}>
+        <Autocomplete
+          disableClearable
+          freeSolo
+          getOptionLabel={(option) => option.fullName}
+          options={results}
+          onChange={(e, value: any) => {
+            setSearchInput(value.fullName)
+            handleChangeSelectedName(value.fullName)
+            setPage(0)
+            navigate({
+              pathname: '/admin/students',
+              search: `?limit=8&offset=0&status=${status}&fullName=${value.fullName}`,
+            })
+          }}
+          clearIcon={<SearchIcon fontSize='large' />}
+          renderOption={(props, student) => (
+            <Box component='li' {...props} key={student.identityNumber}>
+              {student.fullName}
+            </Box>
+          )}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              fullWidth
+              placeholder={t('Search fullname')}
+              variant='standard'
+              sx={{ p: 1 }}
+              type='search'
+              onChange={(e) => {
+                setSearchInput(e.target.value)
+                handleChangeSelectedName(e.target.value)
+                if (!e.target.value) {
+                  navigate({
+                    pathname: '/admin/students',
+                    search: `?limit=8&offset=0&status=${status}`,
+                  })
+                } else {
+                  navigate({
+                    pathname: '/admin/students',
+                    search: `?limit=8&offset=0&status=${status}&fullName=${e.target.value}`,
+                  })
+                }
+                setPage(0)
+              }}
+            />
+          )}
+        />
+      </Stack>
+    </Box>
   )
 }
 

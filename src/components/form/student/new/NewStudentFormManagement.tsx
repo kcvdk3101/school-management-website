@@ -1,15 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Container, Modal, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
-import { addNewStudent } from '../../../../features/student/studentsSlice'
+import { API_BASE_URL } from '../../../../constants'
+import { addNewStudent, getStudents } from '../../../../features/student/studentsSlice'
 import { StudentModel } from '../../../../models'
 import NewStudentForm from './NewStudentForm'
+import queryString from 'query-string'
+import { useLocation } from 'react-router-dom'
 
 type NewStudentFormManagementProps = {
   open: boolean
@@ -25,41 +29,55 @@ type Input = {
   phoneNumber: string
 }
 
-const newStudentSchema = yup
-  .object({
-    lastName: yup.string().trim(),
-    firstName: yup.string().trim(),
-    identityNumber: yup
-      .string()
-      .trim()
-      .test(
-        'checkIdentityNumberLength',
-        'Must be exactly 10 characters',
-        (val) => val?.toString().length === 10
-      )
-      .matches(/^[0-9][0-9]+DH[0-9][0-9][0-9][0-9][0-9][0-9]$/, 'Identity mumber is invalid'),
-    address: yup.string().trim(),
-    phoneNumber: yup
-      .string()
-      .matches(
-        /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-        'Phone number is invalid'
-      ),
-    class: yup
-      .string()
-      .test(
-        'checkClassLength',
-        'Must be exactly 6 characters',
-        (val) => val?.toString().length === 6
-      )
-      .test('checkValidClass', 'Class is invalid', function (value) {
-        if (value?.startsWith('AN') || value?.startsWith('PM') || value?.startsWith('TT')) {
-          return true
-        }
+const newStudentSchema = yup.object({
+  lastName: yup.string().trim().required('This field is required'),
+  firstName: yup.string().trim().required('This field is required'),
+  identityNumber: yup
+    .string()
+    .trim()
+    .matches(/^[0-9][0-9]+DH[0-9][0-9][0-9][0-9][0-9][0-9]$/, 'Identity number is invalid')
+    .test(
+      'checkIdentityNumberLength',
+      'Identity number is invalid',
+      (val) => val?.toString().length === 10
+    )
+    .test('checkDuplicateIdentityNumber', 'Identity number has existed', async (value) => {
+      const { data } = await axios.get(`${API_BASE_URL}/university/student/IdentityNumber`)
+      let checkDuplicate = data.findIndex((element: { MSSV: string }) => element.MSSV === value)
+      if (checkDuplicate > -1) {
         return false
-      }),
-  })
-  .required('This field is required')
+      }
+      return true
+    })
+    .required('This field is required'),
+  address: yup.string().trim().required('This field is required'),
+  phoneNumber: yup
+    .string()
+    .matches(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      'Phone number is invalid'
+    )
+    .test(
+      'checkPhoneNumberLength',
+      'Phone number must be exactly 10 numbers',
+      (val) => val?.toString().length === 10
+    )
+    .required('This field is required'),
+  class: yup
+    .string()
+    .test(
+      'checkClassLength',
+      'Class must be exactly 6 characters',
+      (val) => val?.toString().length === 6
+    )
+    .test('checkValidClass', 'Class is invalid', function (value) {
+      if (value?.startsWith('AN') || value?.startsWith('PM') || value?.startsWith('TT')) {
+        return true
+      }
+      return false
+    })
+    .required('This field is required'),
+})
 
 const useStyles = makeStyles({
   modal: {
@@ -77,8 +95,14 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
   const classes = useStyles()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
+  let { search } = useLocation()
+
+  let paginationQuery = queryString.parse(search)
+  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
 
   const { register, handleSubmit, formState, resetField } = useForm<Input>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     resolver: yupResolver(newStudentSchema),
   })
 
@@ -93,6 +117,7 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
     students.push({
       firstName: data.firstName,
       lastName: data.lastName,
+      fullName: `${data.lastName} ${data.firstName}`,
       birthDate: birth as string,
       identityNumber: data.identityNumber,
       address: data.address,
@@ -102,9 +127,8 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
     })
 
     try {
-      const response = await dispatch(addNewStudent(students))
-      console.log(response)
-      // await dispatch(getStudents(0))
+      await dispatch(addNewStudent(students))
+      await dispatch(getStudents(offset))
       toast.success('Add successfully!')
     } catch (error) {
       toast.error(error as Error)

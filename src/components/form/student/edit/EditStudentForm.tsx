@@ -1,9 +1,13 @@
 import { Button, Grid, TextField } from '@mui/material'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import React from 'react'
-import { FormState, UseFormRegister, UseFormReset } from 'react-hook-form'
+import { FormState, UseFormRegister } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { StudentModel } from '../../../../models'
 
@@ -12,6 +16,7 @@ type Input = {
   firstName: string
   address: string
   phoneNumber: string
+  class: string
 }
 
 type EditStudentFormProps = {
@@ -19,8 +24,10 @@ type EditStudentFormProps = {
   formState: FormState<Input>
   student: StudentModel
   value: string | null
+  status: string
   handleClose: () => void
   handleChangeValue: (value: string | null) => void
+  handleChangeStatus: (event: SelectChangeEvent) => void
 }
 
 const EditStudentForm: React.FC<EditStudentFormProps> = ({
@@ -28,10 +35,11 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
   formState: { errors, isSubmitting },
   student,
   value,
+  status,
   handleClose,
   handleChangeValue,
+  handleChangeStatus,
 }) => {
-  // const classes = useStyles()
   const { t } = useTranslation()
 
   return (
@@ -43,7 +51,8 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
           fullWidth
           defaultValue={student.lastName}
           {...register('lastName')}
-          helperText={errors.lastName?.message}
+          error={Boolean(errors.lastName)}
+          helperText={t(`${errors.lastName?.message ? errors.lastName?.message : ''}`)}
         />
       </Grid>
       <Grid item xs={6}>
@@ -53,7 +62,8 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
           fullWidth
           defaultValue={student.firstName}
           {...register('firstName')}
-          helperText={errors.firstName?.message}
+          error={Boolean(errors.firstName)}
+          helperText={t(`${errors.firstName?.message ? errors.firstName?.message : ''}`)}
         />
       </Grid>
       <Grid item xs={6}>
@@ -75,8 +85,30 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
           fullWidth
           defaultValue={student.phoneNumber}
           {...register('phoneNumber')}
-          helperText={errors.phoneNumber?.message}
+          error={Boolean(errors.phoneNumber)}
+          helperText={t(`${errors.phoneNumber?.message ? errors.phoneNumber?.message : ''}`)}
         />
+      </Grid>
+      <Grid item xs={6}>
+        <TextField
+          label={t('Class')}
+          required
+          fullWidth
+          defaultValue={student.class}
+          {...register('class')}
+          error={Boolean(errors.class)}
+          helperText={t(`${errors.class?.message ? errors.class?.message : ''}`)}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <FormControl fullWidth>
+          <InputLabel id='demo-simple-select-label'>{t('Status')}</InputLabel>
+          <Select value={status} label='Age' onChange={handleChangeStatus}>
+            <MenuItem value='Chưa thực tập'>{t("Haven't practiced")}</MenuItem>
+            <MenuItem value='Đang thực tập'>{t('Practicing')}</MenuItem>
+            <MenuItem value='Đã thực tập'>{t('Trained')}</MenuItem>
+          </Select>
+        </FormControl>
       </Grid>
       <Grid item xs={12}>
         <TextField
@@ -85,7 +117,8 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
           fullWidth
           defaultValue={student.address}
           {...register('address')}
-          helperText={errors.address?.message}
+          error={Boolean(errors.address)}
+          helperText={t(`${errors.address?.message ? errors.address?.message : ''}`)}
         />
       </Grid>
       <Grid item xs={12}>

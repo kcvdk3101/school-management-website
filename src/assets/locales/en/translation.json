@@ -1,7 +1,7 @@
 {
   "Admin": "Admin",
   "Home - JOBHUB": "Home - JOBHUB",
-  "Recruitment News March 2022": "Recruitment News March 2022",
+  "Recruitment News": "Recruitment News",
   "Our partners": "Our partners",
   "Search for internship and work place": "Search for internship and work place",
   "Job": "Job",
@@ -13,6 +13,7 @@
   "Edit student title": "Edit student information",
 
   "Add new": "Add new student",
+  "Search fullname": "Search fullname...",
 
   "Last name": "Last name",
   "First name": "First name",
@@ -32,5 +33,13 @@
 
   "Cancel": "Cancel",
   "Save": "Save",
-  "Edit": "Edit"
+  "Edit": "Edit",
+
+  "This field is required": "This field is required",
+  "Phone number is invalid": "Phone number is invalid",
+  "Phone number must be exactly 10 numbers": "Phone number must be exactly 10 numbers",
+  "Identity number is invalid": "Identity number is invalid",
+  "Identity number has existed": "Identity number has existed",
+  "Class must be exactly 6 characters": "Class must be exactly 6 characters",
+  "Class is invalid": "Class is invalid"
 }

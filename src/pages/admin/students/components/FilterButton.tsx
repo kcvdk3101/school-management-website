@@ -4,8 +4,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useLocation } from 'react-router-dom'
-import queryString from 'query-string'
+import { useNavigate } from 'react-router-dom'
 
 type FilterButtonProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -14,10 +13,6 @@ type FilterButtonProps = {
 const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
   const { t } = useTranslation()
   let navigate = useNavigate()
-  let { search } = useLocation()
-
-  let paginationQuery = queryString.parse(search)
-  const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -38,7 +33,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
 
     navigate({
       pathname: '/admin/students',
-      search: `?limit=8&offset=0&status=${status}&fullName=${fullName}`,
+      search: `?limit=8&offset=0&status=${status}`,
     })
   }
 

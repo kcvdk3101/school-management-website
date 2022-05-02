@@ -10,6 +10,8 @@ export interface EditStudentData {
   address: string
   birthDate: string
   phoneNumber: string
+  status: string
+  class: string
 }
 
 const studentsApi = {
@@ -25,7 +27,7 @@ const studentsApi = {
 
   filterByCondition(offset: number, status: string, fullName: string) {
     return axiosClient.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${API_BASE_URL}/${url}/student/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&firstName=&lastName=`
+      `${API_BASE_URL}/${url}/student/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}`
     )
   },
 

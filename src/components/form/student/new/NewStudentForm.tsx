@@ -35,7 +35,7 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
   const { t } = useTranslation()
 
   return (
-    <Grid container columnSpacing={6} rowSpacing={3}>
+    <Grid container spacing={3}>
       <Grid item xs={6} container spacing={2}>
         <Grid item xs={6}>
           <TextField
@@ -45,7 +45,7 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
             autoComplete='off'
             {...register('lastName')}
             error={Boolean(errors.lastName)}
-            helperText={errors.lastName?.message}
+            helperText={t(`${errors.lastName?.message ? errors.lastName?.message : ''}`)}
           />
         </Grid>
         <Grid item xs={6}>
@@ -56,7 +56,7 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
             autoComplete='off'
             {...register('firstName')}
             error={Boolean(errors.firstName)}
-            helperText={errors.firstName?.message}
+            helperText={t(`${errors.firstName?.message ? errors.firstName?.message : ''}`)}
           />
         </Grid>
         <Grid item xs={12}>
@@ -67,7 +67,9 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
             autoComplete='off'
             {...register('identityNumber')}
             error={Boolean(errors.identityNumber)}
-            helperText={errors.identityNumber?.message}
+            helperText={t(
+              `${errors.identityNumber?.message ? errors.identityNumber?.message : ''}`
+            )}
           />
         </Grid>
         <Grid item xs={12}>
@@ -78,7 +80,7 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
             autoComplete='off'
             {...register('phoneNumber')}
             error={Boolean(errors.phoneNumber)}
-            helperText={errors.phoneNumber?.message}
+            helperText={t(`${errors.phoneNumber?.message ? errors.phoneNumber?.message : ''}`)}
           />
         </Grid>
       </Grid>
@@ -91,7 +93,7 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
             autoComplete='off'
             {...register('class')}
             error={Boolean(errors.class)}
-            helperText={errors.class?.message}
+            helperText={t(`${errors.class?.message ? errors.class?.message : ''}`)}
           />
         </Grid>
 
@@ -103,7 +105,7 @@ const NewStudentForm: React.FC<NewStudentFormProps> = ({
             autoComplete='off'
             {...register('address')}
             error={Boolean(errors.address)}
-            helperText={errors.address?.message}
+            helperText={t(`${errors.address?.message ? errors.address?.message : ''}`)}
           />
         </Grid>
         <Grid item xs={12}>

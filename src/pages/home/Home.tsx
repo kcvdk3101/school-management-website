@@ -90,7 +90,7 @@ const Home: React.FC<HomeProps> = () => {
       <Container maxWidth='lg' className={classes.headingContainer}>
         <Box className={classes.heading}>
           <Typography variant='h5' color='#f05742' fontWeight={700}>
-            {t('Recruitment News March 2022')}
+            {t('Recruitment News')}
           </Typography>
         </Box>
 

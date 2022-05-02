@@ -14,8 +14,6 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { StudentModel } from '../../models/student.model'
-import FilterButton from '../../pages/admin/students/components/FilterButton'
-import SearchButton from '../../pages/admin/students/components/SearchButton'
 import { convertDateString } from '../../utils'
 import EditStudentFormManagement from '../form/student/edit/EditStudentFormManagement'
 
@@ -23,7 +21,6 @@ interface StudentTableProps {
   students: StudentModel[]
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
-  setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 interface RowData extends StudentModel {
@@ -60,7 +57,7 @@ const headCells: HeadCell[] = [
   {
     id: 'birthDate',
     disablePadding: false,
-    label: 'Birth Date',
+    label: 'Birthday',
   },
   {
     id: 'email',
@@ -84,12 +81,7 @@ const headCells: HeadCell[] = [
   },
 ]
 
-const StudentTable: React.FC<StudentTableProps> = ({
-  students,
-  page,
-  setPage,
-  handleChangePage,
-}) => {
+const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChangePage }) => {
   const { t } = useTranslation()
 
   const [open, setOpen] = useState(false)
@@ -135,11 +127,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
   // const isSelected = (name: any) => selected.indexOf(name) !== -1
 
   return (
-    <Paper>
-      <Toolbar>
-        <FilterButton setPage={setPage} />
-        <SearchButton />
-      </Toolbar>
+    <>
       <TableContainer>
         <Table aria-labelledby='tableTitle' size={'medium'}>
           <TableHead>
@@ -220,7 +208,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
           page={page}
         />
       </Modal>
-    </Paper>
+    </>
   )
 }
 

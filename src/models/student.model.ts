@@ -2,6 +2,7 @@ export interface StudentModel {
   id?: string
   firstName: string
   lastName: string
+  fullName: string
   email?: string
   identityNumber: string
   birthDate: string
