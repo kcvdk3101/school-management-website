@@ -2,6 +2,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import { Box, Grid, MenuItem, TextField } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import CustomButon from '../../../../components/commons/CustomButon'
 import Levels from '../../../../constants/levels'
 import Provinces from '../../../../constants/provinces'
@@ -17,6 +18,7 @@ const useStyles = makeStyles({
 
 const FilterForm: React.FC<FilterFormProps> = () => {
   const classes = useStyles()
+  const { t } = useTranslation()
 
   const [provices, setProvices] = useState('')
   const [levels, setLevels] = useState('')
@@ -32,20 +34,20 @@ const FilterForm: React.FC<FilterFormProps> = () => {
   return (
     <Grid item xs={12}>
       <Box component='form' className={classes.box}>
+        {/* Filter Form */}
         <Grid container justifyContent='flex-start' spacing={2}>
-          {/* Search Form */}
-          {/* <Grid item xs={3}>
+          <Grid item xs={4}>
             <TextField
-              margin='normal'
-              fullWidth
-              autoFocus
               required
-              placeholder='Type keyword'
-              id='keyword'
-              name='keyword'
+              fullWidth
+              margin='normal'
+              placeholder={t('Searching job')}
+              id='name'
+              name='name'
+              autoFocus
               color='secondary'
             />
-          </Grid> */}
+          </Grid>
           <Grid item xs={3}>
             <TextField
               margin='normal'
@@ -53,7 +55,7 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               select
               id='city'
               name='city'
-              label='Choose your city'
+              label={t('Choose your city')}
               value={provices}
               onChange={handleChangeProvice}
             >
@@ -71,7 +73,7 @@ const FilterForm: React.FC<FilterFormProps> = () => {
               select
               id='level'
               name='level'
-              label='Choose level'
+              label={t('Choose level')}
               value={levels}
               onChange={handleChangeLevel}
             >
@@ -83,37 +85,6 @@ const FilterForm: React.FC<FilterFormProps> = () => {
             </TextField>
           </Grid>
 
-          {/* <Grid item xs={4}>
-            <TextField
-              fullWidth
-              select
-              id='city'
-              name='city'
-              label='Choose your city'
-              value={provices}
-              onChange={handleChangeProvice}
-            >
-              {Provinces.map((provice) => (
-                <MenuItem key={provice.value} value={provice.value}>
-                  {provice.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid> */}
-
-          {/* Filter Form */}
-          <Grid item xs={4}>
-            <TextField
-              required
-              fullWidth
-              margin='normal'
-              placeholder='Type keyword'
-              id='name'
-              name='name'
-              autoFocus
-              color='secondary'
-            />
-          </Grid>
           <Grid
             item
             xs={1}

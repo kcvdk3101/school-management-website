@@ -1,75 +1,48 @@
 import SearchIcon from '@mui/icons-material/Search'
-import { Box, Grid, MenuItem, TextField } from '@mui/material'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { Box, Grid, TextField } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { FormState, UseFormRegister } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import CustomButon from '../../../../components/commons/CustomButon'
-import Provinces from '../../../../constants/provinces'
 
 type FieldProps = {
-  kw: string
-  location: string
+  jobTitle: string
 }
 
 type SearchFormProps = {
   onSubmit: (e?: React.BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>
   register: UseFormRegister<FieldProps>
   formState: FormState<FieldProps>
-  city: string
-  handleChange: (e: SelectChangeEvent<string>) => void
 }
 
 const useStyles = makeStyles({
   box: {
+    width: '100%',
     backgroundColor: 'white',
     borderRadius: 10,
   },
 })
 
-const SearchForm: React.FC<SearchFormProps> = ({
-  onSubmit,
-  register,
-  formState: { errors },
-  city,
-  handleChange,
-}) => {
+const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, register, formState: { errors } }) => {
   const classes = useStyles()
-
-  // const handleChangeProvice = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setProvices(event.target.value)
-  // }
+  const { t } = useTranslation()
 
   return (
-    <Grid item xs={12}>
+    <Grid item container xs={10}>
       <Box component='form' className={classes.box} padding={2} onSubmit={onSubmit}>
         <Grid container justifyContent='center' spacing={2}>
           {/* Search Form */}
-          <Grid item xs={4}>
+          <Grid item xs={10}>
             <TextField
-              label='Keyword'
+              label={t('Job')}
+              placeholder={t('Searching job')}
               autoFocus
               required
               fullWidth
-              {...register('kw')}
-              helperText={errors.kw?.message}
+              {...register('jobTitle')}
+              helperText={errors.jobTitle?.message}
             />
-          </Grid>
-          <Grid item xs={4}>
-            <Select
-              margin='none'
-              fullWidth
-              id='demo-simple-select'
-              value={city}
-              label='City'
-              onChange={handleChange}
-            >
-              {Provinces.map((provice) => (
-                <MenuItem key={provice.value} value={provice.value}>
-                  {provice.label}
-                </MenuItem>
-              ))}
-            </Select>
           </Grid>
           <Grid
             item

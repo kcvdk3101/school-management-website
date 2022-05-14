@@ -1,47 +1,39 @@
-import React from 'react'
-import SearchForm from './SearchForm'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
-import { SelectChangeEvent } from '@mui/material'
+import SearchForm from './SearchForm'
+import { useNavigate } from 'react-router-dom'
 
 type SearchFormManagementProps = {}
 
 type FieldProps = {
-  kw: string
-  location: string
+  jobTitle: string
 }
 
 const searchSchema = yup
   .object({
-    firstName: yup.string(),
-    age: yup.number().positive().integer(),
+    jobTitle: yup.string().required('This field is required'),
   })
   .required()
 
 const SearchFormManagement: React.FC<SearchFormManagementProps> = () => {
-  const { register, handleSubmit, formState, watch, setValue } = useForm<FieldProps>({
+  const { register, handleSubmit, formState } = useForm<FieldProps>({
     defaultValues: {
-      kw: '',
-      location: '',
+      jobTitle: '',
     },
     resolver: yupResolver(searchSchema),
   })
+  let navigate = useNavigate()
 
-  const city = watch('location')
-  const handleChange = (e: SelectChangeEvent<string>) => setValue('location', e.target.value)
+  const onSubmit = handleSubmit((data) => {
+    navigate({
+      pathname: '/job',
+      search: `?limit=8&offset=0&title=${data.jobTitle}`,
+    })
+  })
 
-  const onSubmit = handleSubmit((data) => console.log(data))
-
-  return (
-    <SearchForm
-      onSubmit={onSubmit}
-      register={register}
-      formState={formState}
-      city={city}
-      handleChange={handleChange}
-    />
-  )
+  return <SearchForm onSubmit={onSubmit} register={register} formState={formState} />
 }
 
 export default SearchFormManagement

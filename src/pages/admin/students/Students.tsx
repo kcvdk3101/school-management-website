@@ -4,7 +4,6 @@ import { Box, Button, Toolbar, Typography } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
-import axios from 'axios'
 import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
@@ -15,7 +14,6 @@ import Header from '../../../components/commons/Header'
 import NewStudentFormManagement from '../../../components/form/student/new/NewStudentFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import StudentTable from '../../../components/tables/StudentTable'
-import { API_BASE_URL } from '../../../constants'
 import {
   getStudents,
   getStudentsByFilter,

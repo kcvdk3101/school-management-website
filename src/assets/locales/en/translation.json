@@ -35,6 +35,10 @@
   "Save": "Save",
   "Edit": "Edit",
 
+  "Searching job": "Searching job",
+  "Choose your city": "Choose your city",
+  "Choose level": "Choose level",
+
   "This field is required": "This field is required",
   "Phone number is invalid": "Phone number is invalid",
   "Phone number must be exactly 10 numbers": "Phone number must be exactly 10 numbers",

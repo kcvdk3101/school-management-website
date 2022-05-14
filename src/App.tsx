@@ -9,6 +9,7 @@ import Students from './pages/admin/students/Students'
 import Home from './pages/home/Home'
 import Job from './pages/job/Job'
 import JobDetail from './pages/jobDetail/JobDetail'
+import Blog from './pages/blog/Blog'
 import NotFound from './pages/NotFound'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -23,6 +24,7 @@ function App() {
           <Route path='job' element={<Job />} />
           <Route path='job/:id' element={<JobDetail />} />
 
+          <Route path='blog' element={<Blog />} />
           <Route path='about' element={<About />} />
         </Route>
 

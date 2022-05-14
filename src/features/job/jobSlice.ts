@@ -21,7 +21,15 @@ const initialState: JobState = {
 export const getJobs = createAsyncThunk(
   'jobs/getJobs',
   async ({ limit, offset }: { limit: number; offset: number }) => {
-    const response = await jobApi.getJobsByCondition(limit, offset)
+    const response = await jobApi.getJobs(limit, offset)
+    return response
+  }
+)
+
+export const getJobsByTitle = createAsyncThunk(
+  'jobs/getJobsByTitle',
+  async ({ limit, offset, title }: { limit: number; offset: number; title: string }) => {
+    const response = await jobApi.getJobsByTitle(limit, offset, title)
     return response
   }
 )
@@ -31,7 +39,7 @@ export const jobSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // Get jobs by condition
+    // Get Jobs
     builder.addCase(getJobs.pending, (state, action) => {
       state.fetchingJob = true
     })
@@ -41,6 +49,21 @@ export const jobSlice = createSlice({
       state.pagination.total = action.payload.data.pagination.total
     })
     builder.addCase(getJobs.rejected, (state, action) => {
+      state.fetchingJob = false
+      state.jobs = []
+      state.pagination.total = 0
+    })
+
+    // Get Jobs By Title
+    builder.addCase(getJobsByTitle.pending, (state, action) => {
+      state.fetchingJob = true
+    })
+    builder.addCase(getJobsByTitle.fulfilled, (state, action) => {
+      state.fetchingJob = false
+      state.jobs = action.payload.data.data
+      state.pagination.total = action.payload.data.pagination.total
+    })
+    builder.addCase(getJobsByTitle.rejected, (state, action) => {
       state.fetchingJob = false
       state.jobs = []
       state.pagination.total = 0

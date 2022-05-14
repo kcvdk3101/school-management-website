@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from '@mui/material'
+import { Box, Card, CardContent, Container, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
 import React, { useEffect } from 'react'
@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import JobCardLarge from '../../components/card/JobCardLarge'
 import SkeletonJobCardLarge from '../../components/skeleton/SkeletonJobCardLarge'
-import { getJobs } from '../../features/job/jobSlice'
+import { getJobs, getJobsByTitle } from '../../features/job/jobSlice'
 import FilterFormManagement from './component/filterForm/FilterFormManagement'
 
 type JobProps = {}
@@ -33,6 +33,7 @@ const Job: React.FC<JobProps> = () => {
   let query = queryString.parse(search)
   const limit = query.limit ? +query.limit : 0
   const offset = query.offset ? +query.offset : 0
+  const title = query.title ? (query.title as string) : ''
 
   const fetchingJob = useAppSelector((state) => state.jobs.fetchingJob)
   const jobs = useAppSelector((state) => state.jobs.jobs)
@@ -40,10 +41,14 @@ const Job: React.FC<JobProps> = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        await dispatch(getJobs({ limit: 5, offset: 0 }))
+        if (title) {
+          return await dispatch(getJobsByTitle({ limit, offset, title }))
+        }
+
+        await dispatch(getJobs({ limit, offset }))
       } catch (error) {}
     })()
-  }, [dispatch])
+  }, [dispatch, limit, offset, title])
 
   return (
     <div className={classes.container}>
@@ -68,11 +73,19 @@ const Job: React.FC<JobProps> = () => {
                   </Grid>
                 ))}
               </>
+            ) : jobs.length === 0 ? (
+              <Grid item xs={12}>
+                <Card sx={{ display: 'flex' }}>
+                  <CardContent style={{ flex: 1 }}>
+                    <Typography>No found job</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             ) : (
               <>
-                {jobs.map((_, index) => (
+                {jobs.map((job, index) => (
                   <Grid item xs={12} key={index}>
-                    <JobCardLarge job={jobs[0]} />
+                    <JobCardLarge job={job} />
                   </Grid>
                 ))}
               </>

@@ -43,7 +43,7 @@ function BannerHeading() {
   const { t } = useTranslation()
 
   return (
-    <Grid item xs={12} container>
+    <Grid item xs={12}>
       <Typography variant='h4' marginBottom={3} color='white' fontWeight='700'>
         {t('Search for internship and work place')}
       </Typography>
