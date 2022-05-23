@@ -29,7 +29,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, register, formState: 
   const { t } = useTranslation()
 
   return (
-    <Grid item container xs={10}>
+    <Grid item container xs={12}>
       <Box component='form' className={classes.box} padding={2} onSubmit={onSubmit}>
         <Grid container justifyContent='center' spacing={2}>
           {/* Search Form */}

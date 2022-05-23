@@ -13,6 +13,7 @@ import Blog from './pages/blog/Blog'
 import NotFound from './pages/NotFound'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Lecturers from './pages/admin/lecturers/Lecturers'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path='/admin' element={<Admin />}>
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='students' element={<Students />} />
+          <Route path='lecturers' element={<Lecturers />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

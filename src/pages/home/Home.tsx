@@ -39,7 +39,7 @@ const useStyles = makeStyles({
 
 type HomeProps = {}
 
-function BannerHeading() {
+function Heading() {
   const { t } = useTranslation()
 
   return (
@@ -79,7 +79,7 @@ const Home: React.FC<HomeProps> = () => {
         <Container maxWidth='lg'>
           <Box component='div' paddingY={10}>
             <Grid container>
-              <BannerHeading />
+              <Heading />
               {/* Search Form */}
               <SearchFormManagement />
             </Grid>

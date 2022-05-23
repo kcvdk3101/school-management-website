@@ -1,3 +1,9 @@
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import GroupsIcon from '@mui/icons-material/Groups'
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
+import MenuIcon from '@mui/icons-material/Menu'
 import {
   Box,
   CssBaseline,
@@ -10,24 +16,19 @@ import {
   Menu,
   MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
-import React from 'react'
-import MenuIcon from '@mui/icons-material/Menu'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import AccountCircle from '@mui/icons-material/AccountCircle'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import logo from '../../assets/images/logo.png'
-import BarChartIcon from '@mui/icons-material/BarChart'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import GroupsIcon from '@mui/icons-material/Groups'
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
-import { useNavigate } from 'react-router-dom'
-import { signout } from '../../features/authenticate/authSlice'
-import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
+import { styled } from '@mui/material/styles'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import logo from '../../assets/images/logo.png'
+import { signout } from '../../features/authenticate/authSlice'
+import LanguageButton from './LanguageButton'
 
 type HeaderProps = {
   title: string
@@ -134,6 +135,8 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
             {t(`${title}`)}
           </Typography>
+          <LanguageButton />
+
           {isAuthenticated && (
             <div>
               <IconButton
@@ -161,9 +164,8 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Setting</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>{t('Profile')}</MenuItem>
+                <MenuItem onClick={handleLogout}>{t('Signout')}</MenuItem>
               </Menu>
             </div>
           )}
@@ -187,32 +189,32 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
         </Toolbar>
         <Divider />
         <List component='nav'>
-          <ListItemButton onClick={() => navigate('/admin/dashboard')}>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary='Dashboard' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/admin/students?limit=8&offset=0')}>
-            <ListItemIcon>
-              <GroupsIcon />
-            </ListItemIcon>
-            <ListItemText primary='Students' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/admin/lecturers')}>
-            <ListItemIcon>
-              <LocalLibraryIcon />
-            </ListItemIcon>
-            <ListItemText primary='Lecturers' />
-          </ListItemButton>
-          <ListItemButton onClick={() => navigate('/admin/reports')}>
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary='Reports' />
-          </ListItemButton>
-          {/* <Divider sx={{ my: 1 }} /> */}
-          {/* {secondaryListItems} */}
+          <Tooltip title={t('Dashboard') as React.ReactChild} placement='right' arrow>
+            <ListItemButton onClick={() => navigate('/admin/dashboard')}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Dashboard')} />
+            </ListItemButton>
+          </Tooltip>
+
+          <Tooltip title={t('Student') as React.ReactChild} placement='right' arrow>
+            <ListItemButton onClick={() => navigate('/admin/students?limit=8&offset=0')}>
+              <ListItemIcon>
+                <GroupsIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Student')} />
+            </ListItemButton>
+          </Tooltip>
+
+          <Tooltip title={t('Lecturer') as React.ReactChild} placement='right' arrow>
+            <ListItemButton onClick={() => navigate('/admin/lecturers')}>
+              <ListItemIcon>
+                <LocalLibraryIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Lecturer')} />
+            </ListItemButton>
+          </Tooltip>
         </List>
       </Drawer>
     </>

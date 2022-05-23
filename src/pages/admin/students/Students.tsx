@@ -144,6 +144,7 @@ const Students: React.FC<StudentsProps> = () => {
         <Box component='main' className={classes.container}>
           <Toolbar />
           <Box
+            component='div'
             sx={{
               display: 'flex',
               flexDirection: 'row',
@@ -151,7 +152,6 @@ const Students: React.FC<StudentsProps> = () => {
               alignItems: 'center',
               mb: 2,
             }}
-            component='div'
           >
             <Box component='div'>
               <label htmlFor='button-file'>
