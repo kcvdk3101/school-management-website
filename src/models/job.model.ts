@@ -1,3 +1,4 @@
+import { Common } from './common.model'
 import { CorporationModel } from './corporation.model'
 import { Location } from './location.model'
 import { Salary } from './salary.model'
@@ -10,15 +11,11 @@ export interface Detail {
   skill: Skill[]
 }
 
-export interface JobModel {
+export interface JobModel extends Common {
   id: string
   title: string
   description: string
   dateCreated: string
   numberCandidate: number
-  isActive: boolean
-  isRegistered: boolean
-  createdAt: string
-  updatedAt: string
   details: Detail
 }

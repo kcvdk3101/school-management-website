@@ -33,6 +33,13 @@ const useStyles = makeStyles({
     height: '100vh',
     padding: '10px',
   },
+  innerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
 })
 
 const Input = styled('input')({
@@ -143,16 +150,7 @@ const Students: React.FC<StudentsProps> = () => {
 
         <Box component='main' className={classes.container}>
           <Toolbar />
-          <Box
-            component='div'
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mb: 2,
-            }}
-          >
+          <Box component='div' className={classes.innerContainer}>
             <Box component='div'>
               <label htmlFor='button-file'>
                 <Input

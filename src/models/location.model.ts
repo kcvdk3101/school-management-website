@@ -1,4 +1,6 @@
-export interface Location {
+import { Common } from './common.model'
+
+export interface Location extends Common {
   id: string
   country: string
   city: string
@@ -7,8 +9,4 @@ export interface Location {
   street: string
   details: string
   slug: string
-  isActive: boolean
-  isRegistered: boolean
-  createdAt: string
-  updatedAt: string
 }

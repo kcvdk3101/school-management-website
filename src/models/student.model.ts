@@ -1,20 +1,11 @@
-export interface StudentModel {
-  id?: string
-  firstName: string
-  lastName: string
-  fullName: string
-  email?: string
+import { UserModel } from './user.model'
+
+export interface StudentModel extends UserModel {
   identityNumber: string
   birthDate: string
   address: string
-  phoneNumber: string
   class: string
   term?: string
   status: string
   academicYear?: string
-  slug?: string
-  isActive?: boolean
-  isRegistered?: boolean
-  createdAt?: string
-  updatedAt?: string
 }
