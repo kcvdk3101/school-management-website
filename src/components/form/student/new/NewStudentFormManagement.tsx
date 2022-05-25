@@ -2,18 +2,18 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Container, Modal, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import axios from 'axios'
+import queryString from 'query-string'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
-import { API_BASE_URL } from '../../../../constants'
+import { API_UNIVERSITY_URL } from '../../../../constants'
 import { addNewStudent, getStudents } from '../../../../features/student/studentsSlice'
 import { StudentModel } from '../../../../models'
 import NewStudentForm from './NewStudentForm'
-import queryString from 'query-string'
-import { useLocation } from 'react-router-dom'
 
 type NewStudentFormManagementProps = {
   open: boolean
@@ -42,7 +42,7 @@ const newStudentSchema = yup.object({
       (val) => val?.toString().length === 10
     )
     .test('checkDuplicateIdentityNumber', 'Identity number has existed', async (value) => {
-      const { data } = await axios.get(`${API_BASE_URL}/university/student/IdentityNumber`)
+      const { data } = await axios.get(`${API_UNIVERSITY_URL}/university/student/IdentityNumber`)
       let checkDuplicate = data.findIndex((element: { MSSV: string }) => element.MSSV === value)
       if (checkDuplicate > -1) {
         return false

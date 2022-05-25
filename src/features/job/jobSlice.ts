@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import jobApi from '../../api/jobApi'
+import jobApi from '../../api/corporation/jobApi'
 import { JobModel } from '../../models'
 
 interface JobState {
@@ -45,8 +45,8 @@ export const jobSlice = createSlice({
     })
     builder.addCase(getJobs.fulfilled, (state, action) => {
       state.fetchingJob = false
-      state.jobs = action.payload.data.data
-      state.pagination.total = action.payload.data.pagination.total
+      state.jobs = action.payload.data
+      state.pagination.total = action.payload.pagination.total
     })
     builder.addCase(getJobs.rejected, (state, action) => {
       state.fetchingJob = false
@@ -60,8 +60,8 @@ export const jobSlice = createSlice({
     })
     builder.addCase(getJobsByTitle.fulfilled, (state, action) => {
       state.fetchingJob = false
-      state.jobs = action.payload.data.data
-      state.pagination.total = action.payload.data.pagination.total
+      state.jobs = action.payload.data
+      state.pagination.total = action.payload.pagination.total
     })
     builder.addCase(getJobsByTitle.rejected, (state, action) => {
       state.fetchingJob = false
@@ -71,5 +71,4 @@ export const jobSlice = createSlice({
   },
 })
 
-export const {} = jobSlice.actions
 export default jobSlice.reducer

@@ -12,6 +12,14 @@ import Header from '../../../components/commons/Header'
 import FilterButton from '../students/components/FilterButton'
 import SearchButton from './components/SearchButton'
 import queryString from 'query-string'
+import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
+import NoData from './components/NoData'
+import LecturerTable from '../../../components/tables/LecturerTable'
+import {
+  getLecturers,
+  getLecturersByFilter,
+  saveLecturersExcelFile,
+} from '../../../features/lecturer/lecturerSlice'
 
 type LecturersProps = {}
 
@@ -49,7 +57,7 @@ const Lecturers: React.FC<LecturersProps> = () => {
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
 
   const dispatch = useAppDispatch()
-  const { fetchingStudent, students } = useAppSelector((state) => state.students)
+  const { fetchingLecturer, lecturers } = useAppSelector((state) => state.lecturers)
 
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
@@ -59,16 +67,16 @@ const Lecturers: React.FC<LecturersProps> = () => {
   const [openNewTeacher, setOpenNewTeacher] = useState(false)
 
   useEffect(() => {
-    // ;(async () => {
-    //   try {
-    //     if (status || selectedName) {
-    //       return await dispatch(getStudentsByFilter({ offset, status, fullName: selectedName }))
-    //     }
-    //     await dispatch(getStudents(offset))
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // })()
+    ;(async () => {
+      try {
+        if (status || selectedName) {
+          return await dispatch(getLecturersByFilter({ offset, status, fullName: selectedName }))
+        }
+        await dispatch(getLecturers(offset))
+      } catch (error) {
+        console.log(error)
+      }
+    })()
   }, [dispatch, selectedName, offset, status])
 
   const handleOnChange = (event: any) => {
@@ -92,41 +100,41 @@ const Lecturers: React.FC<LecturersProps> = () => {
     const formData = new FormData()
     formData.append('files', selectedFile as Blob)
 
-    // try {
-    //   const response = await dispatch(saveStudentsExcelFile(formData))
-    //   if (response.meta.requestStatus === 'fulfilled') {
-    //     ;(async () => {
-    //       try {
-    //         await dispatch(getStudents(0))
-    //       } catch (error) {
-    //         console.log(error)
-    //       }
-    //     })()
-    //   } else {
-    //     console.log('Error')
-    //   }
-    // } catch (error) {
-    //   console.log(error)
-    // }
+    try {
+      const response = await dispatch(saveLecturersExcelFile(formData))
+      if (response.meta.requestStatus === 'fulfilled') {
+        ;(async () => {
+          try {
+            await dispatch(getLecturers(0))
+          } catch (error) {
+            console.log(error)
+          }
+        })()
+      } else {
+        console.log('Error')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  // const handleChangePage = async (event: unknown, newPage: number) => {
-  //   setPage(newPage)
-  //   try {
-  //     if (status || fullName) {
-  //       await dispatch(getStudentsByFilter({ offset: newPage, status, fullName }))
-  //     } else {
-  //       await dispatch(getStudents(newPage))
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   } finally {
-  //     navigate({
-  //       pathname: '/admin/students',
-  //       search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
-  //     })
-  //   }
-  // }
+  const handleChangePage = async (event: unknown, newPage: number) => {
+    setPage(newPage)
+    try {
+      if (status || fullName) {
+        await dispatch(getLecturersByFilter({ offset: newPage, status, fullName }))
+      } else {
+        await dispatch(getLecturers(newPage))
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      navigate({
+        pathname: '/admin/lecturers',
+        search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
+      })
+    }
+  }
 
   return (
     <>
@@ -198,13 +206,17 @@ const Lecturers: React.FC<LecturersProps> = () => {
               <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
               <FilterButton setPage={setPage} />
             </Box>
-            {/* {fetchingStudent ? (
-              // <SkeletonStudentTable columns={6} />
-            ) : students.length === 0 ? (
+            {fetchingLecturer ? (
+              <SkeletonStudentTable columns={6} />
+            ) : lecturers.length === 0 ? (
               <NoData />
             ) : (
-              <StudentTable page={page} students={students} handleChangePage={handleChangePage} />
-            )} */}
+              <LecturerTable
+                page={page}
+                lecturers={lecturers}
+                handleChangePage={handleChangePage}
+              />
+            )}
           </Paper>
         </Box>
       </Box>

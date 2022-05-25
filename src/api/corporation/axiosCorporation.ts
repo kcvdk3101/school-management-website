@@ -1,15 +1,15 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { API_BASE_URL } from '../constants'
+import { API_CORPORATION_URL } from '../../constants'
 
-const axiosClient = axios.create({
-  baseURL: API_BASE_URL,
+const axiosCorporation = axios.create({
+  baseURL: API_CORPORATION_URL,
   headers: {
     'Content-type': 'application/json;charset=utf-8',
   },
 })
 
 // Add a request interceptor
-axiosClient.interceptors.request.use(
+axiosCorporation.interceptors.request.use(
   function (config: AxiosRequestConfig) {
     return config
   },
@@ -19,7 +19,7 @@ axiosClient.interceptors.request.use(
 )
 
 // Add a response interceptor
-axiosClient.interceptors.response.use(
+axiosCorporation.interceptors.response.use(
   function (response: AxiosResponse) {
     return response.data
   },
@@ -28,4 +28,4 @@ axiosClient.interceptors.response.use(
   }
 )
 
-export default axiosClient
+export default axiosCorporation

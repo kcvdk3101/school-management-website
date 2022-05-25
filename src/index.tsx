@@ -9,6 +9,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { theme } from './utils'
 import './i18n'
 import { HelmetProvider } from 'react-helmet-async'
+import { API_CORPORATION_URL, API_UNIVERSITY_URL } from './constants'
 
 ReactDOM.render(
   <React.StrictMode>

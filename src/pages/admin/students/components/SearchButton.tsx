@@ -3,13 +3,13 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import axios from 'axios'
 import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { API_BASE_URL } from '../../../../constants'
+import { useAppDispatch } from '../../../../app/hooks'
 import { StudentModel } from '../../../../models'
+import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
 
 type SearchButtonProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -20,6 +20,7 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
   const { t } = useTranslation()
   let { search } = useLocation()
   let navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   let paginationQuery = queryString.parse(search)
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
@@ -31,15 +32,16 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
   useEffect(() => {
     ;(async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/university/student/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${searchInput}`
+        const response = await dispatch(
+          getStudentsByFilter({ offset, status, fullName: searchInput })
         )
-        setResults(response.data.data)
+        console.log(response.payload)
+        // setResults(response.payload.data)
       } catch (error) {
         console.log(error)
       }
     })()
-  }, [searchInput])
+  }, [dispatch, searchInput])
 
   return (
     <Box component='div' sx={{ mx: 1 }}>

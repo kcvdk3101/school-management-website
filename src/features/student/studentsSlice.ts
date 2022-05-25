@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import studentsApi, { EditStudentData } from '../../api/studentsApi'
+import studentsApi, { EditStudentData } from '../../api/university/studentsApi'
 import { StudentModel } from '../../models/student.model'
 
 interface StudentState {
@@ -56,8 +56,6 @@ export const addNewStudent = createAsyncThunk(
     return response
   }
 )
-
-// export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id: number) => {})
 
 export const studentSlice = createSlice({
   name: 'students',

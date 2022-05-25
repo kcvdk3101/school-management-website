@@ -1,8 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit'
-import { Toolbar } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import Modal from '@mui/material/Modal'
-import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -13,17 +11,17 @@ import TableRow from '@mui/material/TableRow'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
-import { StudentModel } from '../../models/student.model'
+import { LecturerModel } from '../../models/lecturer.model'
 import { convertDateString } from '../../utils'
 import EditStudentFormManagement from '../form/student/edit/EditStudentFormManagement'
 
-interface StudentTableProps {
-  students: StudentModel[]
+interface LecturerTableProps {
+  lecturers: LecturerModel[]
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
 }
 
-interface RowData extends StudentModel {
+interface RowData extends LecturerModel {
   isEditMode?: boolean
 }
 
@@ -35,11 +33,6 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: 'identityNumber',
-    disablePadding: true,
-    label: 'Identity number',
-  },
-  {
     id: 'lastName',
     disablePadding: false,
     label: 'Last name',
@@ -50,14 +43,14 @@ const headCells: HeadCell[] = [
     label: 'First name',
   },
   {
-    id: 'class',
+    id: 'position',
     disablePadding: false,
-    label: 'Class',
+    label: 'Position',
   },
   {
-    id: 'birthDate',
+    id: 'department',
     disablePadding: false,
-    label: 'Birthday',
+    label: 'Department',
   },
   {
     id: 'email',
@@ -70,24 +63,19 @@ const headCells: HeadCell[] = [
     label: 'Phone',
   },
   {
-    id: 'status',
-    disablePadding: false,
-    label: 'Status',
-  },
-  {
     id: 'isEditMode',
     disablePadding: false,
     label: 'Action',
   },
 ]
 
-const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChangePage }) => {
+const LecturerTable: React.FC<LecturerTableProps> = ({ lecturers, page, handleChangePage }) => {
   const { t } = useTranslation()
 
   const [open, setOpen] = useState(false)
   const [currentId, setCurrentId] = useState<number>(-1)
 
-  const totalStudents = useAppSelector((state) => state.students.pagination.total)
+  const totalLecturers = useAppSelector((state) => state.lecturers.pagination.total)
 
   function handleOpen(id: number) {
     setCurrentId(id)
@@ -116,36 +104,15 @@ const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChang
             </TableRow>
           </TableHead>
           <TableBody>
-            {students.map((row, index) => {
-              // const isItemSelected = isSelected(row.identityNumber)
-              const labelId = `enhanced-table-checkbox-${index}`
-
+            {lecturers.map((row, index) => {
               return (
-                <TableRow
-                  key={index}
-                  hover
-                  role='checkbox'
-                  tabIndex={-1}
-                  // selected={isItemSelected}
-                  // onClick={(event: any) => handleClick(event, row.identityNumber)}
-                >
-                  <TableCell
-                    component='th'
-                    id={labelId}
-                    scope='row'
-                    sx={{
-                      py: 1,
-                    }}
-                  >
-                    {row.identityNumber}
-                  </TableCell>
+                <TableRow key={index} hover role='checkbox' tabIndex={-1}>
                   <TableCell align='left'>{row.lastName}</TableCell>
                   <TableCell align='left'>{row.firstName}</TableCell>
-                  <TableCell align='left'>{row.class}</TableCell>
-                  <TableCell align='left'>{convertDateString(row.birthDate as string)}</TableCell>
+                  <TableCell align='left'>{row.position}</TableCell>
+                  <TableCell align='left'>{row.department}</TableCell>
                   <TableCell align='left'>{row.email}</TableCell>
                   <TableCell align='left'>{row.phoneNumber}</TableCell>
-                  <TableCell align='left'>{row.status}</TableCell>
                   <TableCell
                     align='left'
                     sx={{
@@ -166,20 +133,20 @@ const StudentTable: React.FC<StudentTableProps> = ({ students, page, handleChang
         padding='none'
         rowsPerPageOptions={[8]}
         component='div'
-        count={totalStudents}
+        count={totalLecturers}
         rowsPerPage={8}
         page={page}
         onPageChange={handleChangePage}
       />
-      <Modal open={open} onClose={handleClose}>
+      {/* <Modal open={open} onClose={handleClose}>
         <EditStudentFormManagement
-          student={students[currentId]}
+          student={lecturers[currentId]}
           handleClose={handleClose}
           page={page}
         />
-      </Modal>
+      </Modal> */}
     </>
   )
 }
 
-export default StudentTable
+export default LecturerTable

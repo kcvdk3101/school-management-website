@@ -1,3 +1,6 @@
+export const API_UNIVERSITY_URL = process.env.REACT_APP_API_UNIVERSITY_URL
+export const API_CORPORATION_URL = process.env.REACT_APP_API_CORPORATION_URL
+
 export const pages = [
   { title: 'Job', path: '/job?limit=5&offset=0' },
   { title: 'Blog', path: '/blog' },
@@ -57,6 +60,3 @@ export const itemData = [
 ]
 
 export type Order = 'asc' | 'desc'
-
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
-export const API_CORPORATION_URL = process.env.REACT_APP_API_CORPORATION_URL
