@@ -1,6 +1,6 @@
 import SaveIcon from '@mui/icons-material/Save'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
-import { Box, Button, Toolbar, Paper } from '@mui/material'
+import { Box, Button, Toolbar, Paper, Typography, CircularProgress, Modal } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import React, { useState, useEffect } from 'react'
@@ -20,6 +20,7 @@ import {
   getLecturersByFilter,
   saveLecturersExcelFile,
 } from '../../../features/lecturer/lecturerSlice'
+import { toast } from 'react-toastify'
 
 type LecturersProps = {}
 
@@ -40,7 +41,7 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 2,
+    marginBottom: 12,
   },
 })
 
@@ -62,6 +63,7 @@ const Lecturers: React.FC<LecturersProps> = () => {
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
   const [selectedName, setSelectedName] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [page, setPage] = useState(0)
   const [openNewTeacher, setOpenNewTeacher] = useState(false)
@@ -99,22 +101,28 @@ const Lecturers: React.FC<LecturersProps> = () => {
   const saveExcelFile = async () => {
     const formData = new FormData()
     formData.append('files', selectedFile as Blob)
-
+    setIsLoading(true)
     try {
       const response = await dispatch(saveLecturersExcelFile(formData))
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
           try {
             await dispatch(getLecturers(0))
+            toast.success('Save successfully')
+            setSelectedFile(undefined)
           } catch (error) {
-            console.log(error)
+            toast.error(error as any)
+          } finally {
+            setIsLoading(false)
           }
         })()
       } else {
-        console.log('Error')
+        toast.error('Something wrong')
       }
     } catch (error) {
-      console.log(error)
+      toast.error(error as any)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -154,7 +162,7 @@ const Lecturers: React.FC<LecturersProps> = () => {
                   id='button-file'
                   multiple
                   type='file'
-                  // onChange={handleOnChange}
+                  onChange={handleOnChange}
                 />
                 <Button variant='contained' color='secondary' component='span'>
                   <UploadFileIcon />
@@ -165,12 +173,12 @@ const Lecturers: React.FC<LecturersProps> = () => {
                 color='info'
                 component='span'
                 sx={{ ml: 1 }}
-                // disabled={selectedFile === undefined}
-                // onClick={saveExcelFile}
+                disabled={selectedFile === undefined}
+                onClick={saveExcelFile}
               >
-                <SaveIcon />
+                {isLoading ? <CircularProgress size={24} /> : <SaveIcon />}
               </Button>
-              {/* {selectedFile && nameFile && (
+              {selectedFile && nameFile && (
                 <Typography
                   component='span'
                   sx={{
@@ -180,18 +188,18 @@ const Lecturers: React.FC<LecturersProps> = () => {
                 >
                   {nameFile}
                 </Typography>
-              )} */}
+              )}
             </Box>
-            {/* <Box component='div'>
+            <Box component='div'>
               <Button
                 variant='contained'
                 color='secondary'
                 type='button'
-                onClick={handleOpenNewStudent}
+                onClick={handleOpenNewTeacher}
               >
-                {t('Add new')}
+                {t('Add new teacher')}
               </Button>
-            </Box> */}
+            </Box>
           </Box>
 
           <Paper sx={{ p: 1, height: 'auto' }}>
@@ -220,6 +228,18 @@ const Lecturers: React.FC<LecturersProps> = () => {
           </Paper>
         </Box>
       </Box>
+
+      {/* Edit Teacher Form */}
+      <Modal open={openEditStudent} onClose={handleCloseEditStudent}>
+        <EditStudentFormManagement
+          page={page}
+          student={students[currentId]}
+          handleClose={handleCloseEditStudent}
+        />
+      </Modal>
+
+      {/* New Teacher Form */}
+      <NewStudentFormManagement open={openNewStudent} handleClose={() => handleCloseNewStudent()} />
     </>
   )
 }

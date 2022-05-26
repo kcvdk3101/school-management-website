@@ -15,8 +15,10 @@
   "Signin": "Đăng nhập",
   "Signout": "Đăng xuất",
 
-  "Add new": "Thêm mới sinh viên",
-  "Search fullname": "Tìm kiếm tên sinh viên...",
+  "Add new student": "Thêm mới sinh viên",
+  "Add new teacher": "Thêm mới giảng viên",
+
+  "Search fullname": "Tìm kiếm tên...",
 
   "Student information": "Thông tin sinh viên",
   "Edit student title": "Chỉnh sửa thông tin sinh viên",
@@ -31,6 +33,8 @@
   "Phone": "Số điện thoại",
   "Birthday": "Ngày sinh",
   "Status": "Trạng thái",
+  "Position": "Vị trí",
+  "Department": "Phòng ban",
   "Action": "Tác vụ",
 
   "Haven't practiced": "Chưa thực tập",

@@ -26,7 +26,7 @@ const lecturersApi = {
 
   filterByCondition(offset: number, status: string, fullName: string) {
     return axiosUniveristy.get<string, { data: LecturerModel[]; pagination: { total: number } }>(
-      `${url}/teacher/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}`
+      `${url}/teacher/filter?limit=8&offset=${offset}&identityNumber=&position=&department=&status=${status}&fullName=${fullName}`
     )
   },
 

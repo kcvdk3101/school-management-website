@@ -1,6 +1,6 @@
 import SaveIcon from '@mui/icons-material/Save'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
-import { Box, Button, Toolbar, Typography } from '@mui/material'
+import { Box, Button, Toolbar, Typography, CircularProgress, Modal } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
@@ -9,8 +9,10 @@ import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
+import EditStudentFormManagement from '../../../components/form/student/edit/EditStudentFormManagement'
 import NewStudentFormManagement from '../../../components/form/student/new/NewStudentFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import StudentTable from '../../../components/tables/StudentTable'
@@ -64,9 +66,11 @@ const Students: React.FC<StudentsProps> = () => {
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
   const [selectedName, setSelectedName] = useState<string>('')
-
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [page, setPage] = useState(0)
+  const [openEditStudent, setOpenEditStudent] = useState(false)
   const [openNewStudent, setOpenNewStudent] = useState(false)
+  const [currentId, setCurrentId] = useState<number>(-1)
 
   useEffect(() => {
     ;(async () => {
@@ -87,6 +91,15 @@ const Students: React.FC<StudentsProps> = () => {
     setSelectedFile(event.target.files[0])
   }
 
+  function handleOpenEditStudent(id: number) {
+    setCurrentId(id)
+    setOpenEditStudent(true)
+  }
+
+  const handleCloseEditStudent = () => {
+    setOpenEditStudent(false)
+  }
+
   const handleOpenNewStudent = () => {
     setOpenNewStudent(true)
   }
@@ -102,22 +115,28 @@ const Students: React.FC<StudentsProps> = () => {
   const saveExcelFile = async () => {
     const formData = new FormData()
     formData.append('files', selectedFile as Blob)
-
+    setIsLoading(true)
     try {
       const response = await dispatch(saveStudentsExcelFile(formData))
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
           try {
             await dispatch(getStudents(0))
+            setSelectedFile(undefined)
+            toast.success('Save successfully')
           } catch (error) {
             console.log(error)
+          } finally {
+            setIsLoading(false)
           }
         })()
       } else {
-        console.log('Error')
+        toast.error('Something wroing')
       }
     } catch (error) {
-      console.log(error)
+      toast.error(error as any)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -169,10 +188,10 @@ const Students: React.FC<StudentsProps> = () => {
                 color='info'
                 component='span'
                 sx={{ ml: 1 }}
-                disabled={selectedFile === undefined}
+                disabled={selectedFile === undefined || isLoading}
                 onClick={saveExcelFile}
               >
-                <SaveIcon />
+                {isLoading ? <CircularProgress size={24} /> : <SaveIcon />}
               </Button>
               {selectedFile && nameFile && (
                 <Typography
@@ -193,7 +212,7 @@ const Students: React.FC<StudentsProps> = () => {
                 type='button'
                 onClick={handleOpenNewStudent}
               >
-                {t('Add new')}
+                {t('Add new student')}
               </Button>
             </Box>
           </Box>
@@ -215,11 +234,25 @@ const Students: React.FC<StudentsProps> = () => {
             ) : students.length === 0 ? (
               <NoData />
             ) : (
-              <StudentTable page={page} students={students} handleChangePage={handleChangePage} />
+              <StudentTable
+                page={page}
+                students={students}
+                handleChangePage={handleChangePage}
+                handleOpenEditStudent={handleOpenEditStudent}
+              />
             )}
           </Paper>
         </Box>
       </Box>
+
+      {/* Edit Student Form */}
+      <Modal open={openEditStudent} onClose={handleCloseEditStudent}>
+        <EditStudentFormManagement
+          page={page}
+          student={students[currentId]}
+          handleClose={handleCloseEditStudent}
+        />
+      </Modal>
 
       {/* New Student Form */}
       <NewStudentFormManagement open={openNewStudent} handleClose={() => handleCloseNewStudent()} />

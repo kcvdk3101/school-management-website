@@ -9,7 +9,8 @@ import { ThemeProvider } from '@mui/material/styles'
 import { theme } from './utils'
 import './i18n'
 import { HelmetProvider } from 'react-helmet-async'
-import { API_CORPORATION_URL, API_UNIVERSITY_URL } from './constants'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,6 +19,15 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
           <HelmetProvider>
             <App />
+            <ToastContainer
+              position='top-right'
+              autoClose={1500}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              draggable
+            />
           </HelmetProvider>
         </ThemeProvider>
       </BrowserRouter>

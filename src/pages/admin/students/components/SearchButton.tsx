@@ -32,11 +32,10 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
   useEffect(() => {
     ;(async () => {
       try {
-        const response = await dispatch(
+        const response: any = await dispatch(
           getStudentsByFilter({ offset, status, fullName: searchInput })
         )
-        console.log(response.payload)
-        // setResults(response.payload.data)
+        setResults(response.payload.data)
       } catch (error) {
         console.log(error)
       }

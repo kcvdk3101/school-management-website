@@ -15,7 +15,8 @@
   "Student information": "Student Information",
   "Edit student title": "Edit student information",
 
-  "Add new": "Add new student",
+  "Add new student": "Add new student",
+  "Add new teacher": "Add new teacher",
   "Search fullname": "Search fullname...",
 
   "Last name": "Last name",
@@ -28,6 +29,8 @@
   "Phone": "Phone number",
   "Birthday": "Birthday",
   "Status": "Status",
+  "Position": "Position",
+  "Department": "Department",
   "Action": "Action",
 
   "Haven't practiced": "Haven't practiced",

@@ -11,8 +11,7 @@ import Job from './pages/job/Job'
 import JobDetail from './pages/jobDetail/JobDetail'
 import Blog from './pages/blog/Blog'
 import NotFound from './pages/NotFound'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+
 import Lecturers from './pages/admin/lecturers/Lecturers'
 
 function App() {
@@ -38,15 +37,6 @@ function App() {
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
-      <ToastContainer
-        position='top-right'
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        draggable
-      />
     </>
   )
 }

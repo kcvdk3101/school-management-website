@@ -208,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           </Tooltip>
 
           <Tooltip title={t('Lecturer') as React.ReactChild} placement='right' arrow>
-            <ListItemButton onClick={() => navigate('/admin/lecturers')}>
+            <ListItemButton onClick={() => navigate('/admin/lecturers?limit=8&offset=0')}>
               <ListItemIcon>
                 <LocalLibraryIcon />
               </ListItemIcon>
