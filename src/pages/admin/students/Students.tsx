@@ -248,7 +248,6 @@ const Students: React.FC<StudentsProps> = () => {
       {/* Edit Student Form */}
       <Modal open={openEditStudent} onClose={handleCloseEditStudent}>
         <EditStudentFormManagement
-          page={page}
           student={students[currentId]}
           handleClose={handleCloseEditStudent}
         />

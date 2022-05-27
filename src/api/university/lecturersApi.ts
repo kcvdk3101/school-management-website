@@ -3,15 +3,14 @@ import axiosUniveristy from './axiosUniversity'
 
 const url = 'university'
 
-// export interface EditStudentData {
-//   firstName: string
-//   lastName: string
-//   address: string
-//   birthDate: string
-//   phoneNumber: string
-//   status: string
-//   class: string
-// }
+export interface EditLecturerData {
+  firstName: string
+  lastName: string
+  email: string
+  position: string
+  department: string
+  phoneNumber: string
+}
 
 const lecturersApi = {
   saveLecturersExcelFile(form: FormData) {
@@ -30,13 +29,13 @@ const lecturersApi = {
     )
   },
 
-  // editInfoStudent(id: string, data: EditStudentData) {
-  //   return axiosUniveristy.patch<string, LecturerModel>(`${url}/teacher?id=${id}`, data)
-  // },
+  editInfoLecturer(id: string, data: EditLecturerData) {
+    return axiosUniveristy.patch<string, LecturerModel>(`${url}/teacher?id=${id}`, data)
+  },
 
-  addNewStudent(data: LecturerModel[]) {
-    return axiosUniveristy.post<string, LecturerModel[]>(`${url}/student`, {
-      students: data,
+  addNewLecturer(data: LecturerModel[]) {
+    return axiosUniveristy.post<string, LecturerModel>(`${url}/teacher`, {
+      teachers: data,
     })
   },
 }

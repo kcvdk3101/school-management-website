@@ -108,8 +108,8 @@ export const studentSlice = createSlice({
       state.fetchingStudent = true
     })
     builder.addCase(addNewStudent.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.fetchingStudent = false
+      state.students = [...state.students, action.payload]
     })
     builder.addCase(addNewStudent.rejected, (state, action) => {
       state.fetchingStudent = false

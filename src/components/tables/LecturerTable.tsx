@@ -1,6 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
-import Modal from '@mui/material/Modal'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -8,17 +7,16 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { LecturerModel } from '../../models/lecturer.model'
-import { convertDateString } from '../../utils'
-import EditStudentFormManagement from '../form/student/edit/EditStudentFormManagement'
 
 interface LecturerTableProps {
   lecturers: LecturerModel[]
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
+  handleOpenEditLecturer: (id: number) => void
 }
 
 interface RowData extends LecturerModel {
@@ -69,20 +67,15 @@ const headCells: HeadCell[] = [
   },
 ]
 
-const LecturerTable: React.FC<LecturerTableProps> = ({ lecturers, page, handleChangePage }) => {
+const LecturerTable: React.FC<LecturerTableProps> = ({
+  lecturers,
+  page,
+  handleChangePage,
+  handleOpenEditLecturer,
+}) => {
   const { t } = useTranslation()
 
-  const [open, setOpen] = useState(false)
-  const [currentId, setCurrentId] = useState<number>(-1)
-
   const totalLecturers = useAppSelector((state) => state.lecturers.pagination.total)
-
-  function handleOpen(id: number) {
-    setCurrentId(id)
-    setOpen(true)
-  }
-
-  const handleClose = () => setOpen(false)
 
   return (
     <>
@@ -119,7 +112,7 @@ const LecturerTable: React.FC<LecturerTableProps> = ({ lecturers, page, handleCh
                       py: 1,
                     }}
                   >
-                    <IconButton aria-label='edit' onClick={() => handleOpen(index)}>
+                    <IconButton aria-label='edit' onClick={() => handleOpenEditLecturer(index)}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>
@@ -138,13 +131,6 @@ const LecturerTable: React.FC<LecturerTableProps> = ({ lecturers, page, handleCh
         page={page}
         onPageChange={handleChangePage}
       />
-      {/* <Modal open={open} onClose={handleClose}>
-        <EditStudentFormManagement
-          student={lecturers[currentId]}
-          handleClose={handleClose}
-          page={page}
-        />
-      </Modal> */}
     </>
   )
 }

@@ -16,7 +16,6 @@ import EditStudentForm from './EditStudentForm'
 type EditStudentFormManagementProps = {
   student: StudentModel
   handleClose: () => void
-  page: number
 }
 
 type EditFormInput = {
@@ -70,7 +69,6 @@ const editSchema = yup.object({
 
 const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   student,
-  page,
   handleClose,
 }) => {
   const { t } = useTranslation()

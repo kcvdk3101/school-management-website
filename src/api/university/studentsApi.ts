@@ -35,7 +35,7 @@ const studentsApi = {
   },
 
   addNewStudent(data: StudentModel[]) {
-    return axiosUniveristy.post<string, StudentModel[]>(`${url}/student`, {
+    return axiosUniveristy.post<string, StudentModel>(`${url}/student`, {
       students: data,
     })
   },

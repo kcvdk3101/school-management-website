@@ -21,6 +21,8 @@ import {
   saveLecturersExcelFile,
 } from '../../../features/lecturer/lecturerSlice'
 import { toast } from 'react-toastify'
+import NewLecturerFormManagement from '../../../components/form/lecturer/new/NewLecturerFormManagement'
+import EditLecturerFormManagement from '../../../components/form/lecturer/edit/EditLecturerFormManagement'
 
 type LecturersProps = {}
 
@@ -67,6 +69,8 @@ const Lecturers: React.FC<LecturersProps> = () => {
 
   const [page, setPage] = useState(0)
   const [openNewTeacher, setOpenNewTeacher] = useState(false)
+  const [openEditTeacher, setOpenEditTeacher] = useState(false)
+  const [currentId, setCurrentId] = useState<number>(-1)
 
   useEffect(() => {
     ;(async () => {
@@ -92,6 +96,15 @@ const Lecturers: React.FC<LecturersProps> = () => {
 
   function handleCloseNewTeacher() {
     setOpenNewTeacher(false)
+  }
+
+  function handleOpenEditTeacher(id: number) {
+    setCurrentId(id)
+    setOpenEditTeacher(true)
+  }
+
+  const handleCloseEditTeacher = () => {
+    setOpenEditTeacher(false)
   }
 
   const handleChangeSelectedName = (value: string) => {
@@ -223,6 +236,7 @@ const Lecturers: React.FC<LecturersProps> = () => {
                 page={page}
                 lecturers={lecturers}
                 handleChangePage={handleChangePage}
+                handleOpenEditLecturer={handleOpenEditTeacher}
               />
             )}
           </Paper>
@@ -230,16 +244,18 @@ const Lecturers: React.FC<LecturersProps> = () => {
       </Box>
 
       {/* Edit Teacher Form */}
-      <Modal open={openEditStudent} onClose={handleCloseEditStudent}>
-        <EditStudentFormManagement
-          page={page}
-          student={students[currentId]}
-          handleClose={handleCloseEditStudent}
+      <Modal open={openEditTeacher} onClose={handleCloseEditTeacher}>
+        <EditLecturerFormManagement
+          lecturer={lecturers[currentId]}
+          handleClose={handleCloseEditTeacher}
         />
       </Modal>
 
       {/* New Teacher Form */}
-      <NewStudentFormManagement open={openNewStudent} handleClose={() => handleCloseNewStudent()} />
+      <NewLecturerFormManagement
+        open={openNewTeacher}
+        handleClose={() => handleCloseNewTeacher()}
+      />
     </>
   )
 }

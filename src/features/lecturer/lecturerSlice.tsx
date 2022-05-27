@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import lecturersApi from '../../api/university/lecturersApi'
+import lecturersApi, { EditLecturerData } from '../../api/university/lecturersApi'
 import { LecturerModel } from '../../models/lecturer.model'
 
 interface LecturerState {
@@ -38,6 +38,22 @@ export const getLecturersByFilter = createAsyncThunk(
   async ({ offset, status, fullName }: { offset: number; status: string; fullName: string }) => {
     const students = await lecturersApi.filterByCondition(offset, status, fullName)
     return students
+  }
+)
+
+export const editInfoLecturer = createAsyncThunk(
+  'lecturers/editInfoLecturer',
+  async ({ id, data }: { id: string; data: EditLecturerData }) => {
+    const response = await lecturersApi.editInfoLecturer(id, data)
+    return response
+  }
+)
+
+export const addNewLecturer = createAsyncThunk(
+  'lecturers/addNewStudent',
+  async (data: LecturerModel[]) => {
+    const response = await lecturersApi.addNewLecturer(data)
+    return response
   }
 )
 
@@ -85,6 +101,33 @@ export const lecturerSlice = createSlice({
     builder.addCase(getLecturersByFilter.rejected, (state, action) => {
       state.fetchingLecturer = false
       state.lecturers = []
+    })
+
+    // Add lecterur
+    builder.addCase(addNewLecturer.pending, (state, action) => {
+      state.fetchingLecturer = true
+    })
+    builder.addCase(addNewLecturer.fulfilled, (state, action) => {
+      state.fetchingLecturer = false
+      state.lecturers = [...state.lecturers, action.payload]
+    })
+    builder.addCase(addNewLecturer.rejected, (state, action) => {
+      state.fetchingLecturer = false
+    })
+
+    // Edit students
+    builder.addCase(editInfoLecturer.pending, (state, action) => {
+      state.fetchingLecturer = true
+    })
+    builder.addCase(editInfoLecturer.fulfilled, (state, action) => {
+      let currentLecturer = state.lecturers.findIndex(
+        (lecturer) => lecturer.id === action.payload.id
+      )
+      state.fetchingLecturer = false
+      state.lecturers[currentLecturer] = action.payload
+    })
+    builder.addCase(editInfoLecturer.rejected, (state, action) => {
+      state.fetchingLecturer = false
     })
   },
 })
