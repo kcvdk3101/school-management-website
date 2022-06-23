@@ -9,8 +9,8 @@ import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
-import { addNewLecturer, getLecturers } from '../../../../features/lecturer/lecturerSlice'
-import { LecturerModel } from '../../../../models'
+import { addNewLecturer, getLecturers } from '../../../../features/teacher/teacherSlice'
+import { TeacherModel } from '../../../../models/teacher.model'
 import NewLecturerForm from './NewLecturerForm'
 
 type NewLecturerFormManagementProps = {
@@ -82,7 +82,7 @@ const NewLecturerFormManagement: React.FC<NewLecturerFormManagementProps> = ({
   })
 
   const onSubmit = handleSubmit(async (data) => {
-    let lectures: LecturerModel[] = []
+    let lectures: TeacherModel[] = []
     lectures.push({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -91,6 +91,8 @@ const NewLecturerFormManagement: React.FC<NewLecturerFormManagementProps> = ({
       position: data.position,
       department: data.department,
       phoneNumber: data.phoneNumber,
+      studentAmount: 0,
+      maximumStudentAmount: 0,
     })
 
     try {

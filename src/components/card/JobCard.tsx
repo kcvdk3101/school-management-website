@@ -2,10 +2,10 @@ import LocationOnIcon from '@mui/icons-material/LocationOn'
 import PaidIcon from '@mui/icons-material/Paid'
 import { Box, Card, CardContent, CardMedia, Divider, Typography } from '@mui/material'
 import React from 'react'
-import { JobModel } from '../../models'
 import CustomJobType from '../commons/CustomJobType'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@mui/styles'
+import { JobModel } from '../../models/job.model'
 
 type JobCardProps = {
   job: JobModel

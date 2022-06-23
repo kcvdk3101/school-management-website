@@ -10,16 +10,16 @@ import TableRow from '@mui/material/TableRow'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
-import { LecturerModel } from '../../models/lecturer.model'
+import { TeacherModel } from '../../models/teacher.model'
 
 interface LecturerTableProps {
-  lecturers: LecturerModel[]
+  lecturers: TeacherModel[]
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
   handleOpenEditLecturer: (id: number) => void
 }
 
-interface RowData extends LecturerModel {
+interface RowData extends TeacherModel {
   isEditMode?: boolean
 }
 
@@ -75,7 +75,7 @@ const LecturerTable: React.FC<LecturerTableProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  const totalLecturers = useAppSelector((state) => state.lecturers.pagination.total)
+  const totalLecturers = useAppSelector((state) => state.teachers.pagination.total)
 
   return (
     <>

@@ -1,9 +1,8 @@
-import { Common } from './common.model'
+import { Common } from './common'
 
 export interface Skill extends Common {
-  id: string
-  level: string
+  id?: string
   name: string
-  position: string
-  slug: string
+  rating?: number
+  slug?: string
 }

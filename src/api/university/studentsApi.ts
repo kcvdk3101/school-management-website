@@ -1,4 +1,4 @@
-import { StudentModel } from '../../models'
+import { StudentModel } from '../../models/student.model'
 import axiosUniveristy from './axiosUniversity'
 
 const url = 'university'

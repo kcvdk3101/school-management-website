@@ -1,11 +1,23 @@
-import { UserModel } from './user.model'
+import { Common } from './common'
+import { CVModel } from './cv.model'
 
-export interface StudentModel extends UserModel {
-  identityNumber: string
+export interface StudentModel extends Common {
+  id?: string
+  firstName: string
+  lastName: string
+  fullName: string
+  email?: string
   birthDate: string
+  identityNumber: string
   address: string
+  phoneNumber: string
   class: string
   term?: string
   status: string
   academicYear?: string
+  nameTeacher?: string
+  slug?: string
+  internshipCertification?: string
+  internshipReport?: string
+  cv?: CVModel[]
 }

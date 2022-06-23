@@ -1,7 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import authReducer from '../features/authenticate/authSlice'
 import studentsReducer from '../features/student/studentsSlice'
-import lecturersReducer from '../features/lecturer/lecturerSlice'
+import teachersReducer from '../features/teacher/teacherSlice'
 import jobReducer from '../features/job/jobSlice'
 
 export const store = configureStore({
@@ -9,7 +9,7 @@ export const store = configureStore({
     auth: authReducer,
     students: studentsReducer,
     jobs: jobReducer,
-    lecturers: lecturersReducer,
+    teachers: teachersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

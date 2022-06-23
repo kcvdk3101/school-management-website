@@ -1,13 +1,13 @@
 import React from 'react'
 import { FormState, UseFormRegister } from 'react-hook-form'
-import { LecturerModel } from '../../../../models'
 import { Button, Grid, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { TeacherModel } from '../../../../models/teacher.model'
 
 type EditLecturerFormProps = {
   register: UseFormRegister<Input>
   formState: FormState<Input>
-  lecturer: LecturerModel
+  lecturer: TeacherModel
   handleClose: () => void
 }
 

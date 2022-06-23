@@ -1,5 +1,6 @@
 export const API_UNIVERSITY_URL = process.env.REACT_APP_API_UNIVERSITY_URL
 export const API_CORPORATION_URL = process.env.REACT_APP_API_CORPORATION_URL
+export const API_USER_URL = process.env.REACT_APP_API_USER_URL
 
 export const pages = [
   { title: 'Job', path: '/job?limit=5&offset=0' },

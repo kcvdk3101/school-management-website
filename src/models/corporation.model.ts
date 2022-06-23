@@ -1,5 +1,6 @@
-import { Common } from './common.model'
+import { Common } from './common'
 import { Location } from './location.model'
+import { Review } from './review.model'
 
 export interface CorporationModel extends Common {
   id: string
@@ -16,4 +17,5 @@ export interface CorporationModel extends Common {
   slug: string
   image: any[]
   location: Location[]
+  review: Review[]
 }

@@ -9,7 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import React from 'react'
 import { FormState, UseFormRegister } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { StudentModel } from '../../../../models'
+import { StudentModel } from '../../../../models/student.model'
 
 type Input = {
   lastName: string

@@ -8,8 +8,8 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../../app/hooks'
-import { StudentModel } from '../../../../models'
 import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
+import { StudentModel } from '../../../../models/student.model'
 
 type SearchButtonProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>

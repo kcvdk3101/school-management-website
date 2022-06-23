@@ -1,4 +1,4 @@
-import { JobModel } from '../../models'
+import { JobModel } from '../../models/job.model'
 import axiosCorporation from './axiosCorporation'
 
 const url = 'corporation'

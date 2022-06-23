@@ -1,30 +1,30 @@
 import SaveIcon from '@mui/icons-material/Save'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
-import { Box, Button, Toolbar, Paper, Typography, CircularProgress, Modal } from '@mui/material'
+import { Box, Button, CircularProgress, Modal, Paper, Toolbar, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
-import React, { useState, useEffect } from 'react'
+import queryString from 'query-string'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
-import FilterButton from '../students/components/FilterButton'
-import SearchButton from './components/SearchButton'
-import queryString from 'query-string'
+import EditLecturerFormManagement from '../../../components/form/lecturer/edit/EditLecturerFormManagement'
+import NewLecturerFormManagement from '../../../components/form/lecturer/new/NewLecturerFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
-import NoData from './components/NoData'
 import LecturerTable from '../../../components/tables/LecturerTable'
 import {
   getLecturers,
   getLecturersByFilter,
   saveLecturersExcelFile,
-} from '../../../features/lecturer/lecturerSlice'
-import { toast } from 'react-toastify'
-import NewLecturerFormManagement from '../../../components/form/lecturer/new/NewLecturerFormManagement'
-import EditLecturerFormManagement from '../../../components/form/lecturer/edit/EditLecturerFormManagement'
+} from '../../../features/teacher/teacherSlice'
+import FilterButton from '../students/components/FilterButton'
+import NoData from './components/NoData'
+import SearchButton from './components/SearchButton'
 
-type LecturersProps = {}
+type TeachersProps = {}
 
 const Input = styled('input')({
   display: 'none',
@@ -47,7 +47,7 @@ const useStyles = makeStyles({
   },
 })
 
-const Lecturers: React.FC<LecturersProps> = () => {
+const Lecturers: React.FC<TeachersProps> = () => {
   const classes = useStyles()
   const { t } = useTranslation()
 
@@ -60,7 +60,7 @@ const Lecturers: React.FC<LecturersProps> = () => {
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
 
   const dispatch = useAppDispatch()
-  const { fetchingLecturer, lecturers } = useAppSelector((state) => state.lecturers)
+  const { fetchingTeacher, teachers } = useAppSelector((state) => state.teachers)
 
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
@@ -227,14 +227,14 @@ const Lecturers: React.FC<LecturersProps> = () => {
               <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
               <FilterButton setPage={setPage} />
             </Box>
-            {fetchingLecturer ? (
+            {fetchingTeacher ? (
               <SkeletonStudentTable columns={6} />
-            ) : lecturers.length === 0 ? (
+            ) : teachers.length === 0 ? (
               <NoData />
             ) : (
               <LecturerTable
                 page={page}
-                lecturers={lecturers}
+                lecturers={teachers}
                 handleChangePage={handleChangePage}
                 handleOpenEditLecturer={handleOpenEditTeacher}
               />
@@ -246,7 +246,7 @@ const Lecturers: React.FC<LecturersProps> = () => {
       {/* Edit Teacher Form */}
       <Modal open={openEditTeacher} onClose={handleCloseEditTeacher}>
         <EditLecturerFormManagement
-          lecturer={lecturers[currentId]}
+          lecturer={teachers[currentId]}
           handleClose={handleCloseEditTeacher}
         />
       </Modal>

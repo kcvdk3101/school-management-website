@@ -12,7 +12,7 @@ import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
 import { API_UNIVERSITY_URL } from '../../../../constants'
 import { addNewStudent, getStudents } from '../../../../features/student/studentsSlice'
-import { StudentModel } from '../../../../models'
+import { StudentModel } from '../../../../models/student.model'
 import NewStudentForm from './NewStudentForm'
 
 type NewStudentFormManagementProps = {

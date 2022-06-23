@@ -12,7 +12,7 @@ import JobDetail from './pages/jobDetail/JobDetail'
 import Blog from './pages/blog/Blog'
 import NotFound from './pages/NotFound'
 
-import Lecturers from './pages/admin/lecturers/Lecturers'
+import Teachers from './pages/admin/lecturers/Teachers'
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
         <Route path='/admin' element={<Admin />}>
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='students' element={<Students />} />
-          <Route path='lecturers' element={<Lecturers />} />
+          <Route path='teachers' element={<Teachers />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

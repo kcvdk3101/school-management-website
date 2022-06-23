@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import jobApi from '../../api/corporation/jobApi'
-import { JobModel } from '../../models'
+import { JobModel } from '../../models/job.model'
 
 interface JobState {
   fetchingJob: boolean

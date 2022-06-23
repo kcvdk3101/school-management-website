@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
 import { editInfoStudent } from '../../../../features/student/studentsSlice'
-import { StudentModel } from '../../../../models'
+import { StudentModel } from '../../../../models/student.model'
 import EditStudentForm from './EditStudentForm'
 
 type EditStudentFormManagementProps = {

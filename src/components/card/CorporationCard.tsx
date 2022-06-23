@@ -1,11 +1,11 @@
 import { Box, Typography, Paper, Card, CardMedia, CardContent, Grid } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
-import { CorporationModel } from '../../models'
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import EmailIcon from '@mui/icons-material/Email'
 import GroupIcon from '@mui/icons-material/Group'
 import Dns from '@mui/icons-material/Dns'
+import { CorporationModel } from '../../models/corporation.model'
 
 type CorporationCardProps = {
   corporation: CorporationModel

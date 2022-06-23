@@ -1,20 +1,20 @@
-import React from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '../../../../app/hooks'
-import { LecturerModel } from '../../../../models'
 import { toast } from 'react-toastify'
+import * as yup from 'yup'
+import { useAppDispatch } from '../../../../app/hooks'
+import { editInfoLecturer } from '../../../../features/teacher/teacherSlice'
+import { TeacherModel } from '../../../../models/teacher.model'
 import EditLecturerForm from './EditLecturerForm'
-import { editInfoLecturer } from '../../../../features/lecturer/lecturerSlice'
 
 type EditLecturerFormManagementProps = {
-  lecturer: LecturerModel
+  lecturer: TeacherModel
   handleClose: () => void
 }
 

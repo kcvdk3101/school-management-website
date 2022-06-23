@@ -1,11 +1,12 @@
-import { Common } from './common.model'
+import { StudentModel } from './student.model'
 
-export interface UserModel extends Common {
-  id?: string
-  firstName: string
-  lastName: string
-  fullName: string
-  email?: string
-  phoneNumber: string
-  slug?: string
+export interface UserModel {
+  email: string
+  firstName?: string
+  lastName?: string
+  phoneNumber?: string
+  role?: string
+  id: string
+  studentId: string
+  student?: StudentModel
 }

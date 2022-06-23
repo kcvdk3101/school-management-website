@@ -5,8 +5,8 @@ import { Box, Card, CardContent, CardMedia, Divider, Typography } from '@mui/mat
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { JobModel } from '../../models'
 import CustomJobType from '../commons/CustomJobType'
+import { JobModel } from '../../models/job.model'
 
 type JobCardLargeProps = {
   job: JobModel

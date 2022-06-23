@@ -1,64 +1,64 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import lecturersApi, { EditLecturerData } from '../../api/university/lecturersApi'
-import { LecturerModel } from '../../models/lecturer.model'
+import lecturersApi, { EditTeacherData } from '../../api/university/teachersApi'
+import { TeacherModel } from '../../models/teacher.model'
 
-interface LecturerState {
-  fetchingLecturer: boolean
+interface TeacherState {
+  fetchingTeacher: boolean
   savingFile: boolean
-  lecturers: LecturerModel[]
-  pagination: LecturerPagination
+  teachers: TeacherModel[]
+  pagination: TeacherPagination
 }
 
-interface LecturerPagination {
+interface TeacherPagination {
   total: number
 }
 
-const initialState: LecturerState = {
-  fetchingLecturer: false,
+const initialState: TeacherState = {
+  fetchingTeacher: false,
   savingFile: false,
-  lecturers: [],
+  teachers: [],
   pagination: { total: 0 },
 }
 
 export const saveLecturersExcelFile = createAsyncThunk(
-  'lecturers/saveExcelFile',
+  'teachers/saveExcelFile',
   async (file: FormData) => {
     const savedFile = await lecturersApi.saveLecturersExcelFile(file)
     return savedFile
   }
 )
 
-export const getLecturers = createAsyncThunk('lecturers/getLecturers', async (offset: number) => {
-  const lecturers = await lecturersApi.getAllLecturers(offset)
-  return lecturers
+export const getLecturers = createAsyncThunk('teachers/getLecturers', async (offset: number) => {
+  const teachers = await lecturersApi.getAllLecturers(offset)
+  return teachers
 })
 
 export const getLecturersByFilter = createAsyncThunk(
-  'lecturers/getLecturersByFilter',
+  'teachers/getLecturersByFilter',
   async ({ offset, status, fullName }: { offset: number; status: string; fullName: string }) => {
-    const students = await lecturersApi.filterByCondition(offset, status, fullName)
-    return students
+    const teachers = await lecturersApi.filterByCondition(offset, status, fullName)
+    return teachers
   }
 )
 
 export const editInfoLecturer = createAsyncThunk(
-  'lecturers/editInfoLecturer',
-  async ({ id, data }: { id: string; data: EditLecturerData }) => {
+  'teachers/editInfoLecturer',
+  async ({ id, data }: { id: string; data: EditTeacherData }) => {
     const response = await lecturersApi.editInfoLecturer(id, data)
     return response
   }
 )
 
 export const addNewLecturer = createAsyncThunk(
-  'lecturers/addNewStudent',
-  async (data: LecturerModel[]) => {
+  'teachers/addNewStudent',
+  async (data: TeacherModel[]) => {
     const response = await lecturersApi.addNewLecturer(data)
     return response
   }
 )
 
 export const lecturerSlice = createSlice({
-  name: 'students',
+  name: 'teachers',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -75,59 +75,59 @@ export const lecturerSlice = createSlice({
 
     // Get all lecturers
     builder.addCase(getLecturers.pending, (state, action) => {
-      state.fetchingLecturer = true
-      state.lecturers = []
+      state.fetchingTeacher = true
+      state.teachers = []
     })
     builder.addCase(getLecturers.fulfilled, (state, action) => {
-      state.fetchingLecturer = false
-      state.lecturers = action.payload.data
+      state.fetchingTeacher = false
+      state.teachers = action.payload.data
       state.pagination.total = action.payload.pagination.total
     })
     builder.addCase(getLecturers.rejected, (state, action) => {
-      state.fetchingLecturer = false
-      state.lecturers = []
+      state.fetchingTeacher = false
+      state.teachers = []
     })
 
     // Get lecturers by filter
     builder.addCase(getLecturersByFilter.pending, (state, action) => {
-      state.fetchingLecturer = true
-      state.lecturers = []
+      state.fetchingTeacher = true
+      state.teachers = []
     })
     builder.addCase(getLecturersByFilter.fulfilled, (state, action) => {
-      state.fetchingLecturer = false
-      state.lecturers = action.payload.data
+      state.fetchingTeacher = false
+      state.teachers = action.payload.data
       state.pagination.total = action.payload.pagination.total
     })
     builder.addCase(getLecturersByFilter.rejected, (state, action) => {
-      state.fetchingLecturer = false
-      state.lecturers = []
+      state.fetchingTeacher = false
+      state.teachers = []
     })
 
     // Add lecterur
     builder.addCase(addNewLecturer.pending, (state, action) => {
-      state.fetchingLecturer = true
+      state.fetchingTeacher = true
     })
     builder.addCase(addNewLecturer.fulfilled, (state, action) => {
-      state.fetchingLecturer = false
-      state.lecturers = [...state.lecturers, action.payload]
+      state.fetchingTeacher = false
+      state.teachers = [...state.teachers, action.payload]
     })
     builder.addCase(addNewLecturer.rejected, (state, action) => {
-      state.fetchingLecturer = false
+      state.fetchingTeacher = false
     })
 
     // Edit students
     builder.addCase(editInfoLecturer.pending, (state, action) => {
-      state.fetchingLecturer = true
+      state.fetchingTeacher = true
     })
     builder.addCase(editInfoLecturer.fulfilled, (state, action) => {
-      let currentLecturer = state.lecturers.findIndex(
+      let currentLecturer = state.teachers.findIndex(
         (lecturer) => lecturer.id === action.payload.id
       )
-      state.fetchingLecturer = false
-      state.lecturers[currentLecturer] = action.payload
+      state.fetchingTeacher = false
+      state.teachers[currentLecturer] = action.payload
     })
     builder.addCase(editInfoLecturer.rejected, (state, action) => {
-      state.fetchingLecturer = false
+      state.fetchingTeacher = false
     })
   },
 })
