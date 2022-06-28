@@ -13,6 +13,8 @@ import Blog from './pages/blog/Blog'
 import NotFound from './pages/NotFound'
 
 import Teachers from './pages/admin/lecturers/Teachers'
+import Notice from './pages/admin/notice/Notice'
+import Corporations from './pages/admin/corps/Corporations'
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='students' element={<Students />} />
           <Route path='teachers' element={<Teachers />} />
+          <Route path='corporation' element={<Corporations />} />
+          <Route path='notice' element={<Notice />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>

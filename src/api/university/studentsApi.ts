@@ -1,7 +1,7 @@
 import { StudentModel } from '../../models/student.model'
 import axiosUniveristy from './axiosUniversity'
 
-const url = 'university'
+const url = '/university'
 
 export interface EditStudentData {
   firstName: string
@@ -16,6 +16,10 @@ export interface EditStudentData {
 const studentsApi = {
   saveStudentsExcelFile(form: FormData) {
     return axiosUniveristy.post<string, FormData>(`${url}/student/import`, form)
+  },
+
+  generateStudentAccount() {
+    return axiosUniveristy.get(`${url}/student/generate-student`)
   },
 
   getAllStudents(offset: number) {

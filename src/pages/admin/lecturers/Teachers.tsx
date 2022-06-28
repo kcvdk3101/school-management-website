@@ -76,7 +76,8 @@ const Lecturers: React.FC<TeachersProps> = () => {
     ;(async () => {
       try {
         if (status || selectedName) {
-          return await dispatch(getLecturersByFilter({ offset, status, fullName: selectedName }))
+          await dispatch(getLecturersByFilter({ offset, status, fullName: selectedName }))
+          return
         }
         await dispatch(getLecturers(offset))
       } catch (error) {
@@ -151,7 +152,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
       console.log(error)
     } finally {
       navigate({
-        pathname: '/admin/lecturers',
+        pathname: '/admin/teachers',
         search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
       })
     }

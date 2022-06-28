@@ -29,6 +29,8 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import logo from '../../assets/images/logo.png'
 import { signout } from '../../features/authenticate/authSlice'
 import LanguageButton from './LanguageButton'
+import ArticleIcon from '@mui/icons-material/Article'
+import CorporateFareIcon from '@mui/icons-material/CorporateFare'
 
 type HeaderProps = {
   title: string
@@ -213,6 +215,24 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                 <LocalLibraryIcon />
               </ListItemIcon>
               <ListItemText primary={t('Lecturer')} />
+            </ListItemButton>
+          </Tooltip>
+
+          <Tooltip title={t('Corporation') as React.ReactChild} placement='right' arrow>
+            <ListItemButton onClick={() => navigate('/admin/corporation?limit=8&offset=0')}>
+              <ListItemIcon>
+                <CorporateFareIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Corporation')} />
+            </ListItemButton>
+          </Tooltip>
+
+          <Tooltip title={t('Notice') as React.ReactChild} placement='right' arrow>
+            <ListItemButton onClick={() => navigate('/admin/notice?limit=8&offset=0')}>
+              <ListItemIcon>
+                <ArticleIcon />
+              </ListItemIcon>
+              <ListItemText primary={t('Notice')} />
             </ListItemButton>
           </Tooltip>
         </List>

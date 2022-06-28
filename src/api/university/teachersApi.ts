@@ -19,7 +19,7 @@ const teachersApi = {
 
   getAllLecturers(offset: number) {
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
-      `${url}/teacher/all?limit=8&offset=${offset}`
+      `${url}/teacher/all/pagination?limit=8&offset=${offset}`
     )
   },
 

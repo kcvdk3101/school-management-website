@@ -226,7 +226,12 @@ const Students: React.FC<StudentsProps> = () => {
                 alignItems: 'center',
               }}
             >
-              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
+              <Box>
+                <SearchButton
+                  handleChangeSelectedName={handleChangeSelectedName}
+                  setPage={setPage}
+                />
+              </Box>
               <FilterButton setPage={setPage} />
             </Box>
             {fetchingStudent ? (

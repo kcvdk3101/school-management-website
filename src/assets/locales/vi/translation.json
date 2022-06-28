@@ -11,12 +11,15 @@
   "Student": "Sinh viên",
   "Lecturer": "Giảng viên",
   "Profile": "Hồ sơ cá nhân",
+  "Notice": "Thông báo",
+  "Corporation": "Doanh nghiệp",
 
   "Signin": "Đăng nhập",
   "Signout": "Đăng xuất",
 
   "Add new student": "Thêm mới sinh viên",
   "Add new teacher": "Thêm mới giảng viên",
+  "Add new notice": "Thêm mới thông báo",
 
   "Search fullname": "Tìm kiếm tên...",
 

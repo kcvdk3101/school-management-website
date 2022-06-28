@@ -32,12 +32,12 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
             handleChangeSelectedName(e.target.value)
             if (!e.target.value) {
               navigate({
-                pathname: '/admin/lecturers',
+                pathname: '/admin/teachers',
                 search: `?limit=8&offset=0&status=${status}`,
               })
             } else {
               navigate({
-                pathname: '/admin/lecturers',
+                pathname: '/admin/teachers',
                 search: `?limit=8&offset=0&status=${status}&fullName=${e.target.value}`,
               })
             }

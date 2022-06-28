@@ -30,6 +30,7 @@ export const saveLecturersExcelFile = createAsyncThunk(
 
 export const getLecturers = createAsyncThunk('teachers/getLecturers', async (offset: number) => {
   const teachers = await lecturersApi.getAllLecturers(offset)
+  console.log('khoi nguuu', teachers)
   return teachers
 })
 
@@ -37,6 +38,7 @@ export const getLecturersByFilter = createAsyncThunk(
   'teachers/getLecturersByFilter',
   async ({ offset, status, fullName }: { offset: number; status: string; fullName: string }) => {
     const teachers = await lecturersApi.filterByCondition(offset, status, fullName)
+    console.log(teachers)
     return teachers
   }
 )
@@ -50,7 +52,7 @@ export const editInfoLecturer = createAsyncThunk(
 )
 
 export const addNewLecturer = createAsyncThunk(
-  'teachers/addNewStudent',
+  'teachers/addNewLecturer',
   async (data: TeacherModel[]) => {
     const response = await lecturersApi.addNewLecturer(data)
     return response

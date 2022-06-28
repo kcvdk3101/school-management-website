@@ -1,20 +1,10 @@
-import { Container, Box, Typography } from '@mui/material'
+import { Container, Box } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { keyframes } from '@mui/system'
 
 type AboutProps = {}
-
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
 
 const useStyles = makeStyles({
   container: {
@@ -33,15 +23,7 @@ const About: React.FC<AboutProps> = () => {
       </Helmet>
 
       <Container maxWidth='lg'>
-        <Box
-          component='div'
-          bgcolor='red'
-          width={200}
-          height={200}
-          sx={{
-            animation: `${spin} 1s infinite ease`,
-          }}
-        ></Box>
+        <Box component='div' bgcolor='red' width={200} height={200}></Box>
       </Container>
     </div>
   )
