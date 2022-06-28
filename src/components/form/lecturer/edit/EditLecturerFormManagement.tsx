@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Paper, Typography } from '@mui/material'
+import { Box, Paper, Typography, DialogContent } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
 import React from 'react'
@@ -112,25 +112,27 @@ const EditLecturerFormManagement: React.FC<EditLecturerFormManagementProps> = ({
   })
 
   return (
-    <Box className={classes.modal}>
-      <Paper
-        sx={{
-          p: 2,
-        }}
-      >
-        <Typography variant='h6' sx={{ mb: 2 }}>
-          {t('Edit lecturer title')}
-        </Typography>
-        <form onSubmit={onSubmit}>
-          <EditLecturerForm
-            lecturer={lecturer}
-            register={register}
-            formState={formState}
-            handleClose={handleClose}
-          />
-        </form>
-      </Paper>
-    </Box>
+    <DialogContent>
+      <Box className={classes.modal}>
+        <Paper
+          sx={{
+            p: 2,
+          }}
+        >
+          <Typography variant='h6' sx={{ mb: 2 }}>
+            {t('Edit lecturer title')}
+          </Typography>
+          <form onSubmit={onSubmit}>
+            <EditLecturerForm
+              lecturer={lecturer}
+              register={register}
+              formState={formState}
+              handleClose={handleClose}
+            />
+          </form>
+        </Paper>
+      </Box>
+    </DialogContent>
   )
 }
 

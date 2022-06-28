@@ -25,7 +25,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = () => {
   }
 
   const handleLogout = () => {
-    dispatch(signout(false))
+    dispatch(signout())
     navigate('/')
   }
 

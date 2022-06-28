@@ -13,11 +13,17 @@
   "Profile": "Profile",
   "Notice": "Notice",
   "Corporation": "Corporation",
+  "Account": "Account",
 
   "Student information": "Student Information",
   "Lecturer information": "Lecturer Information",
   "Edit student title": "Edit student information",
   "Edit lecturer title": "Edit lecturer information",
+
+  "Signin": "Signin",
+  "Signout": "Singout",
+
+  "Generate Account": "Create account for students",
 
   "Add new student": "Add new student",
   "Add new teacher": "Add new teacher",
@@ -44,6 +50,7 @@
   "Cancel": "Cancel",
   "Save": "Save",
   "Edit": "Edit",
+  "Create": "Create",
 
   "Searching job": "Searching job",
   "Choose your city": "Choose your city",
@@ -55,5 +62,8 @@
   "Identity number is invalid": "Identity number is invalid",
   "Identity number has existed": "Identity number has existed",
   "Class must be exactly 6 characters": "Class must be exactly 6 characters",
-  "Class is invalid": "Class is invalid"
+  "Class is invalid": "Class is invalid",
+
+  "Create account heading": "Create an account for student",
+  "Create account content": "Please create accounts for all students so that students can access the app"
 }

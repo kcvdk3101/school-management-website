@@ -1,4 +1,4 @@
-import { Box, Container, Grid, ImageList, ImageListItem, Typography } from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
@@ -6,7 +6,6 @@ import { useTranslation, withTranslation } from 'react-i18next'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import JobCard from '../../components/card/JobCard'
 import SkeletonJobCard from '../../components/skeleton/SkeletonJobCard'
-import * as Constants from '../../constants/index'
 import { getJobs } from '../../features/job/jobSlice'
 import SearchFormManagement from './components/searchForm/SearchFormManagement'
 
@@ -113,27 +112,6 @@ const Home: React.FC<HomeProps> = () => {
             </>
           )}
         </Grid>
-      </Container>
-
-      <Container maxWidth='lg' className={classes.headingContainer}>
-        <Box className={classes.heading}>
-          <Typography variant='h5' color='#f05742' fontWeight={700}>
-            {t('Our partners')}
-          </Typography>
-        </Box>
-
-        <ImageList variant='quilted' cols={4} rowHeight={150}>
-          {Constants.itemData.map((item) => (
-            <ImageListItem key={item.img} cols={1} rows={1}>
-              <img
-                src={`${item.img}?w=${150}&h=${150}&fit=crop&auto=format`}
-                alt={item.title}
-                loading='lazy'
-                style={{ objectFit: 'scale-down' }}
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
       </Container>
     </div>
   )

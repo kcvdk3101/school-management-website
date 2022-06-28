@@ -1,6 +1,18 @@
 import SaveIcon from '@mui/icons-material/Save'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
-import { Box, Button, Toolbar, Typography, CircularProgress, Modal } from '@mui/material'
+import {
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+  CircularProgress,
+  Modal,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
@@ -10,6 +22,7 @@ import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import studentsApi from '../../../api/university/studentsApi'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
 import EditStudentFormManagement from '../../../components/form/student/edit/EditStudentFormManagement'
@@ -70,7 +83,10 @@ const Students: React.FC<StudentsProps> = () => {
   const [page, setPage] = useState(0)
   const [openEditStudent, setOpenEditStudent] = useState(false)
   const [openNewStudent, setOpenNewStudent] = useState(false)
+  const [openGenerate, setOpenGenerate] = useState(false)
   const [currentId, setCurrentId] = useState<number>(-1)
+
+  const [loadingGenerate, setLoadingGenerate] = useState(false)
 
   useEffect(() => {
     ;(async () => {
@@ -108,8 +124,34 @@ const Students: React.FC<StudentsProps> = () => {
     setOpenNewStudent(false)
   }
 
+  const handleOpenGenerate = () => {
+    setOpenGenerate(true)
+  }
+
+  const handleCloseGenerate = () => {
+    setOpenGenerate(false)
+  }
+
   const handleChangeSelectedName = (value: string) => {
     setSelectedName(value)
+  }
+
+  const handleChangePage = async (event: unknown, newPage: number) => {
+    setPage(newPage)
+    try {
+      if (status || fullName) {
+        await dispatch(getStudentsByFilter({ offset: newPage, status, fullName }))
+      } else {
+        await dispatch(getStudents(newPage))
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      navigate({
+        pathname: '/admin/students',
+        search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
+      })
+    }
   }
 
   const saveExcelFile = async () => {
@@ -140,21 +182,19 @@ const Students: React.FC<StudentsProps> = () => {
     }
   }
 
-  const handleChangePage = async (event: unknown, newPage: number) => {
-    setPage(newPage)
+  const generateAccount = async () => {
+    setLoadingGenerate(true)
     try {
-      if (status || fullName) {
-        await dispatch(getStudentsByFilter({ offset: newPage, status, fullName }))
-      } else {
-        await dispatch(getStudents(newPage))
+      const response = await studentsApi.generateStudentAccount()
+      if (response.students.length === 0) {
+        toast.warning('All accounts have been created')
+        setLoadingGenerate(false)
       }
     } catch (error) {
-      console.log(error)
+      toast.error('Something wrong!')
     } finally {
-      navigate({
-        pathname: '/admin/students',
-        search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
-      })
+      setLoadingGenerate(false)
+      handleCloseGenerate()
     }
   }
 
@@ -208,6 +248,15 @@ const Students: React.FC<StudentsProps> = () => {
             <Box component='div'>
               <Button
                 variant='contained'
+                color='primary'
+                type='button'
+                onClick={handleOpenGenerate}
+                sx={{ mr: 2 }}
+              >
+                {t('Generate Account')}
+              </Button>
+              <Button
+                variant='outlined'
                 color='secondary'
                 type='button'
                 onClick={handleOpenNewStudent}
@@ -257,6 +306,21 @@ const Students: React.FC<StudentsProps> = () => {
           handleClose={handleCloseEditStudent}
         />
       </Modal>
+
+      <Dialog open={openGenerate}>
+        <DialogTitle>{t('Create account heading')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{t('Create account content')}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseGenerate} disabled={loadingGenerate}>
+            {t('Cancel')}
+          </Button>
+          <Button onClick={generateAccount} autoFocus disabled={loadingGenerate}>
+            {loadingGenerate ? <CircularProgress size={20} /> : t('Create')}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* New Student Form */}
       <NewStudentFormManagement open={openNewStudent} handleClose={() => handleCloseNewStudent()} />

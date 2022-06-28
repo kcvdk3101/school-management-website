@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { StudentModel } from '../../models/student.model'
 import { convertDateString } from '../../utils'
+import SummarizeIcon from '@mui/icons-material/Summarize'
 
 interface StudentTableProps {
   students: StudentModel[]
@@ -21,7 +22,7 @@ interface StudentTableProps {
 }
 
 interface RowData extends StudentModel {
-  isEditMode?: boolean
+  mode?: boolean
 }
 
 interface HeadCell {
@@ -67,12 +68,22 @@ const headCells: HeadCell[] = [
     label: 'Phone',
   },
   {
+    id: 'isRegistered',
+    disablePadding: false,
+    label: 'Account',
+  },
+  {
     id: 'status',
     disablePadding: false,
     label: 'Status',
   },
   {
-    id: 'isEditMode',
+    id: 'nameTeacher',
+    disablePadding: false,
+    label: 'Lecturer',
+  },
+  {
+    id: 'mode',
     disablePadding: false,
     label: 'Action',
   },
@@ -91,7 +102,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
   return (
     <>
       <TableContainer>
-        <Table aria-labelledby='tableTitle' size={'medium'}>
+        <Table aria-labelledby='tableTitle' size={'medium'} stickyHeader>
           <TableHead>
             <TableRow>
               {headCells.map((headCell) => (
@@ -126,13 +137,20 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   <TableCell align='left'>{convertDateString(row.birthDate as string)}</TableCell>
                   <TableCell align='left'>{row.email}</TableCell>
                   <TableCell align='left'>{row.phoneNumber}</TableCell>
+                  <TableCell align='left'>{row.isRegistered ? 'Đã tạo' : 'Chưa tạo'}</TableCell>
                   <TableCell align='left'>{row.status}</TableCell>
+                  <TableCell align='left'>
+                    {row.nameTeacher === '' ? '-----' : row.nameTeacher}
+                  </TableCell>
                   <TableCell
                     align='left'
                     sx={{
                       py: 1,
                     }}
                   >
+                    <IconButton aria-label='edit' onClick={() => {}}>
+                      <SummarizeIcon />
+                    </IconButton>
                     <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
                       <EditIcon />
                     </IconButton>

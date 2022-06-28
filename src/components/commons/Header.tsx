@@ -27,10 +27,10 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import logo from '../../assets/images/logo.png'
-import { signout } from '../../features/authenticate/authSlice'
 import LanguageButton from './LanguageButton'
 import ArticleIcon from '@mui/icons-material/Article'
 import CorporateFareIcon from '@mui/icons-material/CorporateFare'
+import { signout } from '../../features/authenticate/authSlice'
 
 type HeaderProps = {
   title: string
@@ -108,9 +108,13 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
     setAnchorEl(null)
   }
 
-  const handleLogout = () => {
-    dispatch(signout(false))
-    navigate('/')
+  const handleLogout = async () => {
+    try {
+      await dispatch(signout())
+      navigate('/')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

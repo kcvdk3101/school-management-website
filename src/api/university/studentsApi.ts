@@ -19,7 +19,9 @@ const studentsApi = {
   },
 
   generateStudentAccount() {
-    return axiosUniveristy.get(`${url}/student/generate-student`)
+    return axiosUniveristy.get<string, { students: StudentModel[] }>(
+      `${url}/student/generate-account`
+    )
   },
 
   getAllStudents(offset: number) {

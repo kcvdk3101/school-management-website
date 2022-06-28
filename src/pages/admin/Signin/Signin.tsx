@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
@@ -8,8 +9,11 @@ import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import * as yup from 'yup'
 import { useAppDispatch } from '../../../app/hooks'
 import CustomButon from '../../../components/commons/CustomButon'
 import { signin } from '../../../features/authenticate/authSlice'
@@ -26,6 +30,32 @@ const useStyles = makeStyles({
 
 type SigninProps = {}
 
+type FormInput = {
+  email: string
+  password: string
+}
+
+const signinSchema = yup.object({
+  email: yup
+    .string()
+    .required('This field is required')
+    .test('checkEmail', 'Please use Admin mail', (value) => {
+      if (value === 'admin@gmail.com') {
+        return true
+      }
+      return false
+    }),
+  password: yup
+    .string()
+    .required('This field is required')
+    .test('checkPassword', 'Wrong password', (value) => {
+      if (value === 'admin123') {
+        return true
+      }
+      return false
+    }),
+})
+
 const Signin: React.FC<SigninProps> = () => {
   const classes = useStyles()
   const { t } = useTranslation()
@@ -33,17 +63,28 @@ const Signin: React.FC<SigninProps> = () => {
   let navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    const data = new FormData(event.currentTarget)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInput>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    resolver: yupResolver(signinSchema),
+  })
+
+  const onSubmit = handleSubmit(async (data) => {
+    const { email, password } = data
     try {
-      if (data.get('email') === 'admin@gmail.com') {
-        dispatch(signin(true))
+      const repsonse = await dispatch(signin({ email, password }))
+      if (repsonse.meta.requestStatus === 'fulfilled') {
         navigate('/admin/dashboard')
+        toast.success('Login successfully')
       }
     } catch (error) {
       console.log(error)
     }
-  }
+  })
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -58,26 +99,28 @@ const Signin: React.FC<SigninProps> = () => {
         <Typography component='h1' variant='h5'>
           {t('Signin')}
         </Typography>
-        <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <form onSubmit={onSubmit} style={{ marginTop: '8px' }}>
           <TextField
-            margin='normal'
             required
             fullWidth
-            id='email'
-            placeholder={t('Email')}
-            name='email'
-            autoComplete='email'
+            margin='normal'
             autoFocus
+            placeholder={t('Email')}
+            {...register('email')}
+            error={Boolean(errors.email)}
+            helperText={t(`${errors.email?.message ? errors.email?.message : ''}`)}
           />
           <TextField
-            margin='normal'
             required
             fullWidth
-            name='password'
-            placeholder={t('Password')}
+            margin='normal'
+            autoFocus
             type='password'
-            id='password'
             autoComplete='current-password'
+            placeholder={t('Password')}
+            {...register('password')}
+            error={Boolean(errors.password)}
+            helperText={t(`${errors.password?.message ? errors.password?.message : ''}`)}
           />
           <CustomButon
             type='submit'
@@ -86,7 +129,7 @@ const Signin: React.FC<SigninProps> = () => {
             variant='contained'
             sx={{ mt: 3, mb: 2 }}
           />
-        </Box>
+        </form>
       </Box>
     </Container>
   )
