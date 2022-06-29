@@ -1,8 +1,6 @@
 import { JobModel } from '../../models/job.model'
 import axiosCorporation from './axiosCorporation'
 
-const url = 'corporation'
-
 const jobApi = {
   getJobs(limit: number, offset: number) {
     return axiosCorporation.get<string, { data: JobModel[]; pagination: { total: number } }>(

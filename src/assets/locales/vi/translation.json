@@ -20,6 +20,10 @@
 
   "Generate Account": "Tạo tài khoản cho tất cả sinh viên",
 
+  "All": "Tất cả",
+  "Activated": "Đã kích hoạt",
+  "Not activated": "Chưa kích hoạt",
+
   "Add new student": "Thêm mới sinh viên",
   "Add new teacher": "Thêm mới giảng viên",
   "Add new notice": "Thêm mới thông báo",
@@ -28,6 +32,7 @@
 
   "Student information": "Thông tin sinh viên",
   "Lecturer information": "Thông tin giảng viên",
+  "Notice information": "Thông tin thông báo",
   "Edit student title": "Chỉnh sửa thông tin sinh viên",
   "Edit lecturer title": "Chỉnh sửa thông tin giảng viên",
 
@@ -44,6 +49,8 @@
   "Position": "Vị trí",
   "Department": "Phòng ban",
   "Action": "Tác vụ",
+  "Title": "Tiêu đề",
+  "Content": "Nội dung",
 
   "Haven't practiced": "Chưa thực tập",
   "Practicing": "Đang thực tập",

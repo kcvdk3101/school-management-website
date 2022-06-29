@@ -17,6 +17,8 @@
 
   "Student information": "Student Information",
   "Lecturer information": "Lecturer Information",
+  "Notice information": "Notice information",
+
   "Edit student title": "Edit student information",
   "Edit lecturer title": "Edit lecturer information",
 
@@ -24,6 +26,10 @@
   "Signout": "Singout",
 
   "Generate Account": "Create account for students",
+
+  "All": "All",
+  "Activated": "Activated",
+  "Not activated": "Not activated",
 
   "Add new student": "Add new student",
   "Add new teacher": "Add new teacher",
@@ -42,6 +48,8 @@
   "Position": "Position",
   "Department": "Department",
   "Action": "Action",
+  "Title": "Title",
+  "Content": "Content",
 
   "Haven't practiced": "Haven't practiced",
   "Practicing": "Practicing",

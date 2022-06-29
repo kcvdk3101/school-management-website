@@ -68,7 +68,7 @@ const Signin: React.FC<SigninProps> = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormInput>({
-    mode: 'onChange',
+    mode: 'onSubmit',
     reValidateMode: 'onChange',
     resolver: yupResolver(signinSchema),
   })

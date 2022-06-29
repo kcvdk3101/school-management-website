@@ -1,18 +1,13 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Card,
-  Toolbar,
-  Typography,
-  CardActions,
-  CardContent,
-} from '@mui/material'
+import { Box, Button, Dialog, Grid, Tab, Tabs, Toolbar, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
+import NewNoticeFormManagement from '../../../components/form/notice/new/NewNoticeFormManagement'
+import { getAllPosts } from '../../../features/post/postSlice'
 import NoticeCard from './components/NoticeCard'
 
 type NoticeProps = {}
@@ -28,15 +23,42 @@ const useStyles = makeStyles({
   innerContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
 })
 
 const Notice: React.FC<NoticeProps> = () => {
   const classes = useStyles()
-
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
+
+  const { posts, fetchingPost } = useAppSelector((state) => state.posts)
+
+  const [openNoticeForm, setOpenNoticeForm] = useState(false)
+  const [value, setValue] = React.useState(0)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        await dispatch(getAllPosts())
+      } catch (error) {
+        toast.error('Cannot load data')
+      }
+    })()
+  }, [dispatch])
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue)
+  }
+
+  const handleOpenNoticeForm = () => {
+    setOpenNoticeForm(true)
+  }
+
+  const handleCloseNoticeForm = () => {
+    setOpenNoticeForm(false)
+  }
 
   return (
     <>
@@ -49,41 +71,50 @@ const Notice: React.FC<NoticeProps> = () => {
 
         <Box component='main' className={classes.container}>
           <Toolbar />
-          <Box component='div' style={{ marginBottom: 12 }}>
-            <Button variant='contained' color='secondary' type='button' onClick={() => {}}>
+          <Box component='div' style={{ marginBottom: 12 }} className={classes.innerContainer}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+                <Tab label={t('All')} />
+                {/* <Tab label={t('Activated')} />
+                <Tab label={t('Not activated')} /> */}
+              </Tabs>
+            </Box>
+            <Button
+              variant='contained'
+              color='secondary'
+              type='button'
+              onClick={handleOpenNoticeForm}
+            >
               {t('Add new notice')}
             </Button>
           </Box>
-          <Box className={classes.innerContainer}>
-            <Grid container>
-              <Grid item xs={3}>
-                <NoticeCard
-                  title='HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ!'
-                  content='"HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ! \n Thời gian & địa điểm : 7:30 – 15:30 ngày 21/5/2022 tại 828 Sư Vạn Hạnh P.13 Q.10 \n Hoạt động ngày hội: talkshow về môi trường và cơ hội nghề nghiệp, giao lưu và học hỏi kinh nghiệm từ các cựu sinh viên HUFLIT thành đạt, gặp gỡ với hơn 30 doanh nghiệp đồng hành, nộp hồ sơ ứng tuyển, tham gia phỏng vấn thật – việc thật, giao lưu cùng ca sĩ DatKaa'
-                />
+          <Box style={{ marginTop: 16 }}>
+            {fetchingPost ? (
+              <Typography>Loading</Typography>
+            ) : (
+              <Grid container>
+                {posts && posts.length > 0 ? (
+                  <>
+                    {posts.map((post, index) => (
+                      <Grid item xs={3} key={index}>
+                        <NoticeCard title={post.title} content={post.content} />
+                      </Grid>
+                    ))}
+                  </>
+                ) : (
+                  <Grid item>
+                    <Typography>Không có dữ liệu</Typography>
+                  </Grid>
+                )}
               </Grid>
-              <Grid item xs={3}>
-                <NoticeCard
-                  title='HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ!'
-                  content='"HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ! \n Thời gian & địa điểm : 7:30 – 15:30 ngày 21/5/2022 tại 828 Sư Vạn Hạnh P.13 Q.10 \n Hoạt động ngày hội: talkshow về môi trường và cơ hội nghề nghiệp, giao lưu và học hỏi kinh nghiệm từ các cựu sinh viên HUFLIT thành đạt, gặp gỡ với hơn 30 doanh nghiệp đồng hành, nộp hồ sơ ứng tuyển, tham gia phỏng vấn thật – việc thật, giao lưu cùng ca sĩ DatKaa'
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <NoticeCard
-                  title='HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ!'
-                  content='"HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ! \n Thời gian & địa điểm : 7:30 – 15:30 ngày 21/5/2022 tại 828 Sư Vạn Hạnh P.13 Q.10 \n Hoạt động ngày hội: talkshow về môi trường và cơ hội nghề nghiệp, giao lưu và học hỏi kinh nghiệm từ các cựu sinh viên HUFLIT thành đạt, gặp gỡ với hơn 30 doanh nghiệp đồng hành, nộp hồ sơ ứng tuyển, tham gia phỏng vấn thật – việc thật, giao lưu cùng ca sĩ DatKaa'
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <NoticeCard
-                  title='HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ!'
-                  content='"HUFLIT JOB FAIR 2022 – SỰ KIỆN HUFLITERS KHÔNG THỂ BỎ LỠ! \n Thời gian & địa điểm : 7:30 – 15:30 ngày 21/5/2022 tại 828 Sư Vạn Hạnh P.13 Q.10 \n Hoạt động ngày hội: talkshow về môi trường và cơ hội nghề nghiệp, giao lưu và học hỏi kinh nghiệm từ các cựu sinh viên HUFLIT thành đạt, gặp gỡ với hơn 30 doanh nghiệp đồng hành, nộp hồ sơ ứng tuyển, tham gia phỏng vấn thật – việc thật, giao lưu cùng ca sĩ DatKaa'
-                />
-              </Grid>
-            </Grid>
+            )}
           </Box>
         </Box>
       </Box>
+
+      <Dialog open={openNoticeForm} maxWidth='sm' fullWidth>
+        <NewNoticeFormManagement handleCloseNoticeForm={handleCloseNoticeForm} />
+      </Dialog>
     </>
   )
 }

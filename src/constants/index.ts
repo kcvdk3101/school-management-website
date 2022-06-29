@@ -4,8 +4,8 @@ export const API_USER_URL = process.env.REACT_APP_API_USER_URL
 
 export const pages = [
   { title: 'Job', path: '/job?limit=5&offset=0' },
-  { title: 'Blog', path: '/blog' },
-  { title: 'About', path: '/about' },
+  // { title: 'Blog', path: '/blog' },
+  // { title: 'About', path: '/about' },
 ]
 
 export const itemData = [
