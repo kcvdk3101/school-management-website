@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { TeacherModel } from '../../models/teacher.model'
 
-interface LecturerTableProps {
-  lecturers: TeacherModel[]
+interface TeacherTableProps {
+  teachers: TeacherModel[]
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
-  handleOpenEditLecturer: (id: number) => void
+  handleOpenEditTeacher: (id: number) => void
 }
 
 interface RowData extends TeacherModel {
@@ -61,17 +61,27 @@ const headCells: HeadCell[] = [
     label: 'Phone',
   },
   {
+    id: 'maximumStudentAmount',
+    disablePadding: false,
+    label: 'Maximum number of students',
+  },
+  {
+    id: 'studentAmount',
+    disablePadding: false,
+    label: 'Current number of students',
+  },
+  {
     id: 'isEditMode',
     disablePadding: false,
     label: 'Action',
   },
 ]
 
-const LecturerTable: React.FC<LecturerTableProps> = ({
-  lecturers,
+const TeacherTable: React.FC<TeacherTableProps> = ({
+  teachers,
   page,
   handleChangePage,
-  handleOpenEditLecturer,
+  handleOpenEditTeacher,
 }) => {
   const { t } = useTranslation()
 
@@ -97,7 +107,7 @@ const LecturerTable: React.FC<LecturerTableProps> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {lecturers.map((row, index) => {
+            {teachers.map((row, index) => {
               return (
                 <TableRow key={index} hover role='checkbox' tabIndex={-1}>
                   <TableCell align='left'>{row.lastName}</TableCell>
@@ -106,13 +116,15 @@ const LecturerTable: React.FC<LecturerTableProps> = ({
                   <TableCell align='left'>{row.department}</TableCell>
                   <TableCell align='left'>{row.email}</TableCell>
                   <TableCell align='left'>{row.phoneNumber}</TableCell>
+                  <TableCell align='left'>{row.maximumStudentAmount}</TableCell>
+                  <TableCell align='left'>{row.studentAmount}</TableCell>
                   <TableCell
                     align='left'
                     sx={{
                       py: 1,
                     }}
                   >
-                    <IconButton aria-label='edit' onClick={() => handleOpenEditLecturer(index)}>
+                    <IconButton aria-label='edit' onClick={() => handleOpenEditTeacher(index)}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>
@@ -135,4 +147,4 @@ const LecturerTable: React.FC<LecturerTableProps> = ({
   )
 }
 
-export default LecturerTable
+export default TeacherTable

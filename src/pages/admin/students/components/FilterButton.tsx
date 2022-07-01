@@ -1,10 +1,10 @@
-import FilterListIcon from '@mui/icons-material/FilterList'
-import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import React from 'react'
+import { Button, Menu, MenuItem, Box, Typography } from '@mui/material'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import queryString from 'query-string'
+import { useAppDispatch } from '../../../../app/hooks'
+import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
 
 type FilterButtonProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -12,36 +12,78 @@ type FilterButtonProps = {
 
 const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
   const { t } = useTranslation()
-  let navigate = useNavigate()
+  let { search } = useLocation()
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  let navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [anchorElTerm, setAnchorElTerm] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const openTerm = Boolean(anchorElTerm)
+
+  let paginationQuery = queryString.parse(search)
+  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
+  const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
+  const status = paginationQuery.status ? (paginationQuery.status as string) : ''
+  const term = paginationQuery.term ? (paginationQuery.term as string) : ''
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
+  const handleClickTerm = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElTerm(event.currentTarget)
+  }
+
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const handleCloseTerm = () => {
+    setAnchorElTerm(null)
+  }
 
-  function handleChangeFilter(status: string) {
+  async function handleChangeFilter(status: string) {
     setPage(0)
-    if (status === 'all')
-      return navigate({
-        pathname: '/admin/students',
-      })
+    await dispatch(getStudentsByFilter({ offset, status, fullName, term }))
+    // if (status === '') {
+    // }
+    // if (status === 'all')
+    //   return navigate({
+    //     pathname: '/admin/students',
+    //   })
 
-    navigate({
-      pathname: '/admin/students',
-      search: `?limit=8&offset=0&status=${status}`,
-    })
+    // navigate({
+    //   pathname: '/admin/students',
+    //   search: `?limit=8&offset=0&status=${status}`,
+    // })
+  }
+
+  async function handleChangeFilterTerm(term: string) {
+    setPage(0)
+    await dispatch(getStudentsByFilter({ offset, status, fullName, term }))
+    // if (status === '') {
+    // }
+    // if (status === 'all')
+    //   return navigate({
+    //     pathname: '/admin/students',
+    //   })
+
+    // navigate({
+    //   pathname: '/admin/students',
+    //   search: `?limit=8&offset=0&status=${status}`,
+    // })
   }
 
   return (
-    <>
-      <IconButton size='large' edge='start' color='inherit' sx={{ mr: 2 }} onClick={handleClick}>
-        <FilterListIcon />
-      </IconButton>
+    <Box>
+      <Box>
+        <Button variant='outlined' size='small' onClick={handleClick}>
+          <Typography variant='body1'>{t('Internship status')}</Typography>
+        </Button>
+        <Button variant='outlined' size='small' onClick={handleClickTerm} style={{ marginLeft: 8 }}>
+          <Typography variant='body1'>{t('Term')}</Typography>
+        </Button>
+      </Box>
       <Menu
         id='basic-menu'
         anchorEl={anchorEl}
@@ -58,7 +100,24 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
         <MenuItem onClick={() => handleChangeFilter('Đang thực tập')}>{t('Practicing')}</MenuItem>
         <MenuItem onClick={() => handleChangeFilter('Đã thực tập')}>{t('Trained')}</MenuItem>
       </Menu>
-    </>
+      <Menu
+        id='basic-menu'
+        anchorEl={anchorElTerm}
+        open={openTerm}
+        onClose={handleCloseTerm}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={() => handleChangeFilterTerm('all')}>-----</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterTerm('K24')}>K24</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterTerm('K24')}>K23</MenuItem>
+      </Menu>
+    </Box>
   )
 }
 

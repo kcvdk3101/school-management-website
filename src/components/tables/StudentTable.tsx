@@ -1,4 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit'
+import SummarizeIcon from '@mui/icons-material/Summarize'
+import { green, red, blue } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -7,12 +9,12 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
+import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { StudentModel } from '../../models/student.model'
 import { convertDateString } from '../../utils'
-import SummarizeIcon from '@mui/icons-material/Summarize'
 
 interface StudentTableProps {
   students: StudentModel[]
@@ -38,14 +40,9 @@ const headCells: HeadCell[] = [
     label: 'Identity number',
   },
   {
-    id: 'lastName',
+    id: 'fullName',
     disablePadding: false,
-    label: 'Last name',
-  },
-  {
-    id: 'firstName',
-    disablePadding: false,
-    label: 'First name',
+    label: 'Full name',
   },
   {
     id: 'class',
@@ -68,19 +65,34 @@ const headCells: HeadCell[] = [
     label: 'Phone',
   },
   {
-    id: 'isRegistered',
+    id: 'address',
     disablePadding: false,
-    label: 'Account',
+    label: 'Address',
+  },
+  {
+    id: 'term',
+    disablePadding: false,
+    label: 'Term',
+  },
+  {
+    id: 'cv',
+    disablePadding: false,
+    label: 'Number of CVs',
   },
   {
     id: 'status',
     disablePadding: false,
-    label: 'Status',
+    label: 'Internship status',
   },
   {
     id: 'nameTeacher',
     disablePadding: false,
     label: 'Lecturer',
+  },
+  {
+    id: 'internshipGrade',
+    disablePadding: false,
+    label: 'Internship grade',
   },
   {
     id: 'mode',
@@ -89,6 +101,18 @@ const headCells: HeadCell[] = [
   },
 ]
 
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  sticky: {
+    position: 'sticky',
+    left: 0,
+    background: 'white',
+    boxShadow: '8px 5px 10px grey',
+  },
+})
+
 const StudentTable: React.FC<StudentTableProps> = ({
   students,
   page,
@@ -96,6 +120,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
   handleOpenEditStudent,
 }) => {
   const { t } = useTranslation()
+  const classes = useStyles()
 
   const totalStudents = useAppSelector((state) => state.students.pagination.total)
 
@@ -131,17 +156,36 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   >
                     {row.identityNumber}
                   </TableCell>
-                  <TableCell align='left'>{row.lastName}</TableCell>
-                  <TableCell align='left'>{row.firstName}</TableCell>
+                  <TableCell align='left'>{row.fullName}</TableCell>
                   <TableCell align='left'>{row.class}</TableCell>
                   <TableCell align='left'>{convertDateString(row.birthDate as string)}</TableCell>
                   <TableCell align='left'>{row.email}</TableCell>
                   <TableCell align='left'>{row.phoneNumber}</TableCell>
-                  <TableCell align='left'>{row.isRegistered ? 'Đã tạo' : 'Chưa tạo'}</TableCell>
-                  <TableCell align='left'>{row.status}</TableCell>
-                  <TableCell align='left'>
-                    {row.nameTeacher === '' ? '-----' : row.nameTeacher}
+                  <TableCell align='left'>{row.address}</TableCell>
+                  <TableCell align='left'>{row.term}</TableCell>
+                  <TableCell
+                    align='left'
+                    style={{
+                      color:
+                        row.status === 'Chưa thực tập'
+                          ? red[500]
+                          : row.status === 'Đang thực tập'
+                          ? blue[500]
+                          : green['A400'],
+                    }}
+                  >
+                    {row.status}
                   </TableCell>
+                  <TableCell
+                    align='left'
+                    style={{ color: row.nameTeacher === '' ? red[500] : green['A400'] }}
+                  >
+                    {row.nameTeacher === '' ? 'Chưa có' : row.nameTeacher}
+                  </TableCell>
+                  <TableCell align='center'>
+                    {row.cv && row.cv.length > 0 ? row.cv.length : 0}
+                  </TableCell>
+                  <TableCell align='center'>{row.internshipGrade}</TableCell>
                   <TableCell
                     align='left'
                     sx={{
@@ -163,10 +207,10 @@ const StudentTable: React.FC<StudentTableProps> = ({
       </TableContainer>
       <TablePagination
         padding='none'
-        rowsPerPageOptions={[8]}
+        rowsPerPageOptions={[10]}
         component='div'
         count={totalStudents}
-        rowsPerPage={8}
+        rowsPerPage={10}
         page={page}
         onPageChange={handleChangePage}
       />

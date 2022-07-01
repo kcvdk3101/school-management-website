@@ -12,11 +12,13 @@ type Admin = {
 
 interface AuthState {
   user: Partial<Admin>
+  error: string
   isAuthenticated: boolean
 }
 
 const initialState: AuthState = {
   user: {},
+  error: '',
   isAuthenticated: false,
 }
 
@@ -50,6 +52,7 @@ const authSlice = createSlice({
     })
     builder.addCase(signin.rejected, (state, action) => {
       state.isAuthenticated = false
+      state.error = action.error.message as string
     })
 
     // signout
@@ -67,5 +70,4 @@ const authSlice = createSlice({
   },
 })
 
-export const {} = authSlice.actions
 export default authSlice.reducer

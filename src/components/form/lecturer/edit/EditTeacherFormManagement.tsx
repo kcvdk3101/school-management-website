@@ -11,9 +11,9 @@ import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
 import { editInfoLecturer } from '../../../../features/teacher/teacherSlice'
 import { TeacherModel } from '../../../../models/teacher.model'
-import EditLecturerForm from './EditLecturerForm'
+import EditTeacherForm from './EditTeacherForm'
 
-type EditLecturerFormManagementProps = {
+type EditTeacherFormManagementProps = {
   lecturer: TeacherModel
   handleClose: () => void
 }
@@ -63,7 +63,7 @@ const editTeacherSchema = yup.object({
     .required('This field is required'),
 })
 
-const EditLecturerFormManagement: React.FC<EditLecturerFormManagementProps> = ({
+const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
   lecturer,
   handleClose,
 }) => {
@@ -123,7 +123,7 @@ const EditLecturerFormManagement: React.FC<EditLecturerFormManagementProps> = ({
             {t('Edit lecturer title')}
           </Typography>
           <form onSubmit={onSubmit}>
-            <EditLecturerForm
+            <EditTeacherForm
               lecturer={lecturer}
               register={register}
               formState={formState}
@@ -136,4 +136,4 @@ const EditLecturerFormManagement: React.FC<EditLecturerFormManagementProps> = ({
   )
 }
 
-export default EditLecturerFormManagement
+export default EditTeacherFormManagement

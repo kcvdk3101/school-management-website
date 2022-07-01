@@ -11,17 +11,17 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
-import EditLecturerFormManagement from '../../../components/form/lecturer/edit/EditLecturerFormManagement'
-import NewLecturerFormManagement from '../../../components/form/lecturer/new/NewLecturerFormManagement'
+import NoData from '../../../components/commons/NoData'
+import EditTeacherFormManagement from '../../../components/form/lecturer/edit/EditTeacherFormManagement'
+import NewTeacherFormManagement from '../../../components/form/lecturer/new/NewTeacherFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
-import LecturerTable from '../../../components/tables/LecturerTable'
+import TeacherTable from '../../../components/tables/TeacherTable'
 import {
   getLecturers,
   getLecturersByFilter,
   saveLecturersExcelFile,
 } from '../../../features/teacher/teacherSlice'
 import FilterButton from '../students/components/FilterButton'
-import NoData from './components/NoData'
 import SearchButton from './components/SearchButton'
 
 type TeachersProps = {}
@@ -233,11 +233,11 @@ const Lecturers: React.FC<TeachersProps> = () => {
             ) : teachers.length === 0 ? (
               <NoData />
             ) : (
-              <LecturerTable
+              <TeacherTable
                 page={page}
-                lecturers={teachers}
+                teachers={teachers}
                 handleChangePage={handleChangePage}
-                handleOpenEditLecturer={handleOpenEditTeacher}
+                handleOpenEditTeacher={handleOpenEditTeacher}
               />
             )}
           </Paper>
@@ -246,17 +246,14 @@ const Lecturers: React.FC<TeachersProps> = () => {
 
       {/* Edit Teacher Form */}
       <Modal open={openEditTeacher} onClose={handleCloseEditTeacher}>
-        <EditLecturerFormManagement
+        <EditTeacherFormManagement
           lecturer={teachers[currentId]}
           handleClose={handleCloseEditTeacher}
         />
       </Modal>
 
       {/* New Teacher Form */}
-      <NewLecturerFormManagement
-        open={openNewTeacher}
-        handleClose={() => handleCloseNewTeacher()}
-      />
+      <NewTeacherFormManagement open={openNewTeacher} handleClose={() => handleCloseNewTeacher()} />
     </>
   )
 }

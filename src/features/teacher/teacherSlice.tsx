@@ -30,7 +30,6 @@ export const saveLecturersExcelFile = createAsyncThunk(
 
 export const getLecturers = createAsyncThunk('teachers/getLecturers', async (offset: number) => {
   const teachers = await lecturersApi.getAllLecturers(offset)
-  console.log('khoi nguuu', teachers)
   return teachers
 })
 

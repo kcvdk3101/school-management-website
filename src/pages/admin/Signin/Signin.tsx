@@ -1,5 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { IconButton } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -7,14 +9,14 @@ import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from '@mui/styles'
-import React from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
-import { useAppDispatch } from '../../../app/hooks'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import CustomButon from '../../../components/commons/CustomButon'
 import { signin } from '../../../features/authenticate/authSlice'
 
@@ -59,9 +61,10 @@ const signinSchema = yup.object({
 const Signin: React.FC<SigninProps> = () => {
   const classes = useStyles()
   const { t } = useTranslation()
-
   let navigate = useNavigate()
+
   const dispatch = useAppDispatch()
+  const { error } = useAppSelector((state) => state.auth)
 
   const {
     register,
@@ -73,16 +76,22 @@ const Signin: React.FC<SigninProps> = () => {
     resolver: yupResolver(signinSchema),
   })
 
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handleClick = () => {
+    setShowPassword((prev) => !prev)
+  }
+
   const onSubmit = handleSubmit(async (data) => {
     const { email, password } = data
-    try {
-      const repsonse = await dispatch(signin({ email, password }))
-      if (repsonse.meta.requestStatus === 'fulfilled') {
-        navigate('/admin/dashboard')
-        toast.success('Login successfully')
-      }
-    } catch (error) {
-      console.log(error)
+    const response = await dispatch(signin({ email, password }))
+
+    if (response.meta.requestStatus === 'fulfilled') {
+      navigate('/admin/dashboard')
+      toast.success('Login successfully')
+    }
+    if (response.meta.requestStatus === 'rejected') {
+      toast.error(error)
     }
   })
 
@@ -101,6 +110,7 @@ const Signin: React.FC<SigninProps> = () => {
         </Typography>
         <form onSubmit={onSubmit} style={{ marginTop: '8px' }}>
           <TextField
+            label='Email'
             required
             fullWidth
             margin='normal'
@@ -115,12 +125,18 @@ const Signin: React.FC<SigninProps> = () => {
             fullWidth
             margin='normal'
             autoFocus
-            type='password'
-            autoComplete='current-password'
+            type={showPassword ? 'text' : 'password'}
             placeholder={t('Password')}
             {...register('password')}
             error={Boolean(errors.password)}
             helperText={t(`${errors.password?.message ? errors.password?.message : ''}`)}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={handleClick}>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              ),
+            }}
           />
           <CustomButon
             type='submit'

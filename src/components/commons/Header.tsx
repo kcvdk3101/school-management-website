@@ -94,20 +94,17 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
   const [open, setOpen] = React.useState(false)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
   const toggleDrawer = () => {
     setOpen(!open)
   }
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
-
   const handleClose = () => {
     setAnchorEl(null)
   }
-
   const handleLogout = async () => {
     try {
       await dispatch(signout())

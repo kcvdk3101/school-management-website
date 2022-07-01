@@ -25,7 +25,7 @@ const languages = [
 const LanguageButton: React.FC<LanguageButtonProps> = () => {
   const { i18n } = useTranslation()
   let lang = localStorage.getItem('cft-language')
-  if (!lang) lang = 'vi'
+  if (!lang) lang = 'vn'
 
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
@@ -53,12 +53,7 @@ const LanguageButton: React.FC<LanguageButtonProps> = () => {
     <Box sx={{ mr: 1, display: 'flex', justifyContent: 'center' }}>
       <ButtonGroup variant='contained' ref={anchorRef}>
         <Button onClick={handleToggle}>
-          <img
-            loading='lazy'
-            width='20'
-            src={`https://flagcdn.com/w20/${languages[selectedIndex].key.toLowerCase()}.png`}
-            alt='flag'
-          />
+          <img loading='lazy' width='20' src={`https://flagcdn.com/w20/${lang}.png`} alt='flag' />
         </Button>
       </ButtonGroup>
       <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>

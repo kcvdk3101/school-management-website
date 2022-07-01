@@ -11,9 +11,9 @@ import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
 import { addNewLecturer, getLecturers } from '../../../../features/teacher/teacherSlice'
 import { TeacherModel } from '../../../../models/teacher.model'
-import NewLecturerForm from './NewLecturerForm'
+import NewTeacherForm from './NewTeacherForm'
 
-type NewLecturerFormManagementProps = {
+type NewTeacherFormManagementProps = {
   open: boolean
   handleClose: () => void
 }
@@ -63,7 +63,7 @@ const useStyles = makeStyles({
   },
 })
 
-const NewLecturerFormManagement: React.FC<NewLecturerFormManagementProps> = ({
+const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
   open,
   handleClose,
 }) => {
@@ -118,7 +118,7 @@ const NewLecturerFormManagement: React.FC<NewLecturerFormManagementProps> = ({
             {t('Lecturer information')}
           </Typography>
           <form onSubmit={onSubmit}>
-            <NewLecturerForm
+            <NewTeacherForm
               register={register}
               formState={formState}
               handleClose={handleClose}
@@ -131,4 +131,4 @@ const NewLecturerFormManagement: React.FC<NewLecturerFormManagementProps> = ({
   )
 }
 
-export default NewLecturerFormManagement
+export default NewTeacherFormManagement

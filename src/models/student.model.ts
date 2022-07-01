@@ -18,6 +18,7 @@ export interface StudentModel extends Common {
   nameTeacher?: string
   slug?: string
   internshipCertification?: string
+  internshipGrade?: string
   internshipReport?: string
   cv?: CVModel[]
 }

@@ -12,6 +12,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Chip,
+  Grid,
 } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
@@ -25,6 +27,7 @@ import { toast } from 'react-toastify'
 import studentsApi from '../../../api/university/studentsApi'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
+import NoData from '../../../components/commons/NoData'
 import EditStudentFormManagement from '../../../components/form/student/edit/EditStudentFormManagement'
 import NewStudentFormManagement from '../../../components/form/student/new/NewStudentFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
@@ -35,7 +38,6 @@ import {
   saveStudentsExcelFile,
 } from '../../../features/student/studentsSlice'
 import FilterButton from './components/FilterButton'
-import NoData from './components/NoData'
 import SearchButton from './components/SearchButton'
 
 type StudentsProps = {}
@@ -55,6 +57,13 @@ const useStyles = makeStyles({
     alignItems: 'center',
     marginBottom: 12,
   },
+  tableContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
 })
 
 const Input = styled('input')({
@@ -72,6 +81,7 @@ const Students: React.FC<StudentsProps> = () => {
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
+  const term = paginationQuery.term ? (paginationQuery.term as string) : ''
 
   const dispatch = useAppDispatch()
   const { fetchingStudent, students } = useAppSelector((state) => state.students)
@@ -79,25 +89,28 @@ const Students: React.FC<StudentsProps> = () => {
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
   const [selectedName, setSelectedName] = useState<string>('')
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loadingGenerate, setLoadingGenerate] = useState(false)
+
   const [page, setPage] = useState(0)
+  const [currentId, setCurrentId] = useState<number>(-1)
+
   const [openEditStudent, setOpenEditStudent] = useState(false)
   const [openNewStudent, setOpenNewStudent] = useState(false)
   const [openGenerate, setOpenGenerate] = useState(false)
-  const [currentId, setCurrentId] = useState<number>(-1)
-
-  const [loadingGenerate, setLoadingGenerate] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       try {
         if (status || selectedName) {
-          return await dispatch(getStudentsByFilter({ offset, status, fullName: selectedName }))
+          return await dispatch(
+            getStudentsByFilter({ offset, status, fullName: selectedName, term })
+          )
         }
-
         await dispatch(getStudents(offset))
       } catch (error) {
-        console.log(error)
+        toast.error('Cannot load student data')
       }
     })()
   }, [dispatch, selectedName, offset, status])
@@ -140,7 +153,7 @@ const Students: React.FC<StudentsProps> = () => {
     setPage(newPage)
     try {
       if (status || fullName) {
-        await dispatch(getStudentsByFilter({ offset: newPage, status, fullName }))
+        await dispatch(getStudentsByFilter({ offset: newPage, status, fullName, term }))
       } else {
         await dispatch(getStudents(newPage))
       }
@@ -149,15 +162,15 @@ const Students: React.FC<StudentsProps> = () => {
     } finally {
       navigate({
         pathname: '/admin/students',
-        search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
+        search: `?limit=10&offset=${newPage}&status=${status}&fullName=${fullName}`,
       })
     }
   }
 
   const saveExcelFile = async () => {
+    setIsLoading(true)
     const formData = new FormData()
     formData.append('files', selectedFile as Blob)
-    setIsLoading(true)
     try {
       const response = await dispatch(saveStudentsExcelFile(formData))
       if (response.meta.requestStatus === 'fulfilled') {
@@ -217,9 +230,10 @@ const Students: React.FC<StudentsProps> = () => {
                   id='button-file'
                   multiple
                   type='file'
+                  disabled={isLoading}
                   onChange={handleOnChange}
                 />
-                <Button variant='contained' color='secondary' component='span'>
+                <Button variant='contained' color='secondary' component='span' disabled={isLoading}>
                   <UploadFileIcon />
                 </Button>
               </label>
@@ -252,6 +266,7 @@ const Students: React.FC<StudentsProps> = () => {
                 type='button'
                 onClick={handleOpenGenerate}
                 sx={{ mr: 2 }}
+                disabled={isLoading}
               >
                 {t('Generate Account')}
               </Button>
@@ -260,21 +275,25 @@ const Students: React.FC<StudentsProps> = () => {
                 color='secondary'
                 type='button'
                 onClick={handleOpenNewStudent}
+                disabled={isLoading}
               >
                 {t('Add new student')}
               </Button>
             </Box>
           </Box>
 
+          <Box component='div' className={classes.innerContainer}>
+            <Grid container spacing={1}>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Grid item key={index}>
+                  <Chip color='warning' label='Chưa thực tập (150)' />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+
           <Paper sx={{ p: 1, height: 'auto' }}>
-            <Box
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
+            <Box className={classes.tableContainer}>
               <Box>
                 <SearchButton
                   handleChangeSelectedName={handleChangeSelectedName}

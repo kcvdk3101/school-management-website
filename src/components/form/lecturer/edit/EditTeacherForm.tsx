@@ -4,7 +4,7 @@ import { Button, Grid, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { TeacherModel } from '../../../../models/teacher.model'
 
-type EditLecturerFormProps = {
+type EditTeacherFormProps = {
   register: UseFormRegister<Input>
   formState: FormState<Input>
   lecturer: TeacherModel
@@ -20,7 +20,7 @@ type Input = {
   phoneNumber: string
 }
 
-const EditLecturerForm: React.FC<EditLecturerFormProps> = ({
+const EditTeacherForm: React.FC<EditTeacherFormProps> = ({
   register,
   formState: { errors, isSubmitting },
   lecturer,
@@ -97,4 +97,4 @@ const EditLecturerForm: React.FC<EditLecturerFormProps> = ({
   )
 }
 
-export default EditLecturerForm
+export default EditTeacherForm

@@ -35,8 +35,18 @@ export const getStudents = createAsyncThunk('students/getStudents', async (offse
 
 export const getStudentsByFilter = createAsyncThunk(
   'students/getStudentsByFilter',
-  async ({ offset, status, fullName }: { offset: number; status: string; fullName: string }) => {
-    const students = await studentsApi.filterByCondition(offset, status, fullName)
+  async ({
+    offset,
+    status,
+    fullName,
+    term,
+  }: {
+    offset: number
+    status: string
+    fullName: string
+    term: string
+  }) => {
+    const students = await studentsApi.filterByCondition(offset, status, fullName, term)
     return students
   }
 )

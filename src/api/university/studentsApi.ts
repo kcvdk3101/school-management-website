@@ -26,13 +26,13 @@ const studentsApi = {
 
   getAllStudents(offset: number) {
     return axiosUniveristy.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${url}/student/all?limit=8&offset=${offset}`
+      `${url}/student/all?limit=10&offset=${offset}`
     )
   },
 
-  filterByCondition(offset: number, status: string, fullName: string) {
+  filterByCondition(offset: number, status: string, fullName: string, term: string) {
     return axiosUniveristy.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${url}/student/filter?limit=8&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}`
+      `${url}/student/filter?limit=10&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&term=${term}`
     )
   },
 

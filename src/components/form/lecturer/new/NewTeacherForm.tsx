@@ -3,7 +3,7 @@ import { Grid, TextField, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { FormState, UseFormRegister, UseFormResetField } from 'react-hook-form'
 
-type NewLecturerFormProps = {
+type NewTeacherFormProps = {
   register: UseFormRegister<Input>
   resetField: UseFormResetField<Input>
   formState: FormState<Input>
@@ -19,7 +19,7 @@ type Input = {
   phoneNumber: string
 }
 
-const NewLecturerForm: React.FC<NewLecturerFormProps> = ({
+const NewTeacherForm: React.FC<NewTeacherFormProps> = ({
   resetField,
   register,
   formState: { errors },
@@ -123,4 +123,4 @@ const NewLecturerForm: React.FC<NewLecturerFormProps> = ({
   )
 }
 
-export default NewLecturerForm
+export default NewTeacherForm

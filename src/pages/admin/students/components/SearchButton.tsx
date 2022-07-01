@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../../../app/hooks'
 import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
-import { StudentModel } from '../../../../models/student.model'
 
 type SearchButtonProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -22,17 +21,14 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
   let paginationQuery = queryString.parse(search)
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
+  const term = paginationQuery.term ? (paginationQuery.term as string) : ''
 
   const [searchInput, setSearchInput] = useState<string>('')
-  const [results, setResults] = useState<StudentModel[]>([])
 
   useEffect(() => {
     ;(async () => {
       try {
-        const response: any = await dispatch(
-          getStudentsByFilter({ offset, status, fullName: searchInput })
-        )
-        setResults(response.payload.data)
+        await dispatch(getStudentsByFilter({ offset, status, fullName: searchInput, term }))
       } catch (error) {
         console.log(error)
       }

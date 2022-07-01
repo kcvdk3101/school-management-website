@@ -1,26 +1,14 @@
-import React, { useEffect } from 'react'
-import {
-  Box,
-  Button,
-  Dialog,
-  Grid,
-  Toolbar,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
-  Avatar,
-} from '@mui/material'
-import { red } from '@mui/material/colors'
-import { Helmet } from 'react-helmet-async'
-import Header from '../../../components/commons/Header'
+import { Box, Grid, Toolbar, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import queryString from 'query-string'
+import React, { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import queryString from 'query-string'
-import { getCorporations } from '../../../features/corporation/corporationSlice'
 import { toast } from 'react-toastify'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import Header from '../../../components/commons/Header'
+import { getCorporations } from '../../../features/corporation/corporationSlice'
 import CorporationCard from './components/CorporationCard'
 
 type CorporationsProps = {}
