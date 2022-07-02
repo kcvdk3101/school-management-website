@@ -30,7 +30,7 @@ const ListChipReport: React.FC<ListChipReportProps> = () => {
           <Chip color='success' label='Đã thực tập (150)' />
         </Grid>
         <Grid item>
-          <Chip color='warning' label='Chưa có GVHD (150)' />
+          <Chip color='error' label='Chưa có GVHD (150)' />
         </Grid>
         <Grid item>
           <Chip color='success' label='Đã có GVHD (150)' />

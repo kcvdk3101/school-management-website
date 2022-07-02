@@ -174,7 +174,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           )}
         </Toolbar>
       </AppBar>
-      <Drawer variant='permanent' open={open}>
+      <Drawer variant='permanent' open={open} style={{ minHeight: '100vh' }}>
         <Toolbar
           sx={{
             display: 'flex',

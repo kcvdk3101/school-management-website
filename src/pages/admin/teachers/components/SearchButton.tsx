@@ -17,7 +17,8 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
   let navigate = useNavigate()
 
   let paginationQuery = queryString.parse(search)
-  const status = paginationQuery.status ? (paginationQuery.status as string) : ''
+  const position = paginationQuery.position ? (paginationQuery.position as string) : ''
+  const department = paginationQuery.department ? (paginationQuery.department as string) : ''
 
   return (
     <Box component='div' sx={{ mx: 1 }}>
@@ -33,12 +34,12 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
             if (!e.target.value) {
               navigate({
                 pathname: '/admin/teachers',
-                search: `?limit=8&offset=0&status=${status}`,
+                search: `?limit=8&offset=0&position=${position}&department=${department}`,
               })
             } else {
               navigate({
                 pathname: '/admin/teachers',
-                search: `?limit=8&offset=0&status=${status}&fullName=${e.target.value}`,
+                search: `?limit=8&offset=0&position=${position}&fullName=${e.target.value}&department=${department}`,
               })
             }
             setPage(0)

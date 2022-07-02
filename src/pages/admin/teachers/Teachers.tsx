@@ -9,6 +9,9 @@ import {
   Typography,
   Dialog,
   DialogContent,
+  DialogTitle,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
@@ -30,7 +33,7 @@ import {
   getTeachersByFilter,
   saveTeachersExcelFile,
 } from '../../../features/teacher/teacherSlice'
-import FilterButton from './components/FilterButton'
+import FilterTeacher from './components/FilterTeacher'
 import SearchButton from './components/SearchButton'
 
 type TeachersProps = {}
@@ -44,7 +47,6 @@ const useStyles = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
     padding: '10px',
   },
   innerContainer: {
@@ -53,6 +55,13 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
+  },
+  tableTop: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
 })
 
@@ -65,7 +74,8 @@ const Lecturers: React.FC<TeachersProps> = () => {
 
   let paginationQuery = queryString.parse(search)
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
-  const status = paginationQuery.status ? (paginationQuery.status as string) : ''
+  const position = paginationQuery.position ? (paginationQuery.position as string) : ''
+  const department = paginationQuery.department ? (paginationQuery.department as string) : ''
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
 
   const dispatch = useAppDispatch()
@@ -75,8 +85,10 @@ const Lecturers: React.FC<TeachersProps> = () => {
   const [nameFile, setNameFile] = useState<string>()
   const [selectedName, setSelectedName] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loadingGenerate, setLoadingGenerate] = useState(false)
 
   const [page, setPage] = useState(0)
+  const [openGenerateTeacher, setOpenGenerateTeacher] = useState(false)
   const [openNewTeacher, setOpenNewTeacher] = useState(false)
   const [openEditTeacher, setOpenEditTeacher] = useState(false)
   const [currentId, setCurrentId] = useState<number>(-1)
@@ -84,8 +96,11 @@ const Lecturers: React.FC<TeachersProps> = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (status || selectedName) {
-          await dispatch(getTeachersByFilter({ offset, status, fullName: selectedName }))
+        if (position || selectedName || department) {
+          await dispatch(
+            getTeachersByFilter({ offset, position, department, fullName: selectedName })
+          )
+          console.log('here')
           return
         }
         await dispatch(getAllTeachers(offset))
@@ -93,11 +108,19 @@ const Lecturers: React.FC<TeachersProps> = () => {
         console.log(error)
       }
     })()
-  }, [dispatch, selectedName, offset, status])
+  }, [dispatch, selectedName, offset, position, department])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
     setSelectedFile(event.target.files[0])
+  }
+
+  const handleOpenGenerateTeacher = () => {
+    setOpenGenerateTeacher(true)
+  }
+
+  const handleCloseGenerateTeacher = () => {
+    setOpenGenerateTeacher(false)
   }
 
   const handleOpenNewTeacher = () => {
@@ -119,6 +142,24 @@ const Lecturers: React.FC<TeachersProps> = () => {
 
   const handleChangeSelectedName = (value: string) => {
     setSelectedName(value)
+  }
+
+  const handleChangePage = async (event: unknown, newPage: number) => {
+    setPage(newPage)
+    try {
+      if (position || fullName || department) {
+        await dispatch(getTeachersByFilter({ offset: newPage, position, department, fullName }))
+      } else {
+        await dispatch(getAllTeachers(newPage))
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      navigate({
+        pathname: '/admin/teachers',
+        search: `?limit=8&offset=${newPage}&position=${position}&fullName=${fullName}&department=${department}`,
+      })
+    }
   }
 
   const saveExcelFile = async () => {
@@ -149,22 +190,20 @@ const Lecturers: React.FC<TeachersProps> = () => {
     }
   }
 
-  const handleChangePage = async (event: unknown, newPage: number) => {
-    setPage(newPage)
-    try {
-      if (status || fullName) {
-        await dispatch(getTeachersByFilter({ offset: newPage, status, fullName }))
-      } else {
-        await dispatch(getAllTeachers(newPage))
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      navigate({
-        pathname: '/admin/teachers',
-        search: `?limit=8&offset=${newPage}&status=${status}&fullName=${fullName}`,
-      })
-    }
+  const generateAccountTeacher = async () => {
+    // setLoadingGenerate(true)
+    // try {
+    //   const response = await studentsApi.generateStudentAccount()
+    //   if (response.students.length === 0) {
+    //     toast.warning('All accounts have been created')
+    //     setLoadingGenerate(false)
+    //   }
+    // } catch (error) {
+    //   toast.error('Something wrong!')
+    // } finally {
+    //   setLoadingGenerate(false)
+    //   handleCloseGenerate()
+    // }
   }
 
   return (
@@ -185,9 +224,10 @@ const Lecturers: React.FC<TeachersProps> = () => {
                   id='button-file'
                   multiple
                   type='file'
+                  disabled={isLoading}
                   onChange={handleOnChange}
                 />
-                <Button variant='contained' color='secondary' component='span'>
+                <Button variant='contained' color='secondary' component='span' disabled={isLoading}>
                   <UploadFileIcon />
                 </Button>
               </label>
@@ -196,7 +236,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
                 color='info'
                 component='span'
                 sx={{ ml: 1 }}
-                disabled={selectedFile === undefined}
+                disabled={selectedFile === undefined || isLoading}
                 onClick={saveExcelFile}
               >
                 {isLoading ? <CircularProgress size={24} /> : <SaveIcon />}
@@ -218,7 +258,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
                 variant='contained'
                 color='primary'
                 type='button'
-                // onClick={handleOpenGenerate}
+                onClick={handleOpenGenerateTeacher}
                 sx={{ mr: 2 }}
                 disabled={isLoading}
               >
@@ -229,6 +269,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
                 color='secondary'
                 type='button'
                 onClick={handleOpenNewTeacher}
+                disabled={isLoading}
               >
                 {t('Add new teacher')}
               </Button>
@@ -236,16 +277,9 @@ const Lecturers: React.FC<TeachersProps> = () => {
           </Box>
 
           <Paper sx={{ p: 1, height: 'auto' }}>
-            <Box
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
+            <Box className={classes.tableTop}>
               <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
-              <FilterButton setPage={setPage} />
+              <FilterTeacher setPage={setPage} />
             </Box>
             {fetchingTeacher ? (
               <SkeletonStudentTable columns={6} />
@@ -263,7 +297,23 @@ const Lecturers: React.FC<TeachersProps> = () => {
         </Box>
       </Box>
 
-      {/* Edit Student Form */}
+      {/* Create account Teacher */}
+      <Dialog open={openGenerateTeacher}>
+        <DialogTitle>{t('Create account heading')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{t('Create account content')}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseGenerateTeacher} disabled={loadingGenerate}>
+            {t('Cancel')}
+          </Button>
+          <Button onClick={generateAccountTeacher} autoFocus disabled={loadingGenerate}>
+            {loadingGenerate ? <CircularProgress size={20} /> : t('Create')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit Teacher Form */}
       <Dialog open={openEditTeacher} onClose={handleCloseEditTeacher} maxWidth='md' fullWidth>
         <DialogContent>
           <EditTeacherFormManagement
@@ -273,7 +323,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
         </DialogContent>
       </Dialog>
 
-      {/* New Student Form */}
+      {/* New Teacher Form */}
       <Dialog open={openNewTeacher} onClose={handleCloseNewTeacher} maxWidth='md' fullWidth>
         <DialogContent>
           <NewTeacherFormManagement open={openNewTeacher} handleClose={handleCloseNewTeacher} />

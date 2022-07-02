@@ -1,4 +1,5 @@
 import { Common } from './common'
+import { StudentModel } from './student.model'
 
 export interface TeacherModel extends Common {
   id?: string
@@ -11,5 +12,6 @@ export interface TeacherModel extends Common {
   phoneNumber: string
   studentAmount: number
   maximumStudentAmount: number
+  students?: StudentModel[]
   slug?: string
 }

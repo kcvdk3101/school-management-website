@@ -1,21 +1,17 @@
-import { Button, Menu, MenuItem, Box, Typography } from '@mui/material'
+import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
+import queryString from 'query-string'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import queryString from 'query-string'
-import { useAppDispatch } from '../../../../app/hooks'
-import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
 
-type ListFilterProps = {
+type FilterStudentProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
+const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
   const { t } = useTranslation()
   let { search } = useLocation()
-
   let navigate = useNavigate()
-  const dispatch = useAppDispatch()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [anchorElTerm, setAnchorElTerm] = useState<null | HTMLElement>(null)
@@ -23,8 +19,8 @@ const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
   const openTerm = Boolean(anchorElTerm)
 
   let paginationQuery = queryString.parse(search)
-  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
-  const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
+  // const offset = paginationQuery.offset ? +paginationQuery.offset : 0
+  // const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
   const term = paginationQuery.term ? (paginationQuery.term as string) : ''
 
@@ -44,34 +40,32 @@ const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
 
   async function handleChangeFilter(status: string) {
     setPage(0)
-    await dispatch(getStudentsByFilter({ offset, status, fullName, term }))
-    // if (status === '') {
-    // }
-    // if (status === 'all')
-    //   return navigate({
-    //     pathname: '/admin/students',
-    //   })
+    if (status === 'all') {
+      return navigate({
+        pathname: '/admin/students',
+        search: `?limit=8&offset=0&status=&term=${term}`,
+      })
+    }
 
-    // navigate({
-    //   pathname: '/admin/students',
-    //   search: `?limit=8&offset=0&status=${status}`,
-    // })
+    navigate({
+      pathname: '/admin/students',
+      search: `?limit=8&offset=0&status=${status}&term=${term}`,
+    })
   }
 
   async function handleChangeFilterTerm(term: string) {
     setPage(0)
-    await dispatch(getStudentsByFilter({ offset, status, fullName, term }))
-    // if (status === '') {
-    // }
-    // if (status === 'all')
-    //   return navigate({
-    //     pathname: '/admin/students',
-    //   })
+    if (term === 'all') {
+      return navigate({
+        pathname: '/admin/students',
+        search: `?limit=8&offset=0&status=${status}&term=`,
+      })
+    }
 
-    // navigate({
-    //   pathname: '/admin/students',
-    //   search: `?limit=8&offset=0&status=${status}`,
-    // })
+    navigate({
+      pathname: '/admin/students',
+      search: `?limit=8&offset=0&status=${status}&term=${term}`,
+    })
   }
 
   return (
@@ -85,7 +79,6 @@ const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
         </Button>
       </Box>
       <Menu
-        id='basic-menu'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -101,7 +94,6 @@ const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
         <MenuItem onClick={() => handleChangeFilter('Đã thực tập')}>{t('Trained')}</MenuItem>
       </Menu>
       <Menu
-        id='basic-menu'
         anchorEl={anchorElTerm}
         open={openTerm}
         onClose={handleCloseTerm}
@@ -121,4 +113,4 @@ const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
   )
 }
 
-export default ListFilter
+export default FilterStudent

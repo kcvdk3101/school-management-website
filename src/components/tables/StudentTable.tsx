@@ -31,69 +31,56 @@ interface RowData extends StudentModel {
 
 interface HeadCell {
   id: keyof RowData
-  disablePadding: boolean
   label: string
 }
 
 const headCells: HeadCell[] = [
   {
     id: 'fullName',
-    disablePadding: false,
     label: 'Full name',
   },
   {
     id: 'class',
-    disablePadding: false,
     label: 'Class',
   },
   {
     id: 'birthDate',
-    disablePadding: false,
     label: 'Birthday',
   },
   {
     id: 'email',
-    disablePadding: false,
     label: 'Email',
   },
   {
     id: 'phoneNumber',
-    disablePadding: false,
     label: 'Phone',
   },
   {
     id: 'address',
-    disablePadding: false,
     label: 'Address',
   },
   {
     id: 'term',
-    disablePadding: false,
     label: 'Term',
   },
   {
     id: 'status',
-    disablePadding: false,
     label: 'Internship status',
   },
   {
     id: 'nameTeacher',
-    disablePadding: false,
     label: 'Lecturer',
   },
   {
     id: 'cv',
-    disablePadding: false,
     label: 'Number of CVs',
   },
   {
     id: 'internshipGrade',
-    disablePadding: false,
     label: 'Internship grade',
   },
   {
     id: 'mode',
-    disablePadding: false,
     label: 'Action',
   },
 ]

@@ -17,6 +17,12 @@
   "Account": "Tài khoản",
   "No data": "Không có dữ liệu",
 
+  "Faculty office": "Văn phòng khoa",
+  "Computer science": "Khoa học máy tính",
+  "Software technology": "Công nghệ phần mềm",
+  "Network security": "An ninh mạng",
+  "Information system": "Hệ thống thông tin",
+
   "Signin": "Đăng nhập",
   "Signout": "Đăng xuất",
 
@@ -54,8 +60,9 @@
   "Position": "Vị trí",
   "Department": "Phòng ban",
   "Number of CVs": "Số lượng CV",
-  "Maximum number of students": "Số lượng sinh viên tối đa",
-  "Current number of students": "Số lượng sinh viên hiện tại",
+  "List students": "Danh sách sinh viên",
+  "Maximum number of students": "Sinh viên tối đa",
+  "Current number of students": "Sinh viên hiện tại",
   "Action": "Tác vụ",
   "Title": "Tiêu đề",
   "Content": "Nội dung",
@@ -81,6 +88,6 @@
   "Class must be exactly 6 characters": "Tên lớp học phải có chính xác 6 ký tự",
   "Class is invalid": "Tên lớp học không hợp lệ",
 
-  "Create account heading": "Tạo tài khoản cho sinh viên",
-  "Create account content": "Vui lòng tạo tài khoản cho tất cả các sinh viên để sinh viên có thể truy cập vào ứng dụng"
+  "Create account heading": "Tạo tài khoản cho người sử dụng",
+  "Create account content": "Vui lòng tạo tài khoản cho tất cả các người sử dụng để có thể truy cập vào ứng dụng hoặc trang web"
 }

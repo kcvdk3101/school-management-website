@@ -7,10 +7,14 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
-import React from 'react'
+import { Dialog, DialogContent, DialogTitle, Button, Typography } from '@mui/material'
+import { grey, red } from '@mui/material/colors'
+
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { TeacherModel } from '../../models/teacher.model'
+import ListStudents from '../../pages/admin/teachers/components/ListStudents'
 
 interface TeacherTableProps {
   teachers: TeacherModel[]
@@ -71,6 +75,11 @@ const headCells: HeadCell[] = [
     label: 'Current number of students',
   },
   {
+    id: 'students',
+    disablePadding: false,
+    label: 'List students',
+  },
+  {
     id: 'isEditMode',
     disablePadding: false,
     label: 'Action',
@@ -86,6 +95,15 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
   const { t } = useTranslation()
 
   const totalLecturers = useAppSelector((state) => state.teachers.pagination.total)
+
+  const [openListStudents, setOpenListStudents] = useState<boolean>(false)
+
+  const handleOpenListStudents = () => {
+    setOpenListStudents(true)
+  }
+  const handleCloseListStudents = () => {
+    setOpenListStudents(false)
+  }
 
   return (
     <>
@@ -116,8 +134,23 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
                   <TableCell align='left'>{row.department}</TableCell>
                   <TableCell align='left'>{row.email}</TableCell>
                   <TableCell align='left'>{row.phoneNumber}</TableCell>
-                  <TableCell align='left'>{row.maximumStudentAmount}</TableCell>
-                  <TableCell align='left'>{row.studentAmount}</TableCell>
+                  <TableCell align='center'>{row.maximumStudentAmount}</TableCell>
+                  <TableCell
+                    align='center'
+                    style={{ color: row.studentAmount === 0 ? red[500] : grey[900] }}
+                  >
+                    {row.studentAmount}
+                  </TableCell>
+                  <TableCell
+                    align='left'
+                    sx={{
+                      py: 1,
+                    }}
+                  >
+                    <Button variant='outlined' size='small' onClick={handleOpenListStudents}>
+                      <Typography variant='body2'>Xem chi tiết</Typography>
+                    </Button>
+                  </TableCell>
                   <TableCell
                     align='left'
                     sx={{
@@ -143,6 +176,14 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
         page={page}
         onPageChange={handleChangePage}
       />
+
+      {/* List student of specific teacher */}
+      <Dialog open={openListStudents} onClose={handleCloseListStudents} maxWidth='lg'>
+        <DialogTitle>{t('List students')}</DialogTitle>
+        <DialogContent>
+          <ListStudents />
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

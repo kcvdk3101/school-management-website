@@ -23,9 +23,10 @@ const teachersApi = {
     )
   },
 
-  filterByCondition(offset: number, status: string, fullName: string) {
+  filterByCondition(offset: number, position: string, department: string, fullName: string) {
+    console.log(position, department)
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
-      `${url}/filter?limit=8&offset=${offset}&identityNumber=&position=&department=&status=${status}&fullName=${fullName}`
+      `${url}/filter?limit=8&offset=${offset}&position=${position}&fullName=${fullName}&department=${department}`
     )
   },
 

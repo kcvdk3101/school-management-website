@@ -35,17 +35,17 @@ import {
   saveStudentsExcelFile,
 } from '../../../features/student/studentsSlice'
 import ListChipReport from './components/ListChipReport'
-import ListFilter from './components/ListFilter'
+import FilterStudent from './components/FilterStudent'
 import SearchButton from './components/SearchButton'
 
 type StudentsProps = {}
 
 const useStyles = makeStyles({
   container: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     width: 'calc(100% - 72px)',
-    height: '100vh',
     padding: '10px',
   },
   innerContainer: {
@@ -111,7 +111,7 @@ const Students: React.FC<StudentsProps> = () => {
         toast.error('Cannot load student data')
       }
     })()
-  }, [dispatch, selectedName, offset, status])
+  }, [dispatch, selectedName, offset, status, term])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
@@ -259,12 +259,12 @@ const Students: React.FC<StudentsProps> = () => {
             </Box>
             <Box component='div'>
               <Button
-                variant='contained'
-                color='primary'
-                type='button'
-                onClick={handleOpenGenerate}
                 sx={{ mr: 2 }}
+                variant='contained'
+                type='button'
+                color='primary'
                 disabled={isLoading}
+                onClick={handleOpenGenerate}
               >
                 {t('Generate student account')}
               </Button>
@@ -285,7 +285,7 @@ const Students: React.FC<StudentsProps> = () => {
           <Paper sx={{ p: 1, height: 'auto' }}>
             <Box className={classes.tableTop}>
               <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
-              <ListFilter setPage={setPage} />
+              <FilterStudent setPage={setPage} />
             </Box>
             {fetchingStudent ? (
               <SkeletonStudentTable columns={6} />
@@ -303,6 +303,7 @@ const Students: React.FC<StudentsProps> = () => {
         </Box>
       </Box>
 
+      {/* Create account student */}
       <Dialog open={openGenerate}>
         <DialogTitle>{t('Create account heading')}</DialogTitle>
         <DialogContent>
