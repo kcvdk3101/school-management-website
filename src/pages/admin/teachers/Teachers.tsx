@@ -1,6 +1,15 @@
 import SaveIcon from '@mui/icons-material/Save'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
-import { Box, Button, CircularProgress, Modal, Paper, Toolbar, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  Toolbar,
+  Typography,
+  Dialog,
+  DialogContent,
+} from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
@@ -12,16 +21,16 @@ import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
 import NoData from '../../../components/commons/NoData'
-import EditTeacherFormManagement from '../../../components/form/lecturer/edit/EditTeacherFormManagement'
-import NewTeacherFormManagement from '../../../components/form/lecturer/new/NewTeacherFormManagement'
+import EditTeacherFormManagement from '../../../components/form/teacher/edit/EditTeacherFormManagement'
+import NewTeacherFormManagement from '../../../components/form/teacher/new/NewTeacherFormManagement'
 import SkeletonStudentTable from '../../../components/skeleton/SkeletonStudentTable'
 import TeacherTable from '../../../components/tables/TeacherTable'
 import {
-  getLecturers,
-  getLecturersByFilter,
-  saveLecturersExcelFile,
+  getAllTeachers,
+  getTeachersByFilter,
+  saveTeachersExcelFile,
 } from '../../../features/teacher/teacherSlice'
-import FilterButton from '../students/components/FilterButton'
+import FilterButton from './components/FilterButton'
 import SearchButton from './components/SearchButton'
 
 type TeachersProps = {}
@@ -76,10 +85,10 @@ const Lecturers: React.FC<TeachersProps> = () => {
     ;(async () => {
       try {
         if (status || selectedName) {
-          await dispatch(getLecturersByFilter({ offset, status, fullName: selectedName }))
+          await dispatch(getTeachersByFilter({ offset, status, fullName: selectedName }))
           return
         }
-        await dispatch(getLecturers(offset))
+        await dispatch(getAllTeachers(offset))
       } catch (error) {
         console.log(error)
       }
@@ -117,11 +126,11 @@ const Lecturers: React.FC<TeachersProps> = () => {
     formData.append('files', selectedFile as Blob)
     setIsLoading(true)
     try {
-      const response = await dispatch(saveLecturersExcelFile(formData))
+      const response = await dispatch(saveTeachersExcelFile(formData))
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
           try {
-            await dispatch(getLecturers(0))
+            await dispatch(getAllTeachers(0))
             toast.success('Save successfully')
             setSelectedFile(undefined)
           } catch (error) {
@@ -144,9 +153,9 @@ const Lecturers: React.FC<TeachersProps> = () => {
     setPage(newPage)
     try {
       if (status || fullName) {
-        await dispatch(getLecturersByFilter({ offset: newPage, status, fullName }))
+        await dispatch(getTeachersByFilter({ offset: newPage, status, fullName }))
       } else {
-        await dispatch(getLecturers(newPage))
+        await dispatch(getAllTeachers(newPage))
       }
     } catch (error) {
       console.log(error)
@@ -207,6 +216,16 @@ const Lecturers: React.FC<TeachersProps> = () => {
             <Box component='div'>
               <Button
                 variant='contained'
+                color='primary'
+                type='button'
+                // onClick={handleOpenGenerate}
+                sx={{ mr: 2 }}
+                disabled={isLoading}
+              >
+                {t('Generate teacher account')}
+              </Button>
+              <Button
+                variant='contained'
                 color='secondary'
                 type='button'
                 onClick={handleOpenNewTeacher}
@@ -244,16 +263,22 @@ const Lecturers: React.FC<TeachersProps> = () => {
         </Box>
       </Box>
 
-      {/* Edit Teacher Form */}
-      <Modal open={openEditTeacher} onClose={handleCloseEditTeacher}>
-        <EditTeacherFormManagement
-          lecturer={teachers[currentId]}
-          handleClose={handleCloseEditTeacher}
-        />
-      </Modal>
+      {/* Edit Student Form */}
+      <Dialog open={openEditTeacher} onClose={handleCloseEditTeacher} maxWidth='md' fullWidth>
+        <DialogContent>
+          <EditTeacherFormManagement
+            lecturer={teachers[currentId]}
+            handleClose={handleCloseEditTeacher}
+          />
+        </DialogContent>
+      </Dialog>
 
-      {/* New Teacher Form */}
-      <NewTeacherFormManagement open={openNewTeacher} handleClose={() => handleCloseNewTeacher()} />
+      {/* New Student Form */}
+      <Dialog open={openNewTeacher} onClose={handleCloseNewTeacher} maxWidth='md' fullWidth>
+        <DialogContent>
+          <NewTeacherFormManagement open={openNewTeacher} handleClose={handleCloseNewTeacher} />
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

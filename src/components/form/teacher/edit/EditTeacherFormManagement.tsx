@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Paper, Typography, DialogContent } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Box, Typography } from '@mui/material'
 import queryString from 'query-string'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -9,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
-import { editInfoLecturer } from '../../../../features/teacher/teacherSlice'
+import { editInfoTeacher } from '../../../../features/teacher/teacherSlice'
 import { TeacherModel } from '../../../../models/teacher.model'
 import EditTeacherForm from './EditTeacherForm'
 
@@ -26,15 +25,6 @@ type EditFormInput = {
   department: string
   phoneNumber: string
 }
-
-const useStyles = makeStyles({
-  modal: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-})
 
 const editTeacherSchema = yup.object({
   lastName: yup.string().required('This field is required'),
@@ -68,7 +58,6 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
   handleClose,
 }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
   let navigate = useNavigate()
   let { search } = useLocation()
 
@@ -87,7 +76,7 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
   const onSubmit = handleSubmit(async (data) => {
     try {
       await dispatch(
-        editInfoLecturer({
+        editInfoTeacher({
           id: lecturer.id as string,
           data: {
             firstName: data.firstName,
@@ -103,7 +92,7 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
         pathname: '/admin/students',
         search: `?limit=8&offset=${offset}&status=${status}`,
       })
-      toast.success('Update succeed!')
+      toast.success('Update successfully!')
     } catch (error) {
       toast.error(error as Error)
     } finally {
@@ -112,27 +101,19 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
   })
 
   return (
-    <DialogContent>
-      <Box className={classes.modal}>
-        <Paper
-          sx={{
-            p: 2,
-          }}
-        >
-          <Typography variant='h6' sx={{ mb: 2 }}>
-            {t('Edit lecturer title')}
-          </Typography>
-          <form onSubmit={onSubmit}>
-            <EditTeacherForm
-              lecturer={lecturer}
-              register={register}
-              formState={formState}
-              handleClose={handleClose}
-            />
-          </form>
-        </Paper>
-      </Box>
-    </DialogContent>
+    <Box>
+      <Typography variant='h6' sx={{ mb: 2 }}>
+        {t('Edit lecturer title')}
+      </Typography>
+      <form onSubmit={onSubmit}>
+        <EditTeacherForm
+          lecturer={lecturer}
+          register={register}
+          formState={formState}
+          handleClose={handleClose}
+        />
+      </form>
+    </Box>
   )
 }
 

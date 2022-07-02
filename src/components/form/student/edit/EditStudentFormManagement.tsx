@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Box, Paper, SelectChangeEvent, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Box, SelectChangeEvent, Typography } from '@mui/material'
 import queryString from 'query-string'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -25,15 +24,6 @@ type EditFormInput = {
   phoneNumber: string
   class: string
 }
-
-const useStyles = makeStyles({
-  modal: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-})
 
 const editSchema = yup.object({
   lastName: yup.string().trim().required('This field is required'),
@@ -72,7 +62,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   handleClose,
 }) => {
   const { t } = useTranslation()
-  const classes = useStyles()
+
   let navigate = useNavigate()
   let { search } = useLocation()
 
@@ -128,28 +118,22 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   })
 
   return (
-    <Box className={classes.modal}>
-      <Paper
-        sx={{
-          p: 2,
-        }}
-      >
-        <Typography variant='h6' sx={{ mb: 2 }}>
-          {t('Edit student title')}
-        </Typography>
-        <form onSubmit={onSubmit}>
-          <EditStudentForm
-            value={value}
-            status={selectedStatus}
-            student={student}
-            register={register}
-            formState={formState}
-            handleClose={handleClose}
-            handleChangeValue={handleChangeValue}
-            handleChangeStatus={handleChangeStatus}
-          />
-        </form>
-      </Paper>
+    <Box>
+      <Typography variant='h6' sx={{ mb: 2 }}>
+        {t('Edit student title')}
+      </Typography>
+      <form onSubmit={onSubmit}>
+        <EditStudentForm
+          value={value}
+          status={selectedStatus}
+          student={student}
+          register={register}
+          formState={formState}
+          handleClose={handleClose}
+          handleChangeValue={handleChangeValue}
+          handleChangeStatus={handleChangeStatus}
+        />
+      </form>
     </Box>
   )
 }

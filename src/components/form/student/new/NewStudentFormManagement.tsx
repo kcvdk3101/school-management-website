@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Container, Modal, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Box, Typography } from '@mui/material'
 import axios from 'axios'
 import queryString from 'query-string'
 import React, { useState } from 'react'
@@ -78,21 +77,10 @@ const newStudentSchema = yup.object({
     })
     .required('This field is required'),
 })
-
-const useStyles = makeStyles({
-  modal: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-})
-
 const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
   open,
   handleClose,
 }) => {
-  const classes = useStyles()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   let { search } = useLocation()
@@ -138,29 +126,21 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
   })
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Container maxWidth='md' className={classes.modal}>
-        <Paper
-          sx={{
-            p: 3,
-          }}
-        >
-          <Typography variant='h6' sx={{ mb: 2 }}>
-            {t('Student information')}
-          </Typography>
-          <form onSubmit={onSubmit}>
-            <NewStudentForm
-              register={register}
-              formState={formState}
-              handleClose={handleClose}
-              birth={birth}
-              resetField={resetField}
-              handleChangeBirth={handleChangeBirth}
-            />
-          </form>
-        </Paper>
-      </Container>
-    </Modal>
+    <Box>
+      <Typography variant='h6' sx={{ mb: 2 }}>
+        {t('Student information')}
+      </Typography>
+      <form onSubmit={onSubmit}>
+        <NewStudentForm
+          register={register}
+          formState={formState}
+          handleClose={handleClose}
+          birth={birth}
+          resetField={resetField}
+          handleChangeBirth={handleChangeBirth}
+        />
+      </form>
+    </Box>
   )
 }
 

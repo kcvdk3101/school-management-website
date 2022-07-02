@@ -1,14 +1,16 @@
 import EditIcon from '@mui/icons-material/Edit'
-import SummarizeIcon from '@mui/icons-material/Summarize'
-import { green, red, blue } from '@mui/material/colors'
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from '@mui/material'
+import { blue, green, red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TablePagination from '@mui/material/TablePagination'
-import TableRow from '@mui/material/TableRow'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -34,11 +36,6 @@ interface HeadCell {
 }
 
 const headCells: HeadCell[] = [
-  {
-    id: 'identityNumber',
-    disablePadding: true,
-    label: 'Identity number',
-  },
   {
     id: 'fullName',
     disablePadding: false,
@@ -75,11 +72,6 @@ const headCells: HeadCell[] = [
     label: 'Term',
   },
   {
-    id: 'cv',
-    disablePadding: false,
-    label: 'Number of CVs',
-  },
-  {
     id: 'status',
     disablePadding: false,
     label: 'Internship status',
@@ -88,6 +80,11 @@ const headCells: HeadCell[] = [
     id: 'nameTeacher',
     disablePadding: false,
     label: 'Lecturer',
+  },
+  {
+    id: 'cv',
+    disablePadding: false,
+    label: 'Number of CVs',
   },
   {
     id: 'internshipGrade',
@@ -102,14 +99,14 @@ const headCells: HeadCell[] = [
 ]
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
   sticky: {
+    zIndex: '900 !important',
     position: 'sticky',
     left: 0,
     background: 'white',
     boxShadow: '8px 5px 10px grey',
+    paddingTop: 1,
+    paddingBottom: 1,
   },
 })
 
@@ -125,15 +122,26 @@ const StudentTable: React.FC<StudentTableProps> = ({
   const totalStudents = useAppSelector((state) => state.students.pagination.total)
 
   return (
-    <>
+    <Box>
       <TableContainer>
-        <Table aria-labelledby='tableTitle' size={'medium'} stickyHeader>
+        <Table
+          aria-labelledby='tableTitle'
+          size={'medium'}
+          stickyHeader
+          sx={{
+            width: 'max-content',
+          }}
+        >
           <TableHead>
             <TableRow>
+              <TableCell align='left' className={classes.sticky} size='small'>
+                {t('Identity number')}
+              </TableCell>
               {headCells.map((headCell) => (
                 <TableCell
                   key={headCell.id}
                   align='left'
+                  size='small'
                   sx={{
                     py: 1,
                   }}
@@ -147,24 +155,33 @@ const StudentTable: React.FC<StudentTableProps> = ({
             {students.map((row, index) => {
               return (
                 <TableRow key={index} hover role='checkbox' tabIndex={-1}>
-                  <TableCell
-                    component='th'
-                    scope='row'
-                    sx={{
-                      py: 1,
-                    }}
-                  >
+                  <TableCell component='th' scope='row' className={classes.sticky} size='small'>
                     {row.identityNumber}
                   </TableCell>
-                  <TableCell align='left'>{row.fullName}</TableCell>
-                  <TableCell align='left'>{row.class}</TableCell>
-                  <TableCell align='left'>{convertDateString(row.birthDate as string)}</TableCell>
-                  <TableCell align='left'>{row.email}</TableCell>
-                  <TableCell align='left'>{row.phoneNumber}</TableCell>
-                  <TableCell align='left'>{row.address}</TableCell>
-                  <TableCell align='left'>{row.term}</TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.fullName}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.class}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {convertDateString(row.birthDate as string)}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.email}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.phoneNumber}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.address}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.term}
+                  </TableCell>
                   <TableCell
                     align='left'
+                    size='small'
                     style={{
                       color:
                         row.status === 'Chưa thực tập'
@@ -178,23 +195,24 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   </TableCell>
                   <TableCell
                     align='left'
+                    size='small'
                     style={{ color: row.nameTeacher === '' ? red[500] : green['A400'] }}
                   >
                     {row.nameTeacher === '' ? 'Chưa có' : row.nameTeacher}
                   </TableCell>
-                  <TableCell align='center'>
+                  <TableCell align='center' size='small'>
                     {row.cv && row.cv.length > 0 ? row.cv.length : 0}
                   </TableCell>
-                  <TableCell align='center'>{row.internshipGrade}</TableCell>
+                  <TableCell align='center' size='small'>
+                    {row.internshipGrade}
+                  </TableCell>
                   <TableCell
                     align='left'
+                    size='small'
                     sx={{
                       py: 1,
                     }}
                   >
-                    <IconButton aria-label='edit' onClick={() => {}}>
-                      <SummarizeIcon />
-                    </IconButton>
                     <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
                       <EditIcon />
                     </IconButton>
@@ -214,7 +232,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
         page={page}
         onPageChange={handleChangePage}
       />
-    </>
+    </Box>
   )
 }
 

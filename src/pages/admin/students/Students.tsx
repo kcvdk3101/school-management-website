@@ -3,17 +3,14 @@ import UploadFileIcon from '@mui/icons-material/UploadFile'
 import {
   Box,
   Button,
-  Toolbar,
-  Typography,
   CircularProgress,
-  Modal,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
-  Chip,
-  Grid,
+  DialogTitle,
+  Toolbar,
+  Typography,
 } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
@@ -37,16 +34,17 @@ import {
   getStudentsByFilter,
   saveStudentsExcelFile,
 } from '../../../features/student/studentsSlice'
-import FilterButton from './components/FilterButton'
+import ListChipReport from './components/ListChipReport'
+import ListFilter from './components/ListFilter'
 import SearchButton from './components/SearchButton'
 
 type StudentsProps = {}
 
 const useStyles = makeStyles({
   container: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    width: 'calc(100% - 72px)',
     height: '100vh',
     padding: '10px',
   },
@@ -57,7 +55,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
     marginBottom: 12,
   },
-  tableContainer: {
+  tableTop: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -268,7 +266,7 @@ const Students: React.FC<StudentsProps> = () => {
                 sx={{ mr: 2 }}
                 disabled={isLoading}
               >
-                {t('Generate Account')}
+                {t('Generate student account')}
               </Button>
               <Button
                 variant='outlined'
@@ -282,25 +280,12 @@ const Students: React.FC<StudentsProps> = () => {
             </Box>
           </Box>
 
-          <Box component='div' className={classes.innerContainer}>
-            <Grid container spacing={1}>
-              {Array.from({ length: 4 }).map((_, index) => (
-                <Grid item key={index}>
-                  <Chip color='warning' label='Chưa thực tập (150)' />
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
+          <ListChipReport />
 
           <Paper sx={{ p: 1, height: 'auto' }}>
-            <Box className={classes.tableContainer}>
-              <Box>
-                <SearchButton
-                  handleChangeSelectedName={handleChangeSelectedName}
-                  setPage={setPage}
-                />
-              </Box>
-              <FilterButton setPage={setPage} />
+            <Box className={classes.tableTop}>
+              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
+              <ListFilter setPage={setPage} />
             </Box>
             {fetchingStudent ? (
               <SkeletonStudentTable columns={6} />
@@ -318,14 +303,6 @@ const Students: React.FC<StudentsProps> = () => {
         </Box>
       </Box>
 
-      {/* Edit Student Form */}
-      <Modal open={openEditStudent} onClose={handleCloseEditStudent}>
-        <EditStudentFormManagement
-          student={students[currentId]}
-          handleClose={handleCloseEditStudent}
-        />
-      </Modal>
-
       <Dialog open={openGenerate}>
         <DialogTitle>{t('Create account heading')}</DialogTitle>
         <DialogContent>
@@ -341,8 +318,22 @@ const Students: React.FC<StudentsProps> = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Edit Student Form */}
+      <Dialog open={openEditStudent} onClose={handleCloseEditStudent} maxWidth='md' fullWidth>
+        <DialogContent>
+          <EditStudentFormManagement
+            student={students[currentId]}
+            handleClose={handleCloseEditStudent}
+          />
+        </DialogContent>
+      </Dialog>
+
       {/* New Student Form */}
-      <NewStudentFormManagement open={openNewStudent} handleClose={() => handleCloseNewStudent()} />
+      <Dialog open={openNewStudent} onClose={handleCloseNewStudent} maxWidth='md' fullWidth>
+        <DialogContent>
+          <NewStudentFormManagement open={openNewStudent} handleClose={handleCloseNewStudent} />
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

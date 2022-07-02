@@ -20,7 +20,8 @@
   "Signin": "Đăng nhập",
   "Signout": "Đăng xuất",
 
-  "Generate Account": "Tạo tài khoản cho tất cả sinh viên",
+  "Generate student account": "Tạo tài khoản cho tất cả sinh viên",
+  "Generate teacher account": "Tạo tài khoản cho tất cả giảng viên",
 
   "All": "Tất cả",
   "Activated": "Đã kích hoạt",
@@ -52,6 +53,7 @@
   "Internship status": "Trạng thái thực tập",
   "Position": "Vị trí",
   "Department": "Phòng ban",
+  "Number of CVs": "Số lượng CV",
   "Maximum number of students": "Số lượng sinh viên tối đa",
   "Current number of students": "Số lượng sinh viên hiện tại",
   "Action": "Tác vụ",

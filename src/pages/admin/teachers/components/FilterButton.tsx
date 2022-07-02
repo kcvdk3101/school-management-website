@@ -50,6 +50,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        style={{ width: '100%' }}
       >
         <MenuItem onClick={() => handleChangeFilter('all')}>-----</MenuItem>
         <MenuItem onClick={() => handleChangeFilter('Chưa thực tập')}>

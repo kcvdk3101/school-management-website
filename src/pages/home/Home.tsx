@@ -58,6 +58,8 @@ const Home: React.FC<HomeProps> = () => {
   const fetchingJob = useAppSelector((state) => state.jobs.fetchingJob)
   const jobs = useAppSelector((state) => state.jobs.jobs)
 
+  console.log(jobs)
+
   useEffect(() => {
     ;(async () => {
       try {

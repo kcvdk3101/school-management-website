@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Container, Modal, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@mui/styles'
+import { Box, Typography } from '@mui/material'
 import queryString from 'query-string'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -9,7 +8,7 @@ import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
-import { addNewLecturer, getLecturers } from '../../../../features/teacher/teacherSlice'
+import { addNewTeacher, getAllTeachers } from '../../../../features/teacher/teacherSlice'
 import { TeacherModel } from '../../../../models/teacher.model'
 import NewTeacherForm from './NewTeacherForm'
 
@@ -54,20 +53,10 @@ const newTeacherSchema = yup.object({
     .required('This field is required'),
 })
 
-const useStyles = makeStyles({
-  modal: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-  },
-})
-
 const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
   open,
   handleClose,
 }) => {
-  const classes = useStyles()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   let { search } = useLocation()
@@ -96,8 +85,8 @@ const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
     })
 
     try {
-      await dispatch(addNewLecturer(lectures))
-      await dispatch(getLecturers(offset))
+      await dispatch(addNewTeacher(lectures))
+      await dispatch(getAllTeachers(offset))
       toast.success('Add successfully!')
     } catch (error) {
       toast.error(error as Error)
@@ -107,27 +96,19 @@ const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
   })
 
   return (
-    <Modal open={open} onClose={handleClose}>
-      <Container maxWidth='md' className={classes.modal}>
-        <Paper
-          sx={{
-            p: 3,
-          }}
-        >
-          <Typography variant='h6' sx={{ mb: 2 }}>
-            {t('Lecturer information')}
-          </Typography>
-          <form onSubmit={onSubmit}>
-            <NewTeacherForm
-              register={register}
-              formState={formState}
-              handleClose={handleClose}
-              resetField={resetField}
-            />
-          </form>
-        </Paper>
-      </Container>
-    </Modal>
+    <Box>
+      <Typography variant='h6' sx={{ mb: 2 }}>
+        {t('Lecturer information')}
+      </Typography>
+      <form onSubmit={onSubmit}>
+        <NewTeacherForm
+          register={register}
+          formState={formState}
+          handleClose={handleClose}
+          resetField={resetField}
+        />
+      </form>
+    </Box>
   )
 }
 

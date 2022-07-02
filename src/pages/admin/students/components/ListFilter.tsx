@@ -6,11 +6,11 @@ import queryString from 'query-string'
 import { useAppDispatch } from '../../../../app/hooks'
 import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
 
-type FilterButtonProps = {
+type ListFilterProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
+const ListFilter: React.FC<ListFilterProps> = ({ setPage }) => {
   const { t } = useTranslation()
   let { search } = useLocation()
 
@@ -107,7 +107,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
         onClose={handleCloseTerm}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'right',
+          horizontal: 'left',
         }}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
@@ -121,4 +121,4 @@ const FilterButton: React.FC<FilterButtonProps> = ({ setPage }) => {
   )
 }
 
-export default FilterButton
+export default ListFilter

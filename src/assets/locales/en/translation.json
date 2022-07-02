@@ -27,7 +27,8 @@
   "Signin": "Signin",
   "Signout": "Singout",
 
-  "Generate Account": "Create account for students",
+  "Generate student account": "Create account for students",
+  "Generate teacher account": "Create account for teachers",
 
   "All": "All",
   "Activated": "Activated",
@@ -51,6 +52,7 @@
   "Internship status": "Internship status",
   "Position": "Position",
   "Department": "Department",
+  "Number of CVs": "Number of CVs",
   "Maximum number of students": "Maximum number of students",
   "Current number of students": "Current number of students",
   "Action": "Action",

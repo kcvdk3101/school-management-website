@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import lecturersApi, { EditTeacherData } from '../../api/university/teachersApi'
+import teachersApi, { EditTeacherData } from '../../api/university/teachersApi'
 import { TeacherModel } from '../../models/teacher.model'
 
 interface TeacherState {
@@ -20,40 +20,43 @@ const initialState: TeacherState = {
   pagination: { total: 0 },
 }
 
-export const saveLecturersExcelFile = createAsyncThunk(
+export const saveTeachersExcelFile = createAsyncThunk(
   'teachers/saveExcelFile',
   async (file: FormData) => {
-    const savedFile = await lecturersApi.saveLecturersExcelFile(file)
+    const savedFile = await teachersApi.saveTeachersExcelFile(file)
     return savedFile
   }
 )
 
-export const getLecturers = createAsyncThunk('teachers/getLecturers', async (offset: number) => {
-  const teachers = await lecturersApi.getAllLecturers(offset)
-  return teachers
-})
+export const getAllTeachers = createAsyncThunk(
+  'teachers/getAllTeachers',
+  async (offset: number) => {
+    const teachers = await teachersApi.getAllTeachers(offset)
+    return teachers
+  }
+)
 
-export const getLecturersByFilter = createAsyncThunk(
-  'teachers/getLecturersByFilter',
+export const getTeachersByFilter = createAsyncThunk(
+  'teachers/getTeachersByFilter',
   async ({ offset, status, fullName }: { offset: number; status: string; fullName: string }) => {
-    const teachers = await lecturersApi.filterByCondition(offset, status, fullName)
+    const teachers = await teachersApi.filterByCondition(offset, status, fullName)
     console.log(teachers)
     return teachers
   }
 )
 
-export const editInfoLecturer = createAsyncThunk(
-  'teachers/editInfoLecturer',
+export const editInfoTeacher = createAsyncThunk(
+  'teachers/editInfoTeacher',
   async ({ id, data }: { id: string; data: EditTeacherData }) => {
-    const response = await lecturersApi.editInfoLecturer(id, data)
+    const response = await teachersApi.editInfoTeacher(id, data)
     return response
   }
 )
 
-export const addNewLecturer = createAsyncThunk(
-  'teachers/addNewLecturer',
+export const addNewTeacher = createAsyncThunk(
+  'teachers/addNewTeacher',
   async (data: TeacherModel[]) => {
-    const response = await lecturersApi.addNewLecturer(data)
+    const response = await teachersApi.addNewTeacher(data)
     return response
   }
 )
@@ -64,70 +67,70 @@ export const lecturerSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     // Save excel file
-    builder.addCase(saveLecturersExcelFile.pending, (state, action) => {
+    builder.addCase(saveTeachersExcelFile.pending, (state, action) => {
       state.savingFile = false
     })
-    builder.addCase(saveLecturersExcelFile.fulfilled, (state, action) => {
+    builder.addCase(saveTeachersExcelFile.fulfilled, (state, action) => {
       state.savingFile = true
     })
-    builder.addCase(saveLecturersExcelFile.rejected, (state, action) => {
+    builder.addCase(saveTeachersExcelFile.rejected, (state, action) => {
       state.savingFile = false
     })
 
     // Get all lecturers
-    builder.addCase(getLecturers.pending, (state, action) => {
+    builder.addCase(getAllTeachers.pending, (state, action) => {
       state.fetchingTeacher = true
       state.teachers = []
     })
-    builder.addCase(getLecturers.fulfilled, (state, action) => {
+    builder.addCase(getAllTeachers.fulfilled, (state, action) => {
       state.fetchingTeacher = false
       state.teachers = action.payload.data
       state.pagination.total = action.payload.pagination.total
     })
-    builder.addCase(getLecturers.rejected, (state, action) => {
+    builder.addCase(getAllTeachers.rejected, (state, action) => {
       state.fetchingTeacher = false
       state.teachers = []
     })
 
     // Get lecturers by filter
-    builder.addCase(getLecturersByFilter.pending, (state, action) => {
+    builder.addCase(getTeachersByFilter.pending, (state, action) => {
       state.fetchingTeacher = true
       state.teachers = []
     })
-    builder.addCase(getLecturersByFilter.fulfilled, (state, action) => {
+    builder.addCase(getTeachersByFilter.fulfilled, (state, action) => {
       state.fetchingTeacher = false
       state.teachers = action.payload.data
       state.pagination.total = action.payload.pagination.total
     })
-    builder.addCase(getLecturersByFilter.rejected, (state, action) => {
+    builder.addCase(getTeachersByFilter.rejected, (state, action) => {
       state.fetchingTeacher = false
       state.teachers = []
     })
 
     // Add lecterur
-    builder.addCase(addNewLecturer.pending, (state, action) => {
+    builder.addCase(addNewTeacher.pending, (state, action) => {
       state.fetchingTeacher = true
     })
-    builder.addCase(addNewLecturer.fulfilled, (state, action) => {
+    builder.addCase(addNewTeacher.fulfilled, (state, action) => {
       state.fetchingTeacher = false
       state.teachers = [...state.teachers, action.payload]
     })
-    builder.addCase(addNewLecturer.rejected, (state, action) => {
+    builder.addCase(addNewTeacher.rejected, (state, action) => {
       state.fetchingTeacher = false
     })
 
     // Edit students
-    builder.addCase(editInfoLecturer.pending, (state, action) => {
+    builder.addCase(editInfoTeacher.pending, (state, action) => {
       state.fetchingTeacher = true
     })
-    builder.addCase(editInfoLecturer.fulfilled, (state, action) => {
+    builder.addCase(editInfoTeacher.fulfilled, (state, action) => {
       let currentLecturer = state.teachers.findIndex(
         (lecturer) => lecturer.id === action.payload.id
       )
       state.fetchingTeacher = false
       state.teachers[currentLecturer] = action.payload
     })
-    builder.addCase(editInfoLecturer.rejected, (state, action) => {
+    builder.addCase(editInfoTeacher.rejected, (state, action) => {
       state.fetchingTeacher = false
     })
   },
