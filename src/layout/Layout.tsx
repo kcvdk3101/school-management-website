@@ -119,7 +119,7 @@ const Layout: React.FC<LayoutProps> = () => {
             >
               <LanguageButton />
               <Button color='secondary' variant='contained' onClick={handleNavigateToAdmin}>
-                {t('Admin')}
+                {t('School')}
               </Button>
             </Box>
           </Toolbar>

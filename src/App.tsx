@@ -5,14 +5,16 @@ import About from './pages/about/About'
 import Admin from './pages/admin/Admin'
 import Corporations from './pages/admin/corps/Corporations'
 import Dashboard from './pages/admin/dashboard/Dashboard'
-import Teachers from './pages/admin/teachers/Teachers'
 import Notice from './pages/admin/notice/Notice'
 import Signin from './pages/admin/signin/Signin'
 import Students from './pages/admin/students/Students'
+import Teachers from './pages/admin/teachers/Teachers'
 import Blog from './pages/blog/Blog'
 import Home from './pages/home/Home'
 import Job from './pages/job/Job'
 import JobDetail from './pages/jobDetail/JobDetail'
+import Lecturer from './pages/lecturer/Lecturer'
+import LecturerLayout from './pages/lecturer/LecturerLayout'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -38,6 +40,11 @@ function App() {
           <Route path='corporation' element={<Corporations />} />
           <Route path='notice' element={<Notice />} />
         </Route>
+
+        <Route path='/lecturer' element={<LecturerLayout />}>
+          <Route index={true} element={<Lecturer />} />
+        </Route>
+
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

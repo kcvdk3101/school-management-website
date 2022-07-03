@@ -1,17 +1,18 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import userApi from '../../api/user/userApi'
+import { UserModel } from '../../models/user.model'
 
-type Admin = {
-  email: string
-  firstName: string
-  lastName: string
-  phoneNumber: string
-  role: string
-  id: string
-}
+// type Admin = {
+//   email: string
+//   firstName: string
+//   lastName: string
+//   phoneNumber: string
+//   role: string
+//   id: string
+// }
 
 interface AuthState {
-  user: Partial<Admin>
+  user: Partial<UserModel>
   error: string
   isAuthenticated: boolean
 }
@@ -44,10 +45,9 @@ const authSlice = createSlice({
     builder.addCase(signin.pending, (state, action) => {
       state.isAuthenticated = false
     })
-    builder.addCase(signin.fulfilled, (state, action) => {
+    builder.addCase(signin.fulfilled, (state, action: PayloadAction<{ user: UserModel }>) => {
       state.isAuthenticated = true
-      localStorage.setItem('id', action.payload.user.id)
-
+      localStorage.setItem('userId', action.payload.user.id)
       state.user = action.payload.user
     })
     builder.addCase(signin.rejected, (state, action) => {
@@ -62,6 +62,7 @@ const authSlice = createSlice({
 
     builder.addCase(signout.fulfilled, (state, action) => {
       state.isAuthenticated = false
+      localStorage.removeItem('userId')
       state.user = {}
     })
     builder.addCase(signout.rejected, (state, action) => {

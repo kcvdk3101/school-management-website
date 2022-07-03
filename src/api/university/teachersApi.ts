@@ -1,3 +1,4 @@
+import { StudentModel } from '../../models/student.model'
 import { TeacherModel } from '../../models/teacher.model'
 import axiosUniveristy from './axiosUniversity'
 
@@ -17,14 +18,25 @@ const teachersApi = {
     return axiosUniveristy.post<string, FormData>(`${url}/import`, form)
   },
 
+  generateTeacherAccount() {
+    return axiosUniveristy.get<string, { message: string; status: number }>(
+      `${url}/generate-account`
+    )
+  },
+
   getAllTeachers(offset: number) {
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
       `${url}/all/pagination?limit=8&offset=${offset}`
     )
   },
 
+  getTeacherById(teacherId: string) {
+    return axiosUniveristy.get<string, { teacher: TeacherModel[]; student: StudentModel[] }>(
+      `${url}?id=${teacherId}`
+    )
+  },
+
   filterByCondition(offset: number, position: string, department: string, fullName: string) {
-    console.log(position, department)
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
       `${url}/filter?limit=8&offset=${offset}&position=${position}&fullName=${fullName}&department=${department}`
     )

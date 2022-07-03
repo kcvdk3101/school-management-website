@@ -4,6 +4,7 @@
   "Recruitment News": "Recruitment News",
   "Our partners": "Our partners",
   "Search for internship and work place": "Search for internship and work place",
+  "School": "School",
   "Job": "Job",
   "Blog": "Blog",
   "About": "About",
@@ -33,6 +34,7 @@
   "Signin": "Signin",
   "Signout": "Singout",
 
+  "Generate account": "Create account",
   "Generate student account": "Create account for students",
   "Generate teacher account": "Create account for teachers",
 
@@ -69,6 +71,9 @@
   "Haven't practiced": "Haven't practiced",
   "Practicing": "Practicing",
   "Trained": "Trained",
+
+  "Accepted": "Accepted",
+  "Not accepted yet": "Not accepted yet",
 
   "Cancel": "Cancel",
   "Save": "Save",

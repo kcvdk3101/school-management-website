@@ -31,6 +31,7 @@ import LanguageButton from './LanguageButton'
 import ArticleIcon from '@mui/icons-material/Article'
 import CorporateFareIcon from '@mui/icons-material/CorporateFare'
 import { signout } from '../../features/authenticate/authSlice'
+import { toast } from 'react-toastify'
 
 type HeaderProps = {
   title: string
@@ -110,7 +111,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
       await dispatch(signout())
       navigate('/')
     } catch (error) {
-      console.log(error)
+      toast.error('Cannot logout this account! Please try again')
     }
   }
 

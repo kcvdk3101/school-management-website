@@ -50,7 +50,6 @@ export const getTeachersByFilter = createAsyncThunk(
     fullName: string
   }) => {
     const teachers = await teachersApi.filterByCondition(offset, position, department, fullName)
-    console.log('khoi ngu', teachers)
     return teachers
   }
 )

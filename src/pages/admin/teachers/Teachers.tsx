@@ -21,6 +21,7 @@ import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import teachersApi from '../../../api/university/teachersApi'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
 import NoData from '../../../components/commons/NoData'
@@ -100,7 +101,6 @@ const Lecturers: React.FC<TeachersProps> = () => {
           await dispatch(
             getTeachersByFilter({ offset, position, department, fullName: selectedName })
           )
-          console.log('here')
           return
         }
         await dispatch(getAllTeachers(offset))
@@ -191,19 +191,19 @@ const Lecturers: React.FC<TeachersProps> = () => {
   }
 
   const generateAccountTeacher = async () => {
-    // setLoadingGenerate(true)
-    // try {
-    //   const response = await studentsApi.generateStudentAccount()
-    //   if (response.students.length === 0) {
-    //     toast.warning('All accounts have been created')
-    //     setLoadingGenerate(false)
-    //   }
-    // } catch (error) {
-    //   toast.error('Something wrong!')
-    // } finally {
-    //   setLoadingGenerate(false)
-    //   handleCloseGenerate()
-    // }
+    setLoadingGenerate(true)
+    try {
+      const response = await teachersApi.generateTeacherAccount()
+      if (response.status === 200) {
+        toast.success(response.message)
+        setLoadingGenerate(false)
+      }
+    } catch (error) {
+      toast.error('Cannot generate account for all teachers')
+    } finally {
+      setLoadingGenerate(false)
+      handleCloseGenerateTeacher()
+    }
   }
 
   return (

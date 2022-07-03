@@ -1,5 +1,5 @@
 import { Box, Button, Typography, Menu, MenuItem } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import queryString from 'query-string'
@@ -13,8 +13,11 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
   let { search } = useLocation()
   let navigate = useNavigate()
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const [anchorElPos, setAnchorElPos] = React.useState<null | HTMLElement>(null)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [anchorElPos, setAnchorElPos] = useState<null | HTMLElement>(null)
+  const [positionValue, setPositionValue] = useState<string>('')
+  const [departmentValue, setDepartmentValue] = useState<string>('')
+
   const open = Boolean(anchorEl)
   const openPos = Boolean(anchorElPos)
 
@@ -38,29 +41,33 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
     setAnchorElPos(null)
   }
 
-  async function handleChangeFilterDepartment(department: string) {
-    setPage(0)
-    if (department === 'all') {
-      return navigate({
-        pathname: '/admin/teachers',
-        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=`,
-      })
-    }
-
-    navigate({
-      pathname: '/admin/teachers',
-      search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}`,
-    })
-  }
-
   async function handleChangeFilterPosition(position: string) {
     setPage(0)
     if (position === 'all') {
+      setPositionValue('')
       navigate({
         pathname: '/admin/teachers',
         search: `?limit=8&offset=0&position=&fullName=${fullName}&department=`,
       })
     } else {
+      setPositionValue(position)
+      navigate({
+        pathname: '/admin/teachers',
+        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}`,
+      })
+    }
+  }
+
+  async function handleChangeFilterDepartment(department: string) {
+    setPage(0)
+    if (department === 'all') {
+      setDepartmentValue('')
+      navigate({
+        pathname: '/admin/teachers',
+        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=`,
+      })
+    } else {
+      setDepartmentValue(department)
       navigate({
         pathname: '/admin/teachers',
         search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}`,
@@ -72,15 +79,20 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
     <Box>
       <Box>
         <Button
-          variant='outlined'
+          variant='contained'
+          color='info'
           size='small'
           onClick={handleClickPosition}
           style={{ marginRight: 8 }}
         >
-          <Typography variant='body1'>{t('Position')}</Typography>
+          <Typography variant='body2'>{`${t('Position')} ${positionValue !== '' ? ':' : ''} ${
+            positionValue !== '' ? positionValue : ''
+          }`}</Typography>
         </Button>
-        <Button variant='outlined' size='small' onClick={handleClick}>
-          <Typography variant='body1'>{t('Department')}</Typography>
+        <Button variant='contained' color='warning' size='small' onClick={handleClick}>
+          <Typography variant='body2'>{`${t('Department')} ${departmentValue !== '' ? ':' : ''} ${
+            departmentValue !== '' ? departmentValue : ''
+          }`}</Typography>
         </Button>
       </Box>
       <Menu
@@ -92,19 +104,19 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
         }}
       >
         <MenuItem onClick={() => handleChangeFilterDepartment('all')}>-----</MenuItem>
-        <MenuItem onClick={() => handleChangeFilterDepartment('Văn Phòng Khoa')}>
+        <MenuItem onClick={() => handleChangeFilterDepartment('Văn phòng khoa')}>
           {t('Faculty office')}
         </MenuItem>
         <MenuItem onClick={() => handleChangeFilterDepartment('Khoa học Máy tính')}>
           {t('Computer science')}
         </MenuItem>
-        <MenuItem onClick={() => handleChangeFilterDepartment('Công nghệ Phần mềm')}>
+        <MenuItem onClick={() => handleChangeFilterDepartment('Công nghệ Phần mềm')}>
           {t('Software technology')}
         </MenuItem>
-        <MenuItem onClick={() => handleChangeFilterDepartment('An ninh mạng')}>
+        <MenuItem onClick={() => handleChangeFilterDepartment('An ninh mạng')}>
           {t('Network security')}
         </MenuItem>
-        <MenuItem onClick={() => handleChangeFilterDepartment('Hệ thống thông tin')}>
+        <MenuItem onClick={() => handleChangeFilterDepartment('Hệ thống thông tin')}>
           {t('Information system')}
         </MenuItem>
       </Menu>
@@ -117,7 +129,20 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
         }}
       >
         <MenuItem onClick={() => handleChangeFilterPosition('all')}>-----</MenuItem>
-        <MenuItem onClick={() => handleChangeFilterPosition('G')}>Giảng viên cơ hữu</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('Trưởng khoa')}>Trưởng khoa</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('Phó Trưởng khoa')}>
+          Phó Trưởng khoa
+        </MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('Quản lý PM')}>Quản lý PM</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('Chuyên viên CTSV')}>
+          Chuyên viên CTSV
+        </MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('Trợ lý giáo vụ khoa	')}>
+          Trợ lý giáo vụ khoa
+        </MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('Giảng viên cơ hữu')}>
+          Giảng viên cơ hữu
+        </MenuItem>
       </Menu>
     </Box>
   )

@@ -4,6 +4,7 @@
   "Recruitment News": "Tin tức tuyển dụng",
   "Our partners": "Đối tác của chúng tôi",
   "Search for internship and work place": "Tìm kiếm nơi thực tập và làm việc",
+  "School": "Nhà trường",
   "Job": "Công việc",
   "Blog": "Tin tức",
   "About": "Về chúng tôi",
@@ -26,6 +27,7 @@
   "Signin": "Đăng nhập",
   "Signout": "Đăng xuất",
 
+  "Generate account": "Tạo tài khoản",
   "Generate student account": "Tạo tài khoản cho tất cả sinh viên",
   "Generate teacher account": "Tạo tài khoản cho tất cả giảng viên",
 
@@ -60,7 +62,7 @@
   "Position": "Vị trí",
   "Department": "Phòng ban",
   "Number of CVs": "Số lượng CV",
-  "List students": "Danh sách sinh viên",
+  "List students": "Danh sách sinh viên",
   "Maximum number of students": "Sinh viên tối đa",
   "Current number of students": "Sinh viên hiện tại",
   "Action": "Tác vụ",
@@ -70,6 +72,9 @@
   "Haven't practiced": "Chưa thực tập",
   "Practicing": "Đang thực tập",
   "Trained": "Đã thực tập",
+
+  "Accepted": "Đã chấp nhận",
+  "Not accepted yet": "Chưa chấp nhận",
 
   "Cancel": "Hủy",
   "Save": "Lưu",
