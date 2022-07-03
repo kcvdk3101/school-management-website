@@ -11,6 +11,7 @@ export interface EditTeacherData {
   position: string
   department: string
   phoneNumber: string
+  maximumStudentAmount: number
 }
 
 const teachersApi = {

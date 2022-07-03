@@ -47,6 +47,7 @@
   "Edit student title": "Chỉnh sửa thông tin sinh viên",
   "Edit lecturer title": "Chỉnh sửa thông tin giảng viên",
 
+  "N.O": "Số thứ tự",
   "Last name": "Họ và tên đệm",
   "First name": "Tên",
   "Full name": "Họ và tên",
@@ -58,6 +59,7 @@
   "Phone": "Số điện thoại",
   "Birthday": "Ngày sinh",
   "Term": "Niên khóa",
+  "Year": "Năm học",
   "Internship status": "Trạng thái thực tập",
   "Position": "Vị trí",
   "Department": "Phòng ban",
@@ -76,6 +78,7 @@
   "Accepted": "Đã chấp nhận",
   "Not accepted yet": "Chưa chấp nhận",
 
+  "Accept": "Chấp nhận",
   "Cancel": "Hủy",
   "Save": "Lưu",
   "Edit": "Chỉnh sửa",

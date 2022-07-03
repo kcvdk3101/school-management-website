@@ -76,7 +76,7 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
   }
 
   return (
-    <Box>
+    <Box style={{ marginBottom: 16 }}>
       <Box>
         <Button
           variant='contained'
@@ -103,7 +103,7 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilterDepartment('all')}>-----</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterDepartment('all')}>Tất cả</MenuItem>
         <MenuItem onClick={() => handleChangeFilterDepartment('Văn phòng khoa')}>
           {t('Faculty office')}
         </MenuItem>
@@ -128,7 +128,7 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilterPosition('all')}>-----</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterPosition('all')}>Tất cả</MenuItem>
         <MenuItem onClick={() => handleChangeFilterPosition('Trưởng khoa')}>Trưởng khoa</MenuItem>
         <MenuItem onClick={() => handleChangeFilterPosition('Phó Trưởng khoa')}>
           Phó Trưởng khoa

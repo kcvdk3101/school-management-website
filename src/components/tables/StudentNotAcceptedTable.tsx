@@ -1,249 +1,168 @@
-import React from 'react'
-import { alpha } from '@mui/material/styles'
 import {
   Box,
-  Tooltip,
-  Toolbar,
-  Typography,
-  Table,
-  Paper,
   Checkbox,
-  IconButton,
+  Paper,
+  Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
   TableRow,
-  TableSortLabel,
+  Button,
+  CircularProgress,
+  Typography,
 } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import { visuallyHidden } from '@mui/utils'
+import { blue, green, red } from '@mui/material/colors'
+import { makeStyles } from '@mui/styles'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
+import { StudentModel } from '../../models/student.model'
 
-interface Data {
-  calories: number
-  carbs: number
-  fat: number
-  name: string
-  protein: number
+interface StudentNotAcceptedTableProps {
+  // students: StudentModel[]
+  // page: number
+  // handleChangePage: (event: unknown, newPage: number) => void
+  // handleOpenEditStudent: (id: number) => void
 }
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-): Data {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  }
-}
-
-const rows = [createData('Cupcake', 305, 3.7, 67, 4.3), createData('Donut', 452, 25.0, 51, 4.9)]
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1
-  }
-  return 0
-}
-
-type Order = 'asc' | 'desc'
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
-}
-
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number])
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0])
-    if (order !== 0) {
-      return order
-    }
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map((el) => el[0])
+interface RowData extends StudentModel {
+  mode?: boolean
 }
 
 interface HeadCell {
-  disablePadding: boolean
-  id: keyof Data
+  id: keyof RowData
   label: string
-  numeric: boolean
 }
 
-const headCells: readonly HeadCell[] = [
+const headCells: HeadCell[] = [
   {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Dessert (100g serving)',
+    id: 'identityNumber',
+    label: 'Identity number',
   },
   {
-    id: 'calories',
-    numeric: true,
-    disablePadding: false,
-    label: 'Calories',
+    id: 'fullName',
+    label: 'Full name',
   },
   {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)',
+    id: 'class',
+    label: 'Class',
   },
   {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)',
+    id: 'email',
+    label: 'Email',
   },
   {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
+    id: 'phoneNumber',
+    label: 'Phone',
+  },
+  {
+    id: 'term',
+    label: 'Term',
+  },
+  {
+    id: 'status',
+    label: 'Internship status',
+  },
+  {
+    id: 'internshipGrade',
+    label: 'Internship grade',
   },
 ]
 
-interface EnhancedTableProps {
-  numSelected: number
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
-  order: Order
-  orderBy: string
-  rowCount: number
-}
-
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property)
+function createData(
+  identityNumber: string,
+  fullName: string,
+  studentClass: string,
+  email: string,
+  phoneNumber: string,
+  term: string,
+  status: string,
+  internshipGrade: number
+) {
+  return {
+    identityNumber,
+    fullName,
+    studentClass,
+    email,
+    phoneNumber,
+    term,
+    status,
+    internshipGrade,
   }
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding='checkbox'>
-          <Checkbox
-            color='primary'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  )
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number
-}
+const rows = [
+  createData(
+    '18dh110815',
+    'Vương Đình Khôi',
+    'PM1804',
+    '18dh110815@st.huflit.edu.vn',
+    '0934105563',
+    'K24',
+    'Chưa thực tập',
+    0
+  ),
+  createData(
+    '18dh110856',
+    'Mai Trung Minh Kiên',
+    'PM1804',
+    '18dh110856@st.huflit.edu.vn',
+    '0934105563',
+    'K24',
+    'Đang thực tập',
+    0
+  ),
+  createData(
+    '18dh110814',
+    'Nguyễn Vĩnh Phước',
+    'PM1804',
+    '18dh110814@st.huflit.edu.vn',
+    '0934105563',
+    'K24',
+    'Đã thực tập',
+    9
+  ),
+  createData(
+    '18dh110810',
+    'Phan Tấn Lâm',
+    'PM1804',
+    '18dh110814@st.huflit.edu.vn',
+    '0934105563',
+    'K24',
+    'Đã thực tập',
+    9
+  ),
+  createData(
+    '18dh110811',
+    'Nguyễn Trung Tín',
+    'PM1804',
+    '18dh110814@st.huflit.edu.vn',
+    '0934105563',
+    'K24',
+    'Đã thực tập',
+    9
+  ),
+]
 
-const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected } = props
+const useStyles = makeStyles({
+  toolbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+})
 
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
-          Nutrition
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title='Delete'>
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title='Filter list'>
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  )
-}
+const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = () => {
+  const { t } = useTranslation()
+  const classes = useStyles()
 
-type Props = {}
+  const [selected, setSelected] = useState<readonly string[]>([])
+  const [loading, setLoading] = useState(false)
 
-const StundentNotAcceptedTable = (props: Props) => {
-  const [order, setOrder] = React.useState<Order>('asc')
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('calories')
-  const [selected, setSelected] = React.useState<readonly string[]>([])
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
-  const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
-    const isAsc = orderBy === property && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(property)
-  }
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name)
-      setSelected(newSelecteds)
-      return
-    }
-    setSelected([])
-  }
+  const isSelected = (name: string) => selected.indexOf(name) !== -1
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name)
@@ -261,85 +180,140 @@ const StundentNotAcceptedTable = (props: Props) => {
         selected.slice(selectedIndex + 1)
       )
     }
-
     setSelected(newSelected)
   }
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelecteds = rows.map((n) => n.identityNumber)
+      setSelected(newSelecteds)
+      return
+    }
+    setSelected([])
   }
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
+  const handleChangePage = () => {}
+
+  const handleAcceptStudent = async () => {
+    setLoading(true)
+    try {
+      // api {teacherId: string, students: []}
+    } catch (error) {
+      toast.error(error as any)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1
   return (
     <Box>
-      <EnhancedTableToolbar numSelected={selected.length} />
-      <TableContainer style={{ flex: 1 }}>
-        <Table aria-labelledby='tableTitle' size='small'>
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={rows.length}
-          />
+      <Box className={classes.toolbar}>
+        <Typography>
+          {selected.length === 0 ? '' : `${selected.length} sinh viên được chọn`}
+        </Typography>
+        <Button
+          color='primary'
+          variant='contained'
+          sx={{ mt: 3, mb: 2 }}
+          type='button'
+          disabled={loading || selected.length === 0}
+          onClick={handleAcceptStudent}
+        >
+          {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
+        </Button>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table
+          sx={{
+            width: 'max-content',
+          }}
+          aria-labelledby='tableTitle'
+          size={'medium'}
+          stickyHeader
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell padding='checkbox' component='th' scope='row'>
+                <Checkbox
+                  color='primary'
+                  checked={selected.length > 0}
+                  onChange={handleSelectAllClick}
+                />
+              </TableCell>
+              <TableCell align='left' size='small'>
+                {t('N.O')}
+              </TableCell>
+              {headCells.map((headCell, idx) => (
+                <TableCell
+                  key={idx}
+                  align='left'
+                  size='small'
+                  sx={{
+                    py: 1,
+                  }}
+                >
+                  {t(`${headCell.label}`)}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
           <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(rows, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.name)
-                const labelId = `enhanced-table-checkbox-${index}`
+            {rows.map((row, idx) => {
+              const isItemSelected = isSelected(row.identityNumber)
 
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.name)}
-                    role='checkbox'
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.name}
-                    selected={isItemSelected}
+              return (
+                <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell padding='checkbox' component='th' scope='row'>
+                    <Checkbox
+                      color='primary'
+                      checked={isItemSelected}
+                      onClick={(event) => handleClick(event, row.identityNumber)}
+                    />
+                  </TableCell>
+                  <TableCell align='center' size='small'>
+                    {idx + 1}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.identityNumber}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.fullName}
+                  </TableCell>
+                  <TableCell align='left'>{row.studentClass}</TableCell>
+                  <TableCell align='left'>{row.email}</TableCell>
+                  <TableCell align='left'>{row.phoneNumber}</TableCell>
+                  <TableCell align='left'>{row.term}</TableCell>
+                  <TableCell
+                    align='left'
+                    style={{
+                      color:
+                        row.status === 'Chưa thực tập'
+                          ? red[500]
+                          : row.status === 'Đang thực tập'
+                          ? blue[500]
+                          : green['A400'],
+                    }}
                   >
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        color='primary'
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell component='th' id={labelId} scope='row' padding='none'>
-                      {row.name}
-                    </TableCell>
-                    <TableCell align='right'>{row.calories}</TableCell>
-                    <TableCell align='right'>{row.fat}</TableCell>
-                    <TableCell align='right'>{row.carbs}</TableCell>
-                    <TableCell align='right'>{row.protein}</TableCell>
-                  </TableRow>
-                )
-              })}
+                    {row.status}
+                  </TableCell>
+                  <TableCell align='center'>{row.internshipGrade}</TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        padding='none'
+        rowsPerPageOptions={[10]}
         component='div'
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
+        count={269}
+        rowsPerPage={5}
+        page={0}
         onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Box>
   )
 }
 
-export default StundentNotAcceptedTable
+export default StudentNotAcceptedTable

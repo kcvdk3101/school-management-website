@@ -15,12 +15,13 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [anchorElTerm, setAnchorElTerm] = useState<null | HTMLElement>(null)
+  const [statusValue, setStatusValue] = useState<string>('')
+  const [termValue, setTermValue] = useState<string>('')
+
   const open = Boolean(anchorEl)
   const openTerm = Boolean(anchorElTerm)
 
   let paginationQuery = queryString.parse(search)
-  // const offset = paginationQuery.offset ? +paginationQuery.offset : 0
-  // const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
   const term = paginationQuery.term ? (paginationQuery.term as string) : ''
 
@@ -41,41 +42,57 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
   async function handleChangeFilter(status: string) {
     setPage(0)
     if (status === 'all') {
-      return navigate({
+      setStatusValue('')
+      navigate({
         pathname: '/admin/students',
         search: `?limit=8&offset=0&status=&term=${term}`,
       })
+    } else {
+      setStatusValue(status)
+      navigate({
+        pathname: '/admin/students',
+        search: `?limit=8&offset=0&status=${status}&term=${term}`,
+      })
     }
-
-    navigate({
-      pathname: '/admin/students',
-      search: `?limit=8&offset=0&status=${status}&term=${term}`,
-    })
   }
 
   async function handleChangeFilterTerm(term: string) {
     setPage(0)
     if (term === 'all') {
-      return navigate({
+      setTermValue('')
+      navigate({
         pathname: '/admin/students',
         search: `?limit=8&offset=0&status=${status}&term=`,
       })
+    } else {
+      setTermValue(term)
+      navigate({
+        pathname: '/admin/students',
+        search: `?limit=8&offset=0&status=${status}&term=${term}`,
+      })
     }
-
-    navigate({
-      pathname: '/admin/students',
-      search: `?limit=8&offset=0&status=${status}&term=${term}`,
-    })
   }
 
   return (
-    <Box>
+    <Box style={{ marginBottom: 16 }}>
       <Box>
-        <Button variant='outlined' size='small' onClick={handleClick}>
-          <Typography variant='body1'>{t('Internship status')}</Typography>
+        <Button variant='contained' size='small' onClick={handleClick}>
+          <Typography variant='body2'>{t('Year')}</Typography>
         </Button>
-        <Button variant='outlined' size='small' onClick={handleClickTerm} style={{ marginLeft: 8 }}>
-          <Typography variant='body1'>{t('Term')}</Typography>
+        <Button variant='contained' size='small' onClick={handleClick} style={{ marginLeft: 8 }}>
+          <Typography variant='body2'>{`${t('Internship status')} ${
+            statusValue !== '' ? ':' : ''
+          } ${statusValue !== '' ? statusValue : ''}`}</Typography>
+        </Button>
+        <Button
+          variant='contained'
+          size='small'
+          onClick={handleClickTerm}
+          style={{ marginLeft: 8 }}
+        >
+          <Typography variant='body2'>{`${t('Term')} ${termValue !== '' ? ':' : ''} ${
+            termValue !== '' ? termValue : ''
+          }`}</Typography>
         </Button>
       </Box>
       <Menu
@@ -86,7 +103,7 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilter('all')}>-----</MenuItem>
+        <MenuItem onClick={() => handleChangeFilter('all')}>Tất cả</MenuItem>
         <MenuItem onClick={() => handleChangeFilter('Chưa thực tập')}>
           {t("Haven't practiced")}
         </MenuItem>
@@ -105,7 +122,7 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilterTerm('all')}>-----</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterTerm('all')}>Tất cả</MenuItem>
         <MenuItem onClick={() => handleChangeFilterTerm('K24')}>K24</MenuItem>
         <MenuItem onClick={() => handleChangeFilterTerm('K24')}>K23</MenuItem>
       </Menu>

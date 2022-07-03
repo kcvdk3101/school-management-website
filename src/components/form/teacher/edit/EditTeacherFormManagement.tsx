@@ -24,6 +24,7 @@ type EditFormInput = {
   position: string
   department: string
   phoneNumber: string
+  maximumStudentAmount: number
 }
 
 const editTeacherSchema = yup.object({
@@ -50,6 +51,12 @@ const editTeacherSchema = yup.object({
       'Phone number must be exactly 10 numbers',
       (val) => val?.toString().length === 10
     )
+    .required('This field is required'),
+  maximumStudentAmount: yup
+    .number()
+    .typeError('This field must be a number')
+    .positive('This number must be greater than 0')
+    .integer('This number must be an integer')
     .required('This field is required'),
 })
 
@@ -85,6 +92,7 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
             department: data.department,
             position: data.position,
             email: data.email,
+            maximumStudentAmount: data.maximumStudentAmount,
           },
         })
       )
@@ -92,7 +100,7 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
         pathname: '/admin/students',
         search: `?limit=8&offset=${offset}&status=${status}`,
       })
-      toast.success('Update successfully!')
+      toast.success('Updated successfully!')
     } catch (error) {
       toast.error(error as Error)
     } finally {

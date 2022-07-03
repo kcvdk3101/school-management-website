@@ -1,9 +1,20 @@
-import { Box, Button, Dialog, DialogContent, Grid, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  Grid,
+  Typography,
+  CircularProgress,
+} from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAppSelector } from '../../../app/hooks'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import EditTeacherFormManagement from '../../../components/form/teacher/edit/EditTeacherFormManagement'
+import { signout } from '../../../features/authenticate/authSlice'
 
 type LecturerInfoProps = {}
 
@@ -20,11 +31,14 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
   const { t } = useTranslation()
   const classes = useStyles()
 
+  let navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const { detail, lastName, firstName, email, phoneNumber } = useAppSelector(
     (state) => state.auth.user
   )
 
   const [openEditTeacher, setOpenEditTeacher] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleOpenEditTeacher = () => {
     setOpenEditTeacher(true)
@@ -34,19 +48,32 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
     setOpenEditTeacher(false)
   }
 
+  const handleLogout = async () => {
+    setIsLoading(true)
+    try {
+      await dispatch(signout())
+      navigate('/')
+      toast.success('Logout successfully!')
+    } catch (error) {
+      toast.error('Cannot logout this account! Please try again')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <>
       <Grid item container xs={12} spacing={3}>
         <Grid item xs={12}>
           <Box component='div' className={classes.heading}>
-            <Typography variant='h5'>Thông tin Giảng viên hướng dẫn</Typography>
+            <Typography variant='h5'>{t('Lecturer information')}</Typography>
             <Box component='div' style={{ justifyContent: 'flex-end' }}>
               <Button
                 sx={{ mr: 2 }}
                 variant='contained'
                 type='button'
                 color='primary'
-                // disabled={isLoading}
+                disabled={isLoading}
                 onClick={handleOpenEditTeacher}
               >
                 {t('Edit')}
@@ -55,8 +82,8 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
                 variant='outlined'
                 color='secondary'
                 type='button'
-                // onClick={handleOpenNewStudent}
-                // disabled={isLoading}
+                disabled={isLoading}
+                onClick={handleLogout}
               >
                 {t('Signout')}
               </Button>
@@ -66,19 +93,19 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
         <Grid item container>
           <Grid item container xs={12} spacing={3}>
             <Grid item xs={4}>
-              <Typography>Fullname:</Typography>
+              <Typography>{t('Full name')}:</Typography>
             </Grid>
             <Grid item xs={8}>
               <Typography>{`${lastName} ${firstName}`}</Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography>Email:</Typography>
+              <Typography>{t('Email')}:</Typography>
             </Grid>
             <Grid item xs={8}>
               <Typography>{email}</Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography>Phone number:</Typography>
+              <Typography>{t('Phone')}:</Typography>
             </Grid>
             <Grid item xs={8}>
               <Typography>{phoneNumber}</Typography>

@@ -57,9 +57,9 @@ const useStyles = makeStyles({
   },
   tableTop: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 8,
   },
 })
@@ -183,8 +183,6 @@ const Students: React.FC<StudentsProps> = () => {
             setIsLoading(false)
           }
         })()
-      } else {
-        toast.error('Something wroing')
       }
     } catch (error) {
       toast.error(error as any)
@@ -197,8 +195,8 @@ const Students: React.FC<StudentsProps> = () => {
     setLoadingGenerate(true)
     try {
       const response = await studentsApi.generateStudentAccount()
-      if (response.students.length === 0) {
-        toast.warning('All accounts have been created')
+      if (response.status === 200) {
+        toast.success(response.message)
         setLoadingGenerate(false)
       }
     } catch (error) {
@@ -269,7 +267,7 @@ const Students: React.FC<StudentsProps> = () => {
                 {t('Generate student account')}
               </Button>
               <Button
-                variant='outlined'
+                variant='contained'
                 color='secondary'
                 type='button'
                 onClick={handleOpenNewStudent}
@@ -284,8 +282,8 @@ const Students: React.FC<StudentsProps> = () => {
 
           <Paper sx={{ p: 1, height: 'auto' }}>
             <Box className={classes.tableTop}>
-              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
               <FilterStudent setPage={setPage} />
+              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
             </Box>
             {fetchingStudent ? (
               <SkeletonStudentTable columns={6} />

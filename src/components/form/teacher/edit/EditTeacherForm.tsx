@@ -18,6 +18,7 @@ type Input = {
   position: string
   department: string
   phoneNumber: string
+  maximumStudentAmount: number
 }
 
 const EditTeacherForm: React.FC<EditTeacherFormProps> = ({
@@ -74,7 +75,7 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({
           helperText={t(`${errors.position?.message ? errors.position?.message : ''}`)}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={6}>
         <TextField
           label={t('Department')}
           required
@@ -83,6 +84,20 @@ const EditTeacherForm: React.FC<EditTeacherFormProps> = ({
           {...register('department')}
           error={Boolean(errors.department)}
           helperText={t(`${errors.department?.message ? errors.department?.message : ''}`)}
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <TextField
+          label={t('Maximum number of students')}
+          required
+          fullWidth
+          type='number'
+          defaultValue={lecturer.maximumStudentAmount}
+          {...register('maximumStudentAmount')}
+          error={Boolean(errors.maximumStudentAmount)}
+          helperText={t(
+            `${errors.maximumStudentAmount?.message ? errors.maximumStudentAmount?.message : ''}`
+          )}
         />
       </Grid>
       <Grid item xs={12}>

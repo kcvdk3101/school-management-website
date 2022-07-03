@@ -21,19 +21,19 @@ const ListChipReport: React.FC<ListChipReportProps> = () => {
     <Box component='div' className={classes.innerContainer}>
       <Grid container spacing={1}>
         <Grid item>
-          <Chip color='warning' label='Chưa thực tập (150)' />
+          <Chip color='warning' variant='outlined' label='Chưa thực tập (150)' />
         </Grid>
         <Grid item>
-          <Chip color='info' label='Đang thực tập (150)' />
+          <Chip color='info' variant='outlined' label='Đang thực tập (150)' />
         </Grid>
         <Grid item>
-          <Chip color='success' label='Đã thực tập (150)' />
+          <Chip color='success' variant='outlined' label='Đã thực tập (150)' />
         </Grid>
         <Grid item>
-          <Chip color='error' label='Chưa có GVHD (150)' />
+          <Chip color='error' variant='outlined' label='Chưa có GVHD (150)' />
         </Grid>
         <Grid item>
-          <Chip color='success' label='Đã có GVHD (150)' />
+          <Chip color='success' variant='outlined' label='Đã có GVHD (150)' />
         </Grid>
       </Grid>
     </Box>

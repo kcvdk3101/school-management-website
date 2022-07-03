@@ -16,7 +16,7 @@ const LecturerListStudent = () => {
     <Grid item container xs={12}>
       <Grid item>
         <Typography variant='h5'>{t('List students')}</Typography>
-        <Box sx={{ my: 2 }}>
+        <Box sx={{ my: 1 }}>
           <Tabs value={value} onChange={handleChange}>
             <Tab label={`${t('Accepted')} (3)`} />
             <Tab label={`${t('Not accepted yet')} (150)`} />

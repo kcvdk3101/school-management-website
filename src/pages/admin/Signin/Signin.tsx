@@ -1,8 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import {
-  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -21,6 +19,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import huflit from '../../../assets/images/huflit.png'
 import { signin } from '../../../features/authenticate/authSlice'
 
 const useStyles = makeStyles({
@@ -105,9 +104,9 @@ const Signin: React.FC<SigninProps> = () => {
       </Helmet>
       <CssBaseline />
       <Box className={classes.innerContainer}>
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
+        <Box component='div' sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+          <img src={huflit} alt='huflit logo' width={120} />
+        </Box>
         <Typography component='h1' variant='h5'>
           {t('Signin')}
         </Typography>

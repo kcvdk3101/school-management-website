@@ -59,9 +59,9 @@ const useStyles = makeStyles({
   },
   tableTop: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 8,
   },
 })
@@ -278,8 +278,8 @@ const Lecturers: React.FC<TeachersProps> = () => {
 
           <Paper sx={{ p: 1, height: 'auto' }}>
             <Box className={classes.tableTop}>
-              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
               <FilterTeacher setPage={setPage} />
+              <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
             </Box>
             {fetchingTeacher ? (
               <SkeletonStudentTable columns={6} />

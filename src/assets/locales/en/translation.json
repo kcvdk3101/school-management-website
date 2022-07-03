@@ -46,6 +46,7 @@
   "Add new teacher": "Add new teacher",
   "Search fullname": "Search fullname...",
 
+  "N.O": "Number ordered",
   "Last name": "Last name",
   "First name": "First name",
   "Full name": "Full name",
@@ -58,6 +59,7 @@
   "Birthday": "Birthday",
   "Term": "Term",
   "Internship status": "Internship status",
+  "Year": "Year",
   "Position": "Position",
   "Department": "Department",
   "Number of CVs": "Number of CVs",
@@ -75,6 +77,7 @@
   "Accepted": "Accepted",
   "Not accepted yet": "Not accepted yet",
 
+  "Accept": "Accept",
   "Cancel": "Cancel",
   "Save": "Save",
   "Edit": "Edit",

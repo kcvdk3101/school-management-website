@@ -19,7 +19,7 @@ const studentsApi = {
   },
 
   generateStudentAccount() {
-    return axiosUniveristy.get<string, { students: StudentModel[] }>(
+    return axiosUniveristy.get<string, { message: string; status: number }>(
       `${url}/student/generate-account`
     )
   },
