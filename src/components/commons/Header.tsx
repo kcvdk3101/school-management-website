@@ -97,6 +97,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   const [open, setOpen] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
+  const d = new Date()
+  let year = d.getFullYear()
+
   const toggleDrawer = () => {
     setOpen(!open)
   }
@@ -203,7 +206,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           </Tooltip>
 
           <Tooltip title={t('Student') as React.ReactChild} placement='right' arrow>
-            <ListItemButton onClick={() => navigate('/admin/students?limit=8&offset=0')}>
+            <ListItemButton
+              onClick={() => navigate(`/admin/students?limit=8&offset=0&academicYear=${year}`)}
+            >
               <ListItemIcon>
                 <GroupsIcon />
               </ListItemIcon>
@@ -212,7 +217,9 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           </Tooltip>
 
           <Tooltip title={t('Lecturer') as React.ReactChild} placement='right' arrow>
-            <ListItemButton onClick={() => navigate('/admin/teachers?limit=8&offset=0')}>
+            <ListItemButton
+              onClick={() => navigate(`/admin/teachers?limit=8&offset=0&academicYear=${year}`)}
+            >
               <ListItemIcon>
                 <LocalLibraryIcon />
               </ListItemIcon>

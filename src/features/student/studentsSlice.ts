@@ -28,10 +28,13 @@ export const saveStudentsExcelFile = createAsyncThunk(
   }
 )
 
-export const getStudents = createAsyncThunk('students/getStudents', async (offset: number) => {
-  const students = await studentsApi.getAllStudents(offset)
-  return students
-})
+export const getStudents = createAsyncThunk(
+  'students/getStudents',
+  async ({ offset, academicYear }: { offset: number; academicYear: number }) => {
+    const students = await studentsApi.getAllStudents(offset, academicYear)
+    return students
+  }
+)
 
 export const getStudentsByFilter = createAsyncThunk(
   'students/getStudentsByFilter',
@@ -40,13 +43,24 @@ export const getStudentsByFilter = createAsyncThunk(
     status,
     fullName,
     term,
+    academicYear,
+    nameTeacher,
   }: {
     offset: number
     status: string
     fullName: string
     term: string
+    academicYear: number
+    nameTeacher: string
   }) => {
-    const students = await studentsApi.filterByCondition(offset, status, fullName, term)
+    const students = await studentsApi.filterByCondition(
+      offset,
+      status,
+      fullName,
+      term,
+      academicYear,
+      nameTeacher
+    )
     return students
   }
 )

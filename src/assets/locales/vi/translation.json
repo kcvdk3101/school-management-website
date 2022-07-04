@@ -59,8 +59,8 @@
   "Phone": "Số điện thoại",
   "Birthday": "Ngày sinh",
   "Term": "Niên khóa",
-  "Year": "Năm học",
   "Internship status": "Trạng thái thực tập",
+  "Academic year": "Năm học",
   "Position": "Vị trí",
   "Department": "Phòng ban",
   "Number of CVs": "Số lượng CV",
@@ -77,8 +77,9 @@
 
   "Accepted": "Đã chấp nhận",
   "Not accepted yet": "Chưa chấp nhận",
-
+  "Cancel accept": "Hủy chấp nhận",
   "Accept": "Chấp nhận",
+  "Filter": "Bộ lọc",
   "Cancel": "Hủy",
   "Save": "Lưu",
   "Edit": "Chỉnh sửa",

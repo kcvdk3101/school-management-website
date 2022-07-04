@@ -30,8 +30,8 @@ export const saveTeachersExcelFile = createAsyncThunk(
 
 export const getAllTeachers = createAsyncThunk(
   'teachers/getAllTeachers',
-  async (offset: number) => {
-    const teachers = await teachersApi.getAllTeachers(offset)
+  async ({ offset, academicYear }: { offset: number; academicYear: number }) => {
+    const teachers = await teachersApi.getAllTeachers(offset, academicYear)
     return teachers
   }
 )
@@ -43,13 +43,21 @@ export const getTeachersByFilter = createAsyncThunk(
     position,
     department,
     fullName,
+    academicYear,
   }: {
     offset: number
     position: string
     department: string
     fullName: string
+    academicYear: number
   }) => {
-    const teachers = await teachersApi.filterByCondition(offset, position, department, fullName)
+    const teachers = await teachersApi.filterByCondition(
+      offset,
+      position,
+      department,
+      fullName,
+      academicYear
+    )
     return teachers
   }
 )

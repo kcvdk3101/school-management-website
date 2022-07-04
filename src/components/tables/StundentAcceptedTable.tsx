@@ -11,6 +11,7 @@ import {
   Typography,
   Button,
   CircularProgress,
+  Checkbox,
 } from '@mui/material'
 import { blue, green, red } from '@mui/material/colors'
 import { makeStyles } from '@mui/styles'
@@ -36,6 +37,10 @@ interface HeadCell {
 }
 
 const headCells: HeadCell[] = [
+  {
+    id: 'identityNumber',
+    label: 'Identity number',
+  },
   {
     id: 'fullName',
     label: 'Full name',
@@ -67,6 +72,7 @@ const headCells: HeadCell[] = [
 ]
 
 function createData(
+  identityNumber: string,
   fullName: string,
   studentClass: string,
   email: string,
@@ -75,11 +81,21 @@ function createData(
   status: string,
   internshipGrade: number
 ) {
-  return { fullName, studentClass, email, phoneNumber, term, status, internshipGrade }
+  return {
+    identityNumber,
+    fullName,
+    studentClass,
+    email,
+    phoneNumber,
+    term,
+    status,
+    internshipGrade,
+  }
 }
 
 const rows = [
   createData(
+    '18dh110815',
     'Vương Đình Khôi',
     'PM1804',
     '18dh110815@st.huflit.edu.vn',
@@ -89,45 +105,40 @@ const rows = [
     0
   ),
   createData(
-    'Vương Đình Khôi',
+    '18dh110856',
+    'Mai Trung Minh Kiên',
     'PM1804',
-    '18dh110815@st.huflit.edu.vn',
+    '18dh110856@st.huflit.edu.vn',
     '0934105563',
     'K24',
     'Đang thực tập',
     0
   ),
   createData(
-    'Vương Đình Khôi',
+    '18dh110814',
+    'Nguyễn Vĩnh Phước',
     'PM1804',
-    '18dh110815@st.huflit.edu.vn',
+    '18dh110814@st.huflit.edu.vn',
     '0934105563',
     'K24',
     'Đã thực tập',
     9
   ),
   createData(
-    'Vương Đình Khôi',
+    '18dh110810',
+    'Phan Tấn Lâm',
     'PM1804',
-    '18dh110815@st.huflit.edu.vn',
+    '18dh110814@st.huflit.edu.vn',
     '0934105563',
     'K24',
     'Đã thực tập',
     9
   ),
   createData(
-    'Vương Đình Khôi',
+    '18dh110811',
+    'Nguyễn Trung Tín',
     'PM1804',
-    '18dh110815@st.huflit.edu.vn',
-    '0934105563',
-    'K24',
-    'Đã thực tập',
-    9
-  ),
-  createData(
-    'Vương Đình Khôi',
-    'PM1804',
-    '18dh110815@st.huflit.edu.vn',
+    '18dh110814@st.huflit.edu.vn',
     '0934105563',
     'K24',
     'Đã thực tập',
@@ -151,6 +162,38 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = () => {
   const [selected, setSelected] = useState<readonly string[]>([])
   const [loading, setLoading] = useState(false)
 
+  const isSelected = (name: string) => selected.indexOf(name) !== -1
+
+  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name)
+    let newSelected: readonly string[] = []
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name)
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1))
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1))
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      )
+    }
+    setSelected(newSelected)
+  }
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelecteds = rows.map((n) => n.identityNumber)
+      setSelected(newSelecteds)
+      return
+    }
+    setSelected([])
+  }
+
+  const handleChangePage = () => {}
+
   return (
     <Box>
       <Box className={classes.toolbar}>
@@ -165,7 +208,7 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = () => {
           disabled={loading || selected.length === 0}
           // onClick={handleAcceptStudent}
         >
-          {loading ? <CircularProgress size={24} /> : `${t('Cancel')}`}
+          {loading ? <CircularProgress size={24} /> : `${t('Cancel accept')}`}
         </Button>
       </Box>
       <TableContainer component={Paper}>
@@ -179,6 +222,16 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = () => {
         >
           <TableHead>
             <TableRow>
+              <TableCell padding='checkbox' component='th' scope='row'>
+                <Checkbox
+                  color='primary'
+                  checked={selected.length > 0}
+                  onChange={handleSelectAllClick}
+                />
+              </TableCell>
+              <TableCell align='left' size='small'>
+                {t('N.O')}
+              </TableCell>
               {headCells.map((headCell, idx) => (
                 <TableCell
                   key={idx}
@@ -194,43 +247,60 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, idx) => (
-              <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component='th' scope='row'>
-                  {row.fullName}
-                </TableCell>
-                <TableCell align='left'>{row.studentClass}</TableCell>
-                <TableCell align='left'>{row.email}</TableCell>
-                <TableCell align='left'>{row.phoneNumber}</TableCell>
-                <TableCell align='left'>{row.term}</TableCell>
-                <TableCell
-                  align='left'
-                  style={{
-                    color:
-                      row.status === 'Chưa thực tập'
-                        ? red[500]
-                        : row.status === 'Đang thực tập'
-                        ? blue[500]
-                        : green['A400'],
-                  }}
-                >
-                  {row.status}
-                </TableCell>
-                <TableCell align='left'>{row.internshipGrade}</TableCell>
-              </TableRow>
-            ))}
+            {rows.map((row, idx) => {
+              const isItemSelected = isSelected(row.identityNumber)
+
+              return (
+                <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell padding='checkbox' component='th' scope='row'>
+                    <Checkbox
+                      color='primary'
+                      checked={isItemSelected}
+                      onClick={(event) => handleClick(event, row.identityNumber)}
+                    />
+                  </TableCell>
+                  <TableCell align='center' size='small'>
+                    {idx + 1}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
+                    {row.identityNumber}
+                  </TableCell>
+                  <TableCell component='th' scope='row'>
+                    {row.fullName}
+                  </TableCell>
+                  <TableCell align='left'>{row.studentClass}</TableCell>
+                  <TableCell align='left'>{row.email}</TableCell>
+                  <TableCell align='left'>{row.phoneNumber}</TableCell>
+                  <TableCell align='left'>{row.term}</TableCell>
+                  <TableCell
+                    align='left'
+                    style={{
+                      color:
+                        row.status === 'Chưa thực tập'
+                          ? red[500]
+                          : row.status === 'Đang thực tập'
+                          ? blue[500]
+                          : green['A400'],
+                    }}
+                  >
+                    {row.status}
+                  </TableCell>
+                  <TableCell align='left'>{row.internshipGrade}</TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
+      <TablePagination
         padding='none'
         rowsPerPageOptions={[10]}
         component='div'
-        count={totalStudents}
-        rowsPerPage={10}
-        page={page}
+        count={269}
+        rowsPerPage={5}
+        page={0}
         onPageChange={handleChangePage}
-      /> */}
+      />
     </Box>
   )
 }

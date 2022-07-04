@@ -74,6 +74,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
   let { search } = useLocation()
 
   let paginationQuery = queryString.parse(search)
+  const academicYear = paginationQuery.academicYear ? +paginationQuery.academicYear : 0
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
   const position = paginationQuery.position ? (paginationQuery.position as string) : ''
   const department = paginationQuery.department ? (paginationQuery.department as string) : ''
@@ -97,18 +98,24 @@ const Lecturers: React.FC<TeachersProps> = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (position || selectedName || department) {
+        if (position || selectedName || department || position || academicYear) {
           await dispatch(
-            getTeachersByFilter({ offset, position, department, fullName: selectedName })
+            getTeachersByFilter({
+              offset,
+              position,
+              department,
+              fullName: selectedName,
+              academicYear,
+            })
           )
           return
         }
-        await dispatch(getAllTeachers(offset))
+        await dispatch(getAllTeachers({ offset, academicYear }))
       } catch (error) {
         console.log(error)
       }
     })()
-  }, [dispatch, selectedName, offset, position, department])
+  }, [dispatch, selectedName, offset, position, department, academicYear])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
@@ -148,16 +155,18 @@ const Lecturers: React.FC<TeachersProps> = () => {
     setPage(newPage)
     try {
       if (position || fullName || department) {
-        await dispatch(getTeachersByFilter({ offset: newPage, position, department, fullName }))
+        await dispatch(
+          getTeachersByFilter({ offset: newPage, position, department, fullName, academicYear })
+        )
       } else {
-        await dispatch(getAllTeachers(newPage))
+        await dispatch(getAllTeachers({ offset: newPage, academicYear }))
       }
     } catch (error) {
       console.log(error)
     } finally {
       navigate({
         pathname: '/admin/teachers',
-        search: `?limit=8&offset=${newPage}&position=${position}&fullName=${fullName}&department=${department}`,
+        search: `?limit=8&offset=${newPage}&position=${position}&fullName=${fullName}&department=${department}&academicYear=${academicYear}`,
       })
     }
   }
@@ -171,7 +180,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
           try {
-            await dispatch(getAllTeachers(0))
+            await dispatch(getAllTeachers({ offset: 0, academicYear }))
             toast.success('Save successfully')
             setSelectedFile(undefined)
           } catch (error) {

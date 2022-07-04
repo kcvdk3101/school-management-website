@@ -1,45 +1,85 @@
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import studentsApi from '../../../../api/university/studentsApi'
 
 type FilterStudentProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
+const useStyles = makeStyles({
+  container: {
+    marginBottom: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: 16,
+  },
+})
+
 const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
   const { t } = useTranslation()
   let { search } = useLocation()
   let navigate = useNavigate()
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [anchorElTerm, setAnchorElTerm] = useState<null | HTMLElement>(null)
-  const [statusValue, setStatusValue] = useState<string>('')
-  const [termValue, setTermValue] = useState<string>('')
-
-  const open = Boolean(anchorEl)
-  const openTerm = Boolean(anchorElTerm)
+  const classes = useStyles()
 
   let paginationQuery = queryString.parse(search)
+  const academicYear = paginationQuery.academicYear ? +paginationQuery.academicYear : 0
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
   const term = paginationQuery.term ? (paginationQuery.term as string) : ''
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const [anchorElAcademicYear, setAnchorElAcademicYear] = useState<null | HTMLElement>(null)
+  const [anchorElStatus, setAnchorElStatus] = useState<null | HTMLElement>(null)
+  const [anchorElTerm, setAnchorElTerm] = useState<null | HTMLElement>(null)
+
+  const [academicYearValue, setAcademicYearValue] = useState<number>(academicYear)
+  const [statusValue, setStatusValue] = useState<string>('')
+  const [termValue, setTermValue] = useState<string>('')
+  const [listTerm, setListTerm] = useState<{ Term: string }[]>([])
+
+  const openAcademicYear = Boolean(anchorElAcademicYear)
+  const openStatus = Boolean(anchorElStatus)
+  const openTerm = Boolean(anchorElTerm)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const response = await studentsApi.getListTerm(academicYear)
+        if (response.length > 0) {
+          setListTerm(response)
+        }
+      } catch (error) {
+        toast.error('Cannot load term in current year')
+      }
+    })()
+  }, [academicYear])
+
+  const handleClickAcedemicYear = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElAcademicYear(event.currentTarget)
+  }
+  const handleClickStatus = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElStatus(event.currentTarget)
   }
   const handleClickTerm = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElTerm(event.currentTarget)
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleCloseAcademicYear = () => {
+    setAnchorElAcademicYear(null)
+  }
+  const handleCloseStatus = () => {
+    setAnchorElStatus(null)
   }
   const handleCloseTerm = () => {
     setAnchorElTerm(null)
   }
 
-  async function handleChangeFilter(status: string) {
+  async function handleChangeFilterStatus(status: string) {
     setPage(0)
     if (status === 'all') {
       setStatusValue('')
@@ -74,41 +114,53 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
   }
 
   return (
-    <Box style={{ marginBottom: 16 }}>
+    <Box className={classes.container}>
+      <Typography style={{ marginRight: 8 }}>{t('Filter')}:</Typography>
       <Box>
-        <Button variant='contained' size='small' onClick={handleClick}>
-          <Typography variant='body2'>{t('Year')}</Typography>
-        </Button>
-        <Button variant='contained' size='small' onClick={handleClick} style={{ marginLeft: 8 }}>
-          <Typography variant='body2'>{`${t('Internship status')} ${
-            statusValue !== '' ? ':' : ''
-          } ${statusValue !== '' ? statusValue : ''}`}</Typography>
+        <Button
+          variant='contained'
+          color='primary'
+          size='small'
+          onClick={handleClickAcedemicYear}
+          style={{ marginRight: 8 }}
+        >
+          <Typography variant='body2'>{`${t('Academic year')} ${
+            academicYearValue !== 0 ? ':' : ''
+          } ${academicYearValue !== 0 ? academicYearValue : ''}`}</Typography>
         </Button>
         <Button
           variant='contained'
           size='small'
-          onClick={handleClickTerm}
-          style={{ marginLeft: 8 }}
+          onClick={handleClickStatus}
+          style={{ marginRight: 8 }}
         >
+          <Typography variant='body2'>{`${t('Internship status')} ${
+            statusValue !== '' ? ':' : ''
+          } ${statusValue !== '' ? statusValue : ''}`}</Typography>
+        </Button>
+        <Button variant='contained' size='small' onClick={handleClickTerm}>
           <Typography variant='body2'>{`${t('Term')} ${termValue !== '' ? ':' : ''} ${
             termValue !== '' ? termValue : ''
           }`}</Typography>
         </Button>
       </Box>
+
       <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        anchorEl={anchorElStatus}
+        open={openStatus}
+        onClose={handleCloseStatus}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilter('all')}>Tất cả</MenuItem>
-        <MenuItem onClick={() => handleChangeFilter('Chưa thực tập')}>
+        <MenuItem onClick={() => handleChangeFilterStatus('all')}>Tất cả</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterStatus('Chưa thực tập')}>
           {t("Haven't practiced")}
         </MenuItem>
-        <MenuItem onClick={() => handleChangeFilter('Đang thực tập')}>{t('Practicing')}</MenuItem>
-        <MenuItem onClick={() => handleChangeFilter('Đã thực tập')}>{t('Trained')}</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterStatus('Đang thực tập')}>
+          {t('Practicing')}
+        </MenuItem>
+        <MenuItem onClick={() => handleChangeFilterStatus('Đã thực tập')}>{t('Trained')}</MenuItem>
       </Menu>
       <Menu
         anchorEl={anchorElTerm}
@@ -123,8 +175,10 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
         }}
       >
         <MenuItem onClick={() => handleChangeFilterTerm('all')}>Tất cả</MenuItem>
-        <MenuItem onClick={() => handleChangeFilterTerm('K24')}>K24</MenuItem>
-        <MenuItem onClick={() => handleChangeFilterTerm('K24')}>K23</MenuItem>
+        {listTerm &&
+          listTerm.map((term, idx) => (
+            <MenuItem onClick={() => handleChangeFilterTerm(term.Term)}>{term.Term}</MenuItem>
+          ))}
       </Menu>
     </Box>
   )

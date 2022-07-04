@@ -3,40 +3,62 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import queryString from 'query-string'
+import { makeStyles } from '@mui/styles'
 
 type FilterTeacherProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
+const useStyles = makeStyles({
+  container: {
+    marginBottom: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginLeft: 16,
+  },
+})
+
 const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
   const { t } = useTranslation()
   let { search } = useLocation()
+  const classes = useStyles()
+
   let navigate = useNavigate()
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [anchorElPos, setAnchorElPos] = useState<null | HTMLElement>(null)
-  const [positionValue, setPositionValue] = useState<string>('')
-  const [departmentValue, setDepartmentValue] = useState<string>('')
-
-  const open = Boolean(anchorEl)
-  const openPos = Boolean(anchorElPos)
-
   let paginationQuery = queryString.parse(search)
+  const academicYear = paginationQuery.academicYear ? (paginationQuery.academicYear as string) : ''
   const position = paginationQuery.position ? (paginationQuery.position as string) : ''
   const department = paginationQuery.department ? (paginationQuery.department as string) : ''
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const [academicYearValue, setAcademicYearValue] = useState<string>(academicYear)
+  const [positionValue, setPositionValue] = useState<string>('')
+  const [departmentValue, setDepartmentValue] = useState<string>('')
+  const [anchorElAcademic, setAnchorElAcademic] = useState<null | HTMLElement>(null)
+  const [anchorElPos, setAnchorElPos] = useState<null | HTMLElement>(null)
+  const [anchorElDepartment, setAnchorElDepartment] = useState<null | HTMLElement>(null)
+
+  const openAcademic = Boolean(anchorElAcademic)
+  const openDepartment = Boolean(anchorElDepartment)
+  const openPos = Boolean(anchorElPos)
+
+  const handleClickAcedemicYear = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElAcademic(event.currentTarget)
+  }
+  const handleClickDepartment = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElDepartment(event.currentTarget)
   }
   const handleClickPosition = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElPos(event.currentTarget)
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleCloseAcademicYear = () => {
+    setAnchorElAcademic(null)
   }
-
+  const handleCloseDepartment = () => {
+    setAnchorElDepartment(null)
+  }
   const handleClosePosition = () => {
     setAnchorElPos(null)
   }
@@ -47,13 +69,13 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
       setPositionValue('')
       navigate({
         pathname: '/admin/teachers',
-        search: `?limit=8&offset=0&position=&fullName=${fullName}&department=`,
+        search: `?limit=8&offset=0&position=&fullName=${fullName}&department=&academicYear=${academicYear}`,
       })
     } else {
       setPositionValue(position)
       navigate({
         pathname: '/admin/teachers',
-        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}`,
+        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}&academicYear=${academicYear}`,
       })
     }
   }
@@ -64,20 +86,32 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
       setDepartmentValue('')
       navigate({
         pathname: '/admin/teachers',
-        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=`,
+        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=&academicYear=${academicYear}`,
       })
     } else {
       setDepartmentValue(department)
       navigate({
         pathname: '/admin/teachers',
-        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}`,
+        search: `?limit=8&offset=0&position=${position}&fullName=${fullName}&department=${department}&academicYear=${academicYear}`,
       })
     }
   }
 
   return (
-    <Box style={{ marginBottom: 16 }}>
+    <Box className={classes.container}>
+      <Typography style={{ marginRight: 8 }}>{t('Filter')}:</Typography>
       <Box>
+        <Button
+          variant='contained'
+          color='info'
+          size='small'
+          onClick={handleClickAcedemicYear}
+          style={{ marginRight: 8 }}
+        >
+          <Typography variant='body2'>{`${t('Academic year')} ${
+            academicYearValue !== '' ? ':' : ''
+          } ${academicYearValue !== '' ? academicYearValue : ''}`}</Typography>
+        </Button>
         <Button
           variant='contained'
           color='info'
@@ -89,16 +123,17 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
             positionValue !== '' ? positionValue : ''
           }`}</Typography>
         </Button>
-        <Button variant='contained' color='warning' size='small' onClick={handleClick}>
+        <Button variant='contained' color='warning' size='small' onClick={handleClickDepartment}>
           <Typography variant='body2'>{`${t('Department')} ${departmentValue !== '' ? ':' : ''} ${
             departmentValue !== '' ? departmentValue : ''
           }`}</Typography>
         </Button>
       </Box>
+
       <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        anchorEl={anchorElDepartment}
+        open={openDepartment}
+        onClose={handleCloseDepartment}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}

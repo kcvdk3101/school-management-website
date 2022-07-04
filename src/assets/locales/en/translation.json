@@ -59,7 +59,7 @@
   "Birthday": "Birthday",
   "Term": "Term",
   "Internship status": "Internship status",
-  "Year": "Year",
+  "Academic year": "Academic year",
   "Position": "Position",
   "Department": "Department",
   "Number of CVs": "Number of CVs",
@@ -76,8 +76,9 @@
 
   "Accepted": "Accepted",
   "Not accepted yet": "Not accepted yet",
-
+  "Cancel accept": "Cancel accept",
   "Accept": "Accept",
+  "Filter": "Filter",
   "Cancel": "Cancel",
   "Save": "Save",
   "Edit": "Edit",

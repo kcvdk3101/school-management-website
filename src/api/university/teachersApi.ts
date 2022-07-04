@@ -25,9 +25,9 @@ const teachersApi = {
     )
   },
 
-  getAllTeachers(offset: number) {
+  getAllTeachers(offset: number, academicYear: number) {
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
-      `${url}/all/pagination?limit=8&offset=${offset}`
+      `${url}/all/pagination?limit=8&offset=${offset}&academicYear=${academicYear}`
     )
   },
 
@@ -37,9 +37,15 @@ const teachersApi = {
     )
   },
 
-  filterByCondition(offset: number, position: string, department: string, fullName: string) {
+  filterByCondition(
+    offset: number,
+    position: string,
+    department: string,
+    fullName: string,
+    academicYear: number
+  ) {
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
-      `${url}/filter?limit=8&offset=${offset}&position=${position}&fullName=${fullName}&department=${department}`
+      `${url}/filter?limit=8&offset=${offset}&position=${position}&fullName=${fullName}&department=${department}&academicYear=${academicYear}`
     )
   },
 

@@ -1,11 +1,9 @@
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import queryString from 'query-string'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '../../../../app/hooks'
-import { getStudentsByFilter } from '../../../../features/student/studentsSlice'
 
 type SearchButtonProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -16,24 +14,12 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
   const { t } = useTranslation()
   let { search } = useLocation()
   let navigate = useNavigate()
-  const dispatch = useAppDispatch()
 
   let paginationQuery = queryString.parse(search)
-  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
+  const academicYear = paginationQuery.academicYear ? +paginationQuery.academicYear : 0
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
   const term = paginationQuery.term ? (paginationQuery.term as string) : ''
-
-  const [searchInput, setSearchInput] = useState<string>('')
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        await dispatch(getStudentsByFilter({ offset, status, fullName: searchInput, term }))
-      } catch (error) {
-        console.log(error)
-      }
-    })()
-  }, [dispatch, searchInput])
+  const nameTeacher = paginationQuery.nameTeacher ? (paginationQuery.nameTeacher as string) : ''
 
   return (
     <Box component='div' sx={{ mx: 1 }}>
@@ -44,17 +30,17 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
         sx={{ p: 1 }}
         type='search'
         onChange={(e) => {
-          setSearchInput(e.target.value)
+          // setSearchInput(e.target.value)
           handleChangeSelectedName(e.target.value)
           if (!e.target.value) {
             navigate({
               pathname: '/admin/students',
-              search: `?limit=8&offset=0&status=${status}`,
+              search: `?limit=10&offset=0&identityNumber=&status=${status}&fullName=&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
             })
           } else {
             navigate({
               pathname: '/admin/students',
-              search: `?limit=8&offset=0&status=${status}&fullName=${e.target.value}`,
+              search: `?limit=10&offset=0&identityNumber=&status=${status}&fullName=${e.target.value}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
             })
           }
           setPage(0)

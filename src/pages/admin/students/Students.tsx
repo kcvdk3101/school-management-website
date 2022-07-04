@@ -76,10 +76,12 @@ const Students: React.FC<StudentsProps> = () => {
   let { search } = useLocation()
 
   let paginationQuery = queryString.parse(search)
+  const academicYear = paginationQuery.academicYear ? +paginationQuery.academicYear : 0
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
   const status = paginationQuery.status ? (paginationQuery.status as string) : ''
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
   const term = paginationQuery.term ? (paginationQuery.term as string) : ''
+  const nameTeacher = paginationQuery.nameTeacher ? (paginationQuery.nameTeacher as string) : ''
 
   const dispatch = useAppDispatch()
   const { fetchingStudent, students } = useAppSelector((state) => state.students)
@@ -101,17 +103,24 @@ const Students: React.FC<StudentsProps> = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (status || selectedName) {
+        if (status || selectedName || term || academicYear || nameTeacher) {
           return await dispatch(
-            getStudentsByFilter({ offset, status, fullName: selectedName, term })
+            getStudentsByFilter({
+              offset,
+              status,
+              fullName: selectedName,
+              term,
+              academicYear,
+              nameTeacher,
+            })
           )
         }
-        await dispatch(getStudents(offset))
+        await dispatch(getStudents({ offset, academicYear }))
       } catch (error) {
         toast.error('Cannot load student data')
       }
     })()
-  }, [dispatch, selectedName, offset, status, term])
+  }, [dispatch, selectedName, offset, status, term, academicYear, nameTeacher])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)
@@ -151,16 +160,25 @@ const Students: React.FC<StudentsProps> = () => {
     setPage(newPage)
     try {
       if (status || fullName) {
-        await dispatch(getStudentsByFilter({ offset: newPage, status, fullName, term }))
+        await dispatch(
+          getStudentsByFilter({
+            offset: newPage,
+            status,
+            fullName,
+            term,
+            academicYear,
+            nameTeacher,
+          })
+        )
       } else {
-        await dispatch(getStudents(newPage))
+        await dispatch(getStudents({ offset: newPage, academicYear }))
       }
     } catch (error) {
       console.log(error)
     } finally {
       navigate({
         pathname: '/admin/students',
-        search: `?limit=10&offset=${newPage}&status=${status}&fullName=${fullName}`,
+        search: `?limit=10&offset=${newPage}&identityNumber=&status=${status}&fullName=${fullName}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
       })
     }
   }
@@ -174,7 +192,7 @@ const Students: React.FC<StudentsProps> = () => {
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
           try {
-            await dispatch(getStudents(0))
+            await dispatch(getStudents({ offset: 0, academicYear }))
             setSelectedFile(undefined)
             toast.success('Save successfully')
           } catch (error) {

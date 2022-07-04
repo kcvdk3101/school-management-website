@@ -1,7 +1,7 @@
 import { StudentModel } from '../../models/student.model'
 import axiosUniveristy from './axiosUniversity'
 
-const url = '/university'
+const url = '/university/student'
 
 export interface EditStudentData {
   firstName: string
@@ -15,35 +15,56 @@ export interface EditStudentData {
 
 const studentsApi = {
   saveStudentsExcelFile(form: FormData) {
-    return axiosUniveristy.post<string, FormData>(`${url}/student/import`, form)
+    return axiosUniveristy.post<string, FormData>(`${url}/import`, form)
   },
 
   generateStudentAccount() {
     return axiosUniveristy.get<string, { message: string; status: number }>(
-      `${url}/student/generate-account`
+      `${url}/generate-account`
     )
   },
 
-  getAllStudents(offset: number) {
+  getAllStudents(offset: number, academicYear: number) {
     return axiosUniveristy.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${url}/student/all?limit=10&offset=${offset}`
+      `${url}/all?limit=10&offset=${offset}&academicYear=${academicYear}`
     )
   },
 
-  filterByCondition(offset: number, status: string, fullName: string, term: string) {
+  filterByCondition(
+    offset: number,
+    status: string,
+    fullName: string,
+    term: string,
+    academicYear: number,
+    nameTeacher: string
+  ) {
     return axiosUniveristy.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${url}/student/filter?limit=10&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&term=${term}`
+      `${url}/filter?limit=10&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`
     )
   },
 
   editInfoStudent(id: string, data: EditStudentData) {
-    return axiosUniveristy.patch<string, StudentModel>(`${url}/student?id=${id}`, data)
+    return axiosUniveristy.patch<string, StudentModel>(`${url}?id=${id}`, data)
   },
 
   addNewStudent(data: StudentModel[]) {
-    return axiosUniveristy.post<string, StudentModel>(`${url}/student`, {
+    return axiosUniveristy.post<string, StudentModel>(`${url}`, {
       students: data,
     })
+  },
+
+  getListIdentityNumber(academicYear: number) {
+    return axiosUniveristy.get<string, any>(`${url}/IdentityNumber?academicYear=${academicYear}`)
+  },
+
+  getListTerm(academicYear: number) {
+    return axiosUniveristy.get<string, { Term: string }[]>(
+      `${url}/term?academicYear=${academicYear}`
+    )
+  },
+
+  getListClass(academicYear: number) {
+    return axiosUniveristy.get<string, any>(`${url}/class?academicYear=${academicYear}`)
   },
 }
 

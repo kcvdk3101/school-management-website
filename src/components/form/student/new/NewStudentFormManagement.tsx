@@ -86,6 +86,7 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
   let { search } = useLocation()
 
   let paginationQuery = queryString.parse(search)
+  const academicYear = paginationQuery.academicYear ? +paginationQuery.academicYear : 0
   const offset = paginationQuery.offset ? +paginationQuery.offset : 0
 
   const { register, handleSubmit, formState, resetField } = useForm<Input>({
@@ -116,7 +117,7 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
 
     try {
       await dispatch(addNewStudent(students))
-      await dispatch(getStudents(offset))
+      await dispatch(getStudents({ offset, academicYear }))
       toast.success('Add successfully!')
     } catch (error) {
       toast.error(error as Error)
