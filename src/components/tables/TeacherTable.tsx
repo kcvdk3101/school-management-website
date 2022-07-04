@@ -108,15 +108,36 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
   return (
     <>
       <TableContainer>
-        <Table aria-labelledby='tableTitle' size={'medium'}>
+        <Table
+          aria-labelledby='tableTitle'
+          size={'medium'}
+          stickyHeader
+          sx={{
+            width: 'max-content',
+          }}
+        >
           <TableHead>
             <TableRow>
+              <TableCell
+                align='left'
+                size='small'
+                style={{
+                  backgroundColor: grey[800],
+                  color: 'white',
+                }}
+              >
+                {t('N.O')}
+              </TableCell>
               {headCells.map((headCell) => (
                 <TableCell
                   key={headCell.id}
                   align='left'
                   sx={{
                     py: 1,
+                  }}
+                  style={{
+                    backgroundColor: grey[800],
+                    color: 'white',
                   }}
                 >
                   {t(`${headCell.label}`)}
@@ -128,6 +149,9 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
             {teachers.map((row, index) => {
               return (
                 <TableRow key={index} hover role='checkbox' tabIndex={-1}>
+                  <TableCell align='center' size='small'>
+                    {index + 1}
+                  </TableCell>
                   <TableCell align='left'>{row.lastName}</TableCell>
                   <TableCell align='left'>{row.firstName}</TableCell>
                   <TableCell align='left'>{row.position}</TableCell>

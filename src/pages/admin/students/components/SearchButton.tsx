@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import queryString from 'query-string'
 import React from 'react'
@@ -23,29 +24,30 @@ const SearchButton: React.FC<SearchButtonProps> = ({ setPage, handleChangeSelect
 
   return (
     <Box component='div' sx={{ mx: 1 }}>
-      <TextField
-        fullWidth
-        placeholder={t('Search fullname')}
-        variant='standard'
-        sx={{ p: 1 }}
-        type='search'
-        onChange={(e) => {
-          // setSearchInput(e.target.value)
-          handleChangeSelectedName(e.target.value)
-          if (!e.target.value) {
-            navigate({
-              pathname: '/admin/students',
-              search: `?limit=10&offset=0&identityNumber=&status=${status}&fullName=&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
-            })
-          } else {
-            navigate({
-              pathname: '/admin/students',
-              search: `?limit=10&offset=0&identityNumber=&status=${status}&fullName=${e.target.value}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
-            })
-          }
-          setPage(0)
-        }}
-      />
+      <Stack sx={{ minWidth: 300, maxWidth: 350 }}>
+        <TextField
+          fullWidth
+          placeholder={t('Search fullname')}
+          variant='standard'
+          sx={{ p: 1 }}
+          type='search'
+          onChange={(e) => {
+            handleChangeSelectedName(e.target.value)
+            if (!e.target.value) {
+              navigate({
+                pathname: '/admin/students',
+                search: `?limit=10&offset=0&identityNumber=&status=${status}&fullName=&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
+              })
+            } else {
+              navigate({
+                pathname: '/admin/students',
+                search: `?limit=10&offset=0&identityNumber=&status=${status}&fullName=${e.target.value}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`,
+              })
+            }
+            setPage(0)
+          }}
+        />
+      </Stack>
     </Box>
   )
 }

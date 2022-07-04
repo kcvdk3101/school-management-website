@@ -8,15 +8,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Button,
-  CircularProgress,
 } from '@mui/material'
-import { blue, green, red } from '@mui/material/colors'
+import { blue, green, grey, red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
 import { makeStyles } from '@mui/styles'
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 import { useAppSelector } from '../../app/hooks'
 import { StudentModel } from '../../models/student.model'
 import { convertDateString } from '../../utils'
@@ -93,7 +90,7 @@ const useStyles = makeStyles({
     zIndex: '900 !important',
     position: 'sticky',
     left: 0,
-    background: 'white',
+    backgroundColor: 'white',
     boxShadow: '8px 5px 10px grey',
     paddingTop: 1,
     paddingBottom: 1,
@@ -123,8 +120,26 @@ const StudentTable: React.FC<StudentTableProps> = ({
         >
           <TableHead>
             <TableRow>
-              <TableCell align='left' className={classes.sticky} size='small'>
+              <TableCell
+                align='left'
+                className={classes.sticky}
+                size='small'
+                style={{
+                  backgroundColor: grey[800],
+                  color: 'white',
+                }}
+              >
                 {t('Identity number')}
+              </TableCell>
+              <TableCell
+                align='left'
+                size='small'
+                style={{
+                  backgroundColor: grey[800],
+                  color: 'white',
+                }}
+              >
+                {t('N.O')}
               </TableCell>
               {headCells.map((headCell) => (
                 <TableCell
@@ -133,6 +148,10 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   size='small'
                   sx={{
                     py: 1,
+                  }}
+                  style={{
+                    backgroundColor: grey[800],
+                    color: 'white',
                   }}
                 >
                   {t(`${headCell.label}`)}
@@ -146,6 +165,9 @@ const StudentTable: React.FC<StudentTableProps> = ({
                 <TableRow key={index} hover role='checkbox' tabIndex={-1}>
                   <TableCell component='th' scope='row' className={classes.sticky} size='small'>
                     {row.identityNumber}
+                  </TableCell>
+                  <TableCell align='center' size='small'>
+                    {index + 1}
                   </TableCell>
                   <TableCell align='left' size='small'>
                     {row.fullName}

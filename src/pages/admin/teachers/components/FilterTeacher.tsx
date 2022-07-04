@@ -99,11 +99,11 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
 
   return (
     <Box className={classes.container}>
-      <Typography style={{ marginRight: 8 }}>{t('Filter')}:</Typography>
+      <Typography style={{ marginRight: 8 }}>{t('Search by')}:</Typography>
       <Box>
         <Button
           variant='contained'
-          color='info'
+          color='primary'
           size='small'
           onClick={handleClickAcedemicYear}
           style={{ marginRight: 8 }}
@@ -114,7 +114,7 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
         </Button>
         <Button
           variant='contained'
-          color='info'
+          color='primary'
           size='small'
           onClick={handleClickPosition}
           style={{ marginRight: 8 }}
@@ -123,7 +123,7 @@ const FilterTeacher: React.FC<FilterTeacherProps> = ({ setPage }) => {
             positionValue !== '' ? positionValue : ''
           }`}</Typography>
         </Button>
-        <Button variant='contained' color='warning' size='small' onClick={handleClickDepartment}>
+        <Button variant='contained' color='primary' size='small' onClick={handleClickDepartment}>
           <Typography variant='body2'>{`${t('Department')} ${departmentValue !== '' ? ':' : ''} ${
             departmentValue !== '' ? departmentValue : ''
           }`}</Typography>

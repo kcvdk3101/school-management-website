@@ -58,7 +58,7 @@ const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
       <CardContent>
         <CorporationDetail
           icon={<LocationOnIcon color='disabled' fontSize='small' />}
-          content={`${corporation.location[0].district}, ${corporation.location[0].street},  ${corporation.location[0].country}`}
+          content={`${corporation.location[0].district}, ${corporation.location[0].street}, ${corporation.location[0].country}`}
         />
         <Box className={classes.flexRow}>
           <CorporationDetail

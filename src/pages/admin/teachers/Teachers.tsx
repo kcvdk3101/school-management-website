@@ -48,6 +48,7 @@ const useStyles = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    width: 'calc(100% - 72px)',
     padding: '10px',
   },
   innerContainer: {

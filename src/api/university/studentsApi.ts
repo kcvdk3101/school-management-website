@@ -54,7 +54,9 @@ const studentsApi = {
   },
 
   getListIdentityNumber(academicYear: number) {
-    return axiosUniveristy.get<string, any>(`${url}/IdentityNumber?academicYear=${academicYear}`)
+    return axiosUniveristy.get<string, { MSSV: string }[]>(
+      `${url}/IdentityNumber?academicYear=${academicYear}`
+    )
   },
 
   getListTerm(academicYear: number) {
@@ -64,7 +66,9 @@ const studentsApi = {
   },
 
   getListClass(academicYear: number) {
-    return axiosUniveristy.get<string, any>(`${url}/class?academicYear=${academicYear}`)
+    return axiosUniveristy.get<string, { class: string }[]>(
+      `${url}/class?academicYear=${academicYear}`
+    )
   },
 }
 

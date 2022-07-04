@@ -58,6 +58,12 @@ const teachersApi = {
       teachers: data,
     })
   },
+
+  getListTeacherFullname(academicYear: number) {
+    return axiosUniveristy.get<string, { fullName: string }[]>(
+      `${url}/fullName?academicYear=${academicYear}`
+    )
+  },
 }
 
 export default teachersApi

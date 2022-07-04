@@ -1,4 +1,4 @@
-import { Box, Grid, Toolbar, Typography } from '@mui/material'
+import { Box, Grid, Toolbar, Typography, Pagination } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
 import React, { useEffect } from 'react'
@@ -49,7 +49,7 @@ const Corporations: React.FC<CorporationsProps> = () => {
         toast.error('Cannot load data')
       }
     })()
-  }, [dispatch])
+  }, [dispatch, limit, offset])
 
   return (
     <>
@@ -77,9 +77,12 @@ const Corporations: React.FC<CorporationsProps> = () => {
                   </>
                 ) : (
                   <Grid item>
-                    <Typography>Không có dữ liệu</Typography>
+                    <Typography>{t('No data')}</Typography>
                   </Grid>
                 )}
+                <Grid item xs={12}>
+                  <Pagination count={10} color='primary' />
+                </Grid>
               </Grid>
             )}
           </Box>
