@@ -48,6 +48,7 @@ const authSlice = createSlice({
     builder.addCase(signin.fulfilled, (state, action: PayloadAction<{ user: UserModel }>) => {
       state.isAuthenticated = true
       localStorage.setItem('userId', action.payload.user.id)
+      localStorage.setItem('token', action.payload.user.token as string)
       state.user = action.payload.user
     })
     builder.addCase(signin.rejected, (state, action) => {

@@ -85,6 +85,9 @@
   "Save": "Save",
   "Edit": "Edit",
   "Create": "Create",
+  "Close": "Close",
+  "Activate": "Activate",
+  "Deactivate": "Deactivate",
 
   "Searching job": "Searching job",
   "Choose your city": "Choose your city",
@@ -97,6 +100,9 @@
   "Identity number has existed": "Identity number has existed",
   "Class must be exactly 6 characters": "Class must be exactly 6 characters",
   "Class is invalid": "Class is invalid",
+
+  "Accept corporation": "Accept corporation account",
+  "Accept corporation content": "Do you accept this corporation account?",
 
   "Create account heading": "Create an account for all users",
   "Create account content": "Please create accounts for all users"

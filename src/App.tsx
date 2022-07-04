@@ -16,8 +16,12 @@ import JobDetail from './pages/jobDetail/JobDetail'
 import Lecturer from './pages/lecturer/Lecturer'
 import LecturerLayout from './pages/lecturer/LecturerLayout'
 import NotFound from './pages/NotFound'
+import Cookies from 'js-cookie'
 
 function App() {
+  const token = Cookies.get('token')
+  console.log(token)
+
   return (
     <>
       <CssBaseline />

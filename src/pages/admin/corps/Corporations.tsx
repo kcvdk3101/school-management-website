@@ -1,4 +1,4 @@
-import { Box, Grid, Toolbar, Typography, Pagination } from '@mui/material'
+import { Box, Grid, Pagination, Toolbar, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import queryString from 'query-string'
 import React, { useEffect } from 'react'
@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import Header from '../../../components/commons/Header'
+import SkeletonCorporationList from '../../../components/skeleton/SkeletonCorporationList'
 import { getCorporations } from '../../../features/corporation/corporationSlice'
 import CorporationCard from './components/CorporationCard'
 
@@ -35,7 +36,11 @@ const Corporations: React.FC<CorporationsProps> = () => {
   const { t } = useTranslation()
 
   const dispatch = useAppDispatch()
-  const { corporations, fetchCorporations } = useAppSelector((state) => state.corps)
+  const {
+    corporations,
+    fetchCorporations,
+    pagination: { total },
+  } = useAppSelector((state) => state.corps)
 
   let paginationQuery = queryString.parse(search)
   const limit = paginationQuery.limit ? +paginationQuery.limit : 0
@@ -62,9 +67,9 @@ const Corporations: React.FC<CorporationsProps> = () => {
 
         <Box component='main' className={classes.container}>
           <Toolbar />
-          <Box style={{ marginTop: 16 }}>
+          <Box style={{ padding: 16, marginTop: 16 }}>
             {fetchCorporations ? (
-              <Typography>Loading</Typography>
+              <SkeletonCorporationList />
             ) : (
               <Grid container spacing={3}>
                 {corporations && corporations.length > 0 ? (
@@ -81,7 +86,9 @@ const Corporations: React.FC<CorporationsProps> = () => {
                   </Grid>
                 )}
                 <Grid item xs={12}>
-                  <Pagination count={10} color='primary' />
+                  <Box style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                    <Pagination count={total / 6 + 1} color='primary' />
+                  </Box>
                 </Grid>
               </Grid>
             )}

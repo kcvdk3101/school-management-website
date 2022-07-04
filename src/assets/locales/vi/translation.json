@@ -85,6 +85,9 @@
   "Save": "Lưu",
   "Edit": "Chỉnh sửa",
   "Create": "Tạo",
+  "Close": "Đóng",
+  "Activate": "Kích hoạt",
+  "Deactivate": "Hủy kích hoạt",
 
   "Searching job": "Tìm kiếm công việc",
   "Choose your city": "Chọn địa điểm",
@@ -97,6 +100,9 @@
   "Identity number has existed": "Mã số đã tồn tại",
   "Class must be exactly 6 characters": "Tên lớp học phải có chính xác 6 ký tự",
   "Class is invalid": "Tên lớp học không hợp lệ",
+
+  "Accept corporation": "Chấp nhận tài khoản Doanh nghiệp",
+  "Accept corporation content": "Bạn có chấp nhận tài khoản Doanh nghiệp này không ?",
 
   "Create account heading": "Tạo tài khoản cho người sử dụng",
   "Create account content": "Vui lòng tạo tài khoản cho tất cả các người sử dụng để có thể truy cập vào ứng dụng hoặc trang web"

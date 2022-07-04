@@ -5,7 +5,9 @@ const axiosUser = axios.create({
   baseURL: API_USER_URL,
   headers: {
     'Content-type': 'application/json;charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
   },
+  withCredentials: true,
 })
 
 // Add a request interceptor

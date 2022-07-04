@@ -14,4 +14,5 @@ export interface UserModel {
   detail?: {
     teacher: TeacherModel[]
   }
+  token?: string
 }
