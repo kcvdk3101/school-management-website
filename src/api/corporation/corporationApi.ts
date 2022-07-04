@@ -12,7 +12,7 @@ const corporationApi = {
   },
 
   activateCorporation(corpId: string) {
-    return axiosCorporation.patch(`${url}/activate?id=${corpId}`)
+    return axiosCorporation.patch<string, CorporationModel>(`${url}/activate?id=${corpId}`)
   },
 }
 

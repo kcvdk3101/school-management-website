@@ -26,6 +26,14 @@ export const getCorporations = createAsyncThunk(
   }
 )
 
+export const activateCorporation = createAsyncThunk(
+  'corporation/activateCorporation',
+  async (corpId: string) => {
+    const activatedCorporation = await corporationApi.activateCorporation(corpId)
+    return activatedCorporation
+  }
+)
+
 const corporationSlice = createSlice({
   name: 'corporation',
   initialState,
@@ -46,6 +54,19 @@ const corporationSlice = createSlice({
       state.fetchCorporations = false
       state.corporations = []
       state.pagination.total = 0
+    })
+
+    // Activate current coproration
+    builder.addCase(activateCorporation.pending, (state, action) => {
+      state.fetchCorporations = true
+    })
+    builder.addCase(activateCorporation.fulfilled, (state, action) => {
+      let findIndexCorp = state.corporations.findIndex((corp) => corp.id === action.payload.id)
+      state.fetchCorporations = false
+      state.corporations[findIndexCorp].isActive = action.payload.isActive
+    })
+    builder.addCase(activateCorporation.rejected, (state, action) => {
+      state.fetchCorporations = false
     })
   },
 })

@@ -1,33 +1,34 @@
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import FlagIcon from '@mui/icons-material/Flag'
+import HeadphonesIcon from '@mui/icons-material/Headphones'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
+import SourceIcon from '@mui/icons-material/Source'
 import {
   Avatar,
   Box,
+  Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
-  CardActions,
-  Typography,
-  Grid,
-  Button,
+  CircularProgress,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
+  DialogTitle,
+  Grid,
+  Typography,
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import { makeStyles } from '@mui/styles'
 import React, { ReactNode, useState } from 'react'
-import { CorporationModel } from '../../../../models/corporation.model'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import FlagIcon from '@mui/icons-material/Flag'
-import HeadphonesIcon from '@mui/icons-material/Headphones'
-import SourceIcon from '@mui/icons-material/Source'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
-import queryString from 'query-string'
 import { useLocation } from 'react-router-dom'
-import corporationApi from '../../../../api/corporation/corporationApi'
+import { toast } from 'react-toastify'
+import { useAppDispatch } from '../../../../app/hooks'
+import { activateCorporation } from '../../../../features/corporation/corporationSlice'
+import { CorporationModel } from '../../../../models/corporation.model'
 
 type CorporationCardProps = {
   corporation: CorporationModel
@@ -61,13 +62,11 @@ const CorporationDetail: React.FC<CorporationDetailProps> = ({ icon, content }) 
 
 const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
   const { t } = useTranslation()
-  let { search } = useLocation()
 
-  let paginationQuery = queryString.parse(search)
-  const limit = paginationQuery.limit ? +paginationQuery.limit : 0
-  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
+  const dispatch = useAppDispatch()
 
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -77,18 +76,23 @@ const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
   }
 
   const activateAccount = async () => {
+    setLoading(true)
     try {
-      await corporationApi.activateCorporation(corporation.id)
+      const response = await dispatch(activateCorporation(corporation.id))
+      if (response.meta.requestStatus === 'fulfilled') {
+        toast.success('Updated successfully!')
+      }
     } catch (error) {
       toast.error('Cannot accept this corporation')
     } finally {
       handleClose()
+      setLoading(false)
     }
   }
 
   return (
     <>
-      <Card style={{ minHeight: 200, maxHeight: 280, minWidth: 300 }}>
+      <Card style={{ minHeight: 200, minWidth: 300 }}>
         <CardHeader
           avatar={<Avatar sx={{ bgcolor: red[500] }}>{corporation.name[0]}</Avatar>}
           title={corporation.name}
@@ -130,7 +134,7 @@ const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
         </CardContent>
         <CardActions>
           <Button
-            variant='outlined'
+            variant='contained'
             color='primary'
             size='small'
             disabled={corporation.isActive}
@@ -138,7 +142,7 @@ const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
             style={{ marginLeft: 8 }}
           >
             <Typography variant='body2'>
-              {corporation.isActive ? `${t('Deactivate')}` : `${t('Accept')}`}
+              {corporation.isActive ? `${t('Accepted')}` : `${t('Accept')}`}
             </Typography>
           </Button>
         </CardActions>
@@ -150,11 +154,11 @@ const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
           <DialogContentText>{t('Accept corporation content')}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant='outlined' color='secondary' onClick={handleClose}>
+          <Button variant='outlined' color='secondary' onClick={handleClose} disabled={loading}>
             {t('Close')}
           </Button>
-          <Button variant='contained' color='primary' onClick={activateAccount} autoFocus>
-            {t('Accept')}
+          <Button variant='contained' color='primary' onClick={activateAccount} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
           </Button>
         </DialogActions>
       </Dialog>
