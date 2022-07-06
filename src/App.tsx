@@ -1,4 +1,5 @@
 import { CssBaseline } from '@mui/material'
+import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Layout from './layout/Layout'
 import About from './pages/about/About'
@@ -16,12 +17,19 @@ import JobDetail from './pages/jobDetail/JobDetail'
 import Lecturer from './pages/lecturer/Lecturer'
 import LecturerLayout from './pages/lecturer/LecturerLayout'
 import NotFound from './pages/NotFound'
-import Cookies from 'js-cookie'
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from 'chart.js'
+ChartJS.register(ArcElement, Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
-function App() {
-  const token = Cookies.get('token')
-  console.log(token)
-
+const App: React.FC = () => {
   return (
     <>
       <CssBaseline />

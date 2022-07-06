@@ -241,7 +241,7 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
         <MenuItem onClick={() => handleChangeFilterTeacherName('all')}>Tất cả</MenuItem>
         {listTeacher &&
           listTeacher.map((name, idx) => (
-            <MenuItem onClick={() => handleChangeFilterTeacherName(name.fullName)}>
+            <MenuItem key={idx} onClick={() => handleChangeFilterTeacherName(name.fullName)}>
               {name.fullName}
             </MenuItem>
           ))}

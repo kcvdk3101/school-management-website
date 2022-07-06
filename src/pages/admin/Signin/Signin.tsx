@@ -9,9 +9,10 @@ import {
   IconButton,
   TextField,
   Typography,
+  Backdrop,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -20,7 +21,8 @@ import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import huflit from '../../../assets/images/huflit.png'
-import { signin } from '../../../features/authenticate/authSlice'
+import { authenticate, signin } from '../../../features/authenticate/authSlice'
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles({
   innerContainer: {
@@ -41,28 +43,15 @@ type FormInput = {
 
 const signinSchema = yup.object({
   email: yup.string().required('This field is required'),
-  // .test('checkEmail', 'Please use Admin mail', (value) => {
-  //   if (value === 'admin@gmail.com') {
-  //     return true
-  //   }
-  //   return false
-  // }),
   password: yup.string().required('This field is required'),
-  // .test('checkPassword', 'Wrong password', (value) => {
-  //   if (value === 'admin123') {
-  //     return true
-  //   }
-  //   return false
-  // }),
 })
+
+let amount = true
 
 const Signin: React.FC<SigninProps> = () => {
   const classes = useStyles()
   const { t } = useTranslation()
   let navigate = useNavigate()
-
-  const dispatch = useAppDispatch()
-  const { error } = useAppSelector((state) => state.auth)
 
   const {
     register,
@@ -74,7 +63,40 @@ const Signin: React.FC<SigninProps> = () => {
     resolver: yupResolver(signinSchema),
   })
 
+  const dispatch = useAppDispatch()
+  const { error } = useAppSelector((state) => state.auth)
+
+  const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+
+  async function getProfile() {
+    setLoading(true)
+    try {
+      const token = Cookies.get('token')
+      if (token === null) return
+      const response: any = await dispatch(authenticate())
+      if (response.meta.requestStatus === 'fulfilled') {
+        if (response.payload.user.role === 'teacher') {
+          navigate('/lecturer')
+        }
+        if (response.payload.user.role === 'admin') {
+          navigate('/admin/dashboard')
+        }
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (amount) {
+      getProfile()
+    }
+    return () => {
+      amount = false
+    }
+  }, [])
 
   const handleClick = () => {
     setShowPassword((prev) => !prev)
@@ -103,58 +125,64 @@ const Signin: React.FC<SigninProps> = () => {
         <title>{t('Signin')}</title>
       </Helmet>
       <CssBaseline />
-      <Box className={classes.innerContainer}>
-        <Box component='div' sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-          <img src={huflit} alt='huflit logo' width={120} />
+      {loading ? (
+        <Backdrop open={true}>
+          <CircularProgress style={{ color: 'white' }} />
+        </Backdrop>
+      ) : (
+        <Box className={classes.innerContainer}>
+          <Box component='div' sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+            <img src={huflit} alt='huflit logo' width={120} />
+          </Box>
+          <Typography component='h1' variant='h5'>
+            {t('Signin')}
+          </Typography>
+          <form onSubmit={onSubmit} style={{ marginTop: '8px' }}>
+            <TextField
+              label={t('Email')}
+              required
+              fullWidth
+              margin='normal'
+              autoFocus
+              disabled={isSubmitting}
+              placeholder={t('Email')}
+              {...register('email')}
+              error={Boolean(errors.email)}
+              helperText={t(`${errors.email?.message ? errors.email?.message : ''}`)}
+            />
+            <TextField
+              label={t('Password')}
+              required
+              fullWidth
+              margin='normal'
+              autoFocus
+              disabled={isSubmitting}
+              type={showPassword ? 'text' : 'password'}
+              placeholder={t('Password')}
+              {...register('password')}
+              error={Boolean(errors.password)}
+              helperText={t(`${errors.password?.message ? errors.password?.message : ''}`)}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleClick}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                ),
+              }}
+            />
+            <Button
+              fullWidth
+              color='secondary'
+              variant='contained'
+              sx={{ mt: 3, mb: 2 }}
+              type='submit'
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? <CircularProgress size={24} /> : `${t('Signin')}`}
+            </Button>
+          </form>
         </Box>
-        <Typography component='h1' variant='h5'>
-          {t('Signin')}
-        </Typography>
-        <form onSubmit={onSubmit} style={{ marginTop: '8px' }}>
-          <TextField
-            label={t('Email')}
-            required
-            fullWidth
-            margin='normal'
-            autoFocus
-            disabled={isSubmitting}
-            placeholder={t('Email')}
-            {...register('email')}
-            error={Boolean(errors.email)}
-            helperText={t(`${errors.email?.message ? errors.email?.message : ''}`)}
-          />
-          <TextField
-            label={t('Password')}
-            required
-            fullWidth
-            margin='normal'
-            autoFocus
-            disabled={isSubmitting}
-            type={showPassword ? 'text' : 'password'}
-            placeholder={t('Password')}
-            {...register('password')}
-            error={Boolean(errors.password)}
-            helperText={t(`${errors.password?.message ? errors.password?.message : ''}`)}
-            InputProps={{
-              endAdornment: (
-                <IconButton onClick={handleClick}>
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              ),
-            }}
-          />
-          <Button
-            fullWidth
-            color='secondary'
-            variant='contained'
-            sx={{ mt: 3, mb: 2 }}
-            type='submit'
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? <CircularProgress size={24} /> : `${t('Signin')}`}
-          </Button>
-        </form>
-      </Box>
+      )}
     </Container>
   )
 }

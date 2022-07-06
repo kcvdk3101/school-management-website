@@ -2,15 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import userApi from '../../api/user/userApi'
 import { UserModel } from '../../models/user.model'
 
-// type Admin = {
-//   email: string
-//   firstName: string
-//   lastName: string
-//   phoneNumber: string
-//   role: string
-//   id: string
-// }
-
 interface AuthState {
   user: Partial<UserModel>
   error: string
@@ -36,6 +27,12 @@ export const signout = createAsyncThunk('auth/signout', async () => {
   return response
 })
 
+export const authenticate = createAsyncThunk('auth/authenticate', async () => {
+  const authenticate = await userApi.authenticate()
+  console.log(authenticate)
+  return authenticate
+})
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -48,7 +45,6 @@ const authSlice = createSlice({
     builder.addCase(signin.fulfilled, (state, action: PayloadAction<{ user: UserModel }>) => {
       state.isAuthenticated = true
       localStorage.setItem('userId', action.payload.user.id)
-      localStorage.setItem('token', action.payload.user.token as string)
       state.user = action.payload.user
     })
     builder.addCase(signin.rejected, (state, action) => {
@@ -68,6 +64,19 @@ const authSlice = createSlice({
     })
     builder.addCase(signout.rejected, (state, action) => {
       state.isAuthenticated = true
+    })
+
+    // authenticate with token
+    builder.addCase(authenticate.pending, (state, action) => {
+      state.isAuthenticated = false
+    })
+
+    builder.addCase(authenticate.fulfilled, (state, action) => {
+      state.user = action.payload.user
+      state.isAuthenticated = true
+    })
+    builder.addCase(authenticate.rejected, (state, action) => {
+      state.isAuthenticated = false
     })
   },
 })

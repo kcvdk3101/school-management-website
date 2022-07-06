@@ -1,17 +1,8 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogContent,
-  Grid,
-  Typography,
-  CircularProgress,
-} from '@mui/material'
+import { Box, Button, Dialog, DialogContent, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import EditTeacherFormManagement from '../../../components/form/teacher/edit/EditTeacherFormManagement'
 import { signout } from '../../../features/authenticate/authSlice'
@@ -38,7 +29,6 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
   )
 
   const [openEditTeacher, setOpenEditTeacher] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleOpenEditTeacher = () => {
     setOpenEditTeacher(true)
@@ -49,16 +39,8 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
   }
 
   const handleLogout = async () => {
-    setIsLoading(true)
-    try {
-      await dispatch(signout())
-      navigate('/')
-      toast.success('Logout successfully!')
-    } catch (error) {
-      toast.error('Cannot logout this account! Please try again')
-    } finally {
-      setIsLoading(false)
-    }
+    await dispatch(signout())
+    navigate('/')
   }
 
   return (
@@ -73,18 +55,11 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
                 variant='contained'
                 type='button'
                 color='primary'
-                disabled={isLoading}
                 onClick={handleOpenEditTeacher}
               >
                 {t('Edit')}
               </Button>
-              <Button
-                variant='outlined'
-                color='secondary'
-                type='button'
-                disabled={isLoading}
-                onClick={handleLogout}
-              >
+              <Button variant='outlined' color='secondary' type='button' onClick={handleLogout}>
                 {t('Signout')}
               </Button>
             </Box>

@@ -1,3 +1,4 @@
+import { ReportModel } from '../../models/report.model'
 import { StudentModel } from '../../models/student.model'
 import axiosUniveristy from './axiosUniversity'
 
@@ -68,6 +69,12 @@ const studentsApi = {
   getListClass(academicYear: number) {
     return axiosUniveristy.get<string, { class: string }[]>(
       `${url}/class?academicYear=${academicYear}`
+    )
+  },
+
+  reportTotalStudent(academicYear: number) {
+    return axiosUniveristy.get<string, { report: ReportModel }>(
+      `/university/studentReport?academicYear=${academicYear}`
     )
   },
 }

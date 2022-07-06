@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import studentsApi, { EditStudentData } from '../../api/university/studentsApi'
+import { ReportModel } from '../../models/report.model'
 import { StudentModel } from '../../models/student.model'
 
 interface StudentState {
   fetchingStudent: boolean
+  fetchingReport: boolean
   students: StudentModel[]
+  report: Partial<ReportModel>
   savingFile: boolean
   pagination: StudentPagination
 }
@@ -15,7 +18,9 @@ interface StudentPagination {
 
 const initialState: StudentState = {
   fetchingStudent: false,
+  fetchingReport: false,
   savingFile: false,
+  report: {},
   students: [],
   pagination: { total: 0 },
 }
@@ -78,6 +83,14 @@ export const addNewStudent = createAsyncThunk(
   async (data: StudentModel[]) => {
     const response = await studentsApi.addNewStudent(data)
     return response
+  }
+)
+
+export const reportStudent = createAsyncThunk(
+  'students/reportStudent',
+  async (academicYear: number) => {
+    const report = await studentsApi.reportTotalStudent(academicYear)
+    return report
   }
 )
 
@@ -150,6 +163,21 @@ export const studentSlice = createSlice({
     })
     builder.addCase(editInfoStudent.rejected, (state, action) => {
       state.fetchingStudent = false
+    })
+
+    // Get report total student
+    builder.addCase(reportStudent.pending, (state, action) => {
+      state.fetchingReport = true
+      state.report = {}
+    })
+    builder.addCase(reportStudent.fulfilled, (state, action) => {
+      state.fetchingReport = false
+
+      state.report = action.payload.report as ReportModel
+    })
+    builder.addCase(reportStudent.rejected, (state, action) => {
+      state.fetchingReport = false
+      state.report = {}
     })
   },
 })

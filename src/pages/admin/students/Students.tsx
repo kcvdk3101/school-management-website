@@ -32,11 +32,13 @@ import StudentTable from '../../../components/tables/StudentTable'
 import {
   getStudents,
   getStudentsByFilter,
+  reportStudent,
   saveStudentsExcelFile,
 } from '../../../features/student/studentsSlice'
 import ListChipReport from './components/ListChipReport'
 import FilterStudent from './components/FilterStudent'
 import SearchButton from './components/SearchButton'
+import { ReportModel } from '../../../models/report.model'
 
 type StudentsProps = {}
 
@@ -84,7 +86,9 @@ const Students: React.FC<StudentsProps> = () => {
   const nameTeacher = paginationQuery.nameTeacher ? (paginationQuery.nameTeacher as string) : ''
 
   const dispatch = useAppDispatch()
-  const { fetchingStudent, students } = useAppSelector((state) => state.students)
+  const { fetchingStudent, fetchingReport, students, report } = useAppSelector(
+    (state) => state.students
+  )
 
   const [selectedFile, setSelectedFile] = useState<string | Blob | FileList | File>()
   const [nameFile, setNameFile] = useState<string>()
@@ -104,7 +108,7 @@ const Students: React.FC<StudentsProps> = () => {
     ;(async () => {
       try {
         if (status || selectedName || term || academicYear || nameTeacher) {
-          return await dispatch(
+          await dispatch(
             getStudentsByFilter({
               offset,
               status,
@@ -114,8 +118,10 @@ const Students: React.FC<StudentsProps> = () => {
               nameTeacher,
             })
           )
+        } else {
+          await dispatch(getStudents({ offset, academicYear }))
         }
-        await dispatch(getStudents({ offset, academicYear }))
+        await dispatch(reportStudent(academicYear))
       } catch (error) {
         toast.error('Cannot load student data')
       }
@@ -296,7 +302,7 @@ const Students: React.FC<StudentsProps> = () => {
             </Box>
           </Box>
 
-          <ListChipReport />
+          <ListChipReport fetching={fetchingReport} report={report as ReportModel} />
 
           <Paper sx={{ p: 1, height: 'auto' }}>
             <Box className={classes.tableTop}>

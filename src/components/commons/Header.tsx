@@ -121,7 +121,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <>
       <CssBaseline />
-      <AppBar position='absolute' open={open} color='secondary'>
+      <AppBar position='absolute' open={open} color='primary'>
         <Toolbar
           sx={{
             pr: '24px',
@@ -171,7 +171,6 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleLogout}>{t('Profile')}</MenuItem>
                 <MenuItem onClick={handleLogout}>{t('Signout')}</MenuItem>
               </Menu>
             </div>

@@ -1,8 +1,13 @@
-import { Box, Grid, Chip } from '@mui/material'
+import { Box, Grid, Chip, Divider } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { ReportModel } from '../../../../models/report.model'
 
-type ListChipReportProps = {}
+type ListChipReportProps = {
+  fetching: boolean
+  report: ReportModel
+}
 
 const useStyles = makeStyles({
   innerContainer: {
@@ -14,26 +19,58 @@ const useStyles = makeStyles({
   },
 })
 
-const ListChipReport: React.FC<ListChipReportProps> = () => {
+const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => {
+  const { t } = useTranslation()
   const classes = useStyles()
 
   return (
     <Box component='div' className={classes.innerContainer}>
       <Grid container spacing={1}>
         <Grid item>
-          <Chip color='warning' variant='outlined' label='Chưa thực tập (150)' />
+          <Chip
+            color='error'
+            variant='filled'
+            label={
+              fetching
+                ? t('Loading')
+                : `${t("Haven't practiced")} (${report.numberOfNotInternship})`
+            }
+          />
         </Grid>
         <Grid item>
-          <Chip color='info' variant='outlined' label='Đang thực tập (150)' />
+          <Chip
+            color='info'
+            variant='filled'
+            label={fetching ? t('Loading') : `${t('Practicing')} (${report.numberOfInternship})`}
+          />
         </Grid>
         <Grid item>
-          <Chip color='success' variant='outlined' label='Đã thực tập (150)' />
+          <Chip
+            color='success'
+            variant='filled'
+            label={
+              fetching ? t('Loading') : `${t('Trained')} (${report.numberOfCompletedInternship})`
+            }
+          />
         </Grid>
         <Grid item>
-          <Chip color='error' variant='outlined' label='Chưa có GVHD (150)' />
+          <Divider orientation='vertical' flexItem light={false} style={{ height: '100%' }} />
         </Grid>
         <Grid item>
-          <Chip color='success' variant='outlined' label='Đã có GVHD (150)' />
+          <Chip
+            color='error'
+            variant='filled'
+            label={
+              fetching ? t('Loading') : `${t('No lecturer')} (${report.numberOfNotInstructor})`
+            }
+          />
+        </Grid>
+        <Grid item>
+          <Chip
+            color='success'
+            variant='filled'
+            label={fetching ? t('Loading') : `${t('Have lecturer')} (${report.numberOfInstructor})`}
+          />
         </Grid>
       </Grid>
     </Box>

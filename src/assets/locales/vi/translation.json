@@ -17,6 +17,7 @@
   "Corporation": "Doanh nghiệp",
   "Account": "Tài khoản",
   "No data": "Không có dữ liệu",
+  "Loading": "Đang tải dữ liệu",
 
   "Faculty office": "Văn phòng khoa",
   "Computer science": "Khoa học máy tính",
@@ -75,6 +76,8 @@
   "Haven't practiced": "Chưa thực tập",
   "Practicing": "Đang thực tập",
   "Trained": "Đã thực tập",
+  "Have lecturer": "Có Giảng viên",
+  "No lecturer": "Chưa có Giảng viên",
 
   "Accepted": "Đã chấp nhận",
   "Not accepted yet": "Chưa chấp nhận",
@@ -105,5 +108,9 @@
   "Accept corporation content": "Bạn có chấp nhận tài khoản Doanh nghiệp này không ?",
 
   "Create account heading": "Tạo tài khoản cho người sử dụng",
-  "Create account content": "Vui lòng tạo tài khoản cho tất cả các người sử dụng để có thể truy cập vào ứng dụng hoặc trang web"
+  "Create account content": "Vui lòng tạo tài khoản cho tất cả các người sử dụng để có thể truy cập vào ứng dụng hoặc trang web",
+
+  "Total number of students": "Tổng số lượng sinh viên",
+  "Total number of teachers": "Tổng số lượng giảng viên hướng dẫn",
+  "Total number of corporations": "Tổng số lượng doanh nghiệp hiện tại"
 }

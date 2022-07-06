@@ -17,6 +17,7 @@
   "Corporation": "Corporation",
   "Account": "Account",
   "No data": "No data",
+  "Loading": "Loading data",
 
   "Faculty office": "Faculty office",
   "Computer science": "Computer science",
@@ -75,6 +76,8 @@
   "Haven't practiced": "Haven't practiced",
   "Practicing": "Practicing",
   "Trained": "Trained",
+  "Have lecturer": "Have lecturer",
+  "No lecturer": "No lecturer",
 
   "Accepted": "Accepted",
   "Not accepted yet": "Not accepted yet",
@@ -105,5 +108,9 @@
   "Accept corporation content": "Do you accept this corporation account?",
 
   "Create account heading": "Create an account for all users",
-  "Create account content": "Please create accounts for all users"
+  "Create account content": "Please create accounts for all users",
+
+  "Total number of students": "Total number of students",
+  "Total number of teachers": "Total number of teachers",
+  "Total number of corporations": "Total number of corporations"
 }

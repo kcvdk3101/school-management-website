@@ -4,7 +4,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import LecturerInfo from './info/LecturerInfo'
 import LecturerStudent from './students/LecturerListStudent'
-import Cookies from 'js-cookie'
 
 type LecturerProps = {}
 
@@ -18,8 +17,6 @@ const useStyles = makeStyles({
 
 const Lecturer: React.FC<LecturerProps> = () => {
   const classes = useStyles()
-  const token = Cookies.get('token')
-  console.log(token)
 
   return (
     <>
