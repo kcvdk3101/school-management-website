@@ -19,9 +19,9 @@ const studentsApi = {
     return axiosUniveristy.post<string, FormData>(`${url}/import`, form)
   },
 
-  generateStudentAccount() {
+  generateStudentAccount(academicYear: number) {
     return axiosUniveristy.get<string, { message: string; status: number }>(
-      `${url}/generate-account`
+      `${url}/generate-account?academicYear=${academicYear}`
     )
   },
 

@@ -138,15 +138,6 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   style={{
                     backgroundColor: grey[800],
                     color: 'white',
-                    flexGrow: 0,
-                  }}
-                >
-                  {t('N.O')}
-                </TableCell>
-                <TableCell
-                  style={{
-                    backgroundColor: grey[800],
-                    color: 'white',
                     flex: 1,
                   }}
                 >
@@ -180,9 +171,6 @@ const StudentTable: React.FC<StudentTableProps> = ({
                       <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
                         <EditIcon />
                       </IconButton>
-                    </TableCell>
-                    <TableCell align='center' size='small' style={{ width: '100%' }}>
-                      {index + 1}
                     </TableCell>
                     <TableCell align='left' size='small' style={{ width: '100%' }}>
                       {row.identityNumber}

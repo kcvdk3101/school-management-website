@@ -113,7 +113,6 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
       })
     }
   }
-
   async function handleChangeFilterTerm(term: string) {
     setPage(0)
     if (term === 'all') {
@@ -197,7 +196,7 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilterStatus('all')}>Tất cả</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterStatus('all')}>{t('All')}</MenuItem>
         <MenuItem onClick={() => handleChangeFilterStatus('Chưa thực tập')}>
           {t("Haven't practiced")}
         </MenuItem>
@@ -218,7 +217,7 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilterTerm('all')}>Tất cả</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterTerm('all')}>{t('All')}</MenuItem>
         {listTerm &&
           listTerm.map((term, idx) => (
             <MenuItem key={idx} onClick={() => handleChangeFilterTerm(term.Term)}>
@@ -238,7 +237,7 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={() => handleChangeFilterTeacherName('all')}>Tất cả</MenuItem>
+        <MenuItem onClick={() => handleChangeFilterTeacherName('all')}>{t('All')}</MenuItem>
         {listTeacher &&
           listTeacher.map((name, idx) => (
             <MenuItem key={idx} onClick={() => handleChangeFilterTeacherName(name.fullName)}>

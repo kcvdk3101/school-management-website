@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
@@ -24,8 +24,18 @@ const languages = [
 ]
 const LanguageButton: React.FC<LanguageButtonProps> = () => {
   const { i18n } = useTranslation()
-  let lang = localStorage.getItem('cft-language')
-  if (!lang) lang = 'vi'
+  const [language, setLanguage] = useState('vn')
+
+  useEffect(() => {
+    let lang = localStorage.getItem('cft-language')
+    if (!lang) return
+    if (lang === 'vi') {
+      setLanguage('vn')
+    } else {
+      setLanguage(lang)
+    }
+    i18n.changeLanguage(lang)
+  }, [i18n])
 
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
@@ -34,6 +44,7 @@ const LanguageButton: React.FC<LanguageButtonProps> = () => {
   const handleMenuItemClick = (key: string, index: number) => {
     localStorage.setItem('cft-language', key)
     i18n.changeLanguage(key)
+    setLanguage(key)
     setSelectedIndex(index)
     setOpen(false)
   }
@@ -53,7 +64,12 @@ const LanguageButton: React.FC<LanguageButtonProps> = () => {
     <Box sx={{ mr: 1, display: 'flex', justifyContent: 'center' }}>
       <ButtonGroup variant='contained' ref={anchorRef}>
         <Button onClick={handleToggle}>
-          <img loading='lazy' width='20' src={`https://flagcdn.com/w20/${lang}.png`} alt='flag' />
+          <img
+            loading='lazy'
+            width='20'
+            src={`https://flagcdn.com/w20/${language}.png`}
+            alt='flag'
+          />
         </Button>
       </ButtonGroup>
       <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>

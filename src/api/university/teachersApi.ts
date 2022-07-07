@@ -19,9 +19,9 @@ const teachersApi = {
     return axiosUniveristy.post<string, FormData>(`${url}/import`, form)
   },
 
-  generateTeacherAccount() {
+  generateTeacherAccount(academicYear: number) {
     return axiosUniveristy.get<string, { message: string; status: number }>(
-      `${url}/generate-account`
+      `${url}/generate-account?academicYear=${academicYear}`
     )
   },
 
@@ -29,6 +29,10 @@ const teachersApi = {
     return axiosUniveristy.get<string, { data: TeacherModel[]; pagination: { total: number } }>(
       `${url}/all/pagination?limit=8&offset=${offset}&academicYear=${academicYear}`
     )
+  },
+
+  getAllTeachersNoPagination(academicYear: number) {
+    return axiosUniveristy.get<string, { data: TeacherModel[] }>(`${url}/all?academicYear=2022`)
   },
 
   getTeacherById(teacherId: string) {

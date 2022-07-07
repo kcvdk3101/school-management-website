@@ -109,9 +109,9 @@ const Lecturers: React.FC<TeachersProps> = () => {
               academicYear,
             })
           )
-          return
+        } else {
+          await dispatch(getAllTeachers({ offset, academicYear }))
         }
-        await dispatch(getAllTeachers({ offset, academicYear }))
       } catch (error) {
         console.log(error)
       }
@@ -203,7 +203,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
   const generateAccountTeacher = async () => {
     setLoadingGenerate(true)
     try {
-      const response = await teachersApi.generateTeacherAccount()
+      const response = await teachersApi.generateTeacherAccount(academicYear)
       if (response.status === 200) {
         toast.success(response.message)
         setLoadingGenerate(false)

@@ -46,11 +46,12 @@ const Dashboard: React.FC<DashboardProps> = () => {
 
   const [statusStudentReport, setStatusStudentReport] = useState<any>({})
   const [studentHaveInstructorReport, setStudentHaveInstructorReport] = useState<any>({})
+  const [corporationActivationReport, setCorporationActivationReport] = useState<any>({})
 
   useEffect(() => {
     ;(async () => {
       try {
-        await dispatch(reportCorporation(year))
+        const responseCorporation: any = await dispatch(reportCorporation(year))
         const responseStudent: any = await dispatch(reportStudent(year))
         if (responseStudent.meta.requestStatus === 'fulfilled') {
           let dataStatus = {
@@ -88,9 +89,26 @@ const Dashboard: React.FC<DashboardProps> = () => {
               },
             ],
           }
-
           setStatusStudentReport(dataStatus)
           setStudentHaveInstructorReport(dataHaveInstructor)
+        }
+        if (responseCorporation.meta.requestStatus === 'fulfilled') {
+          let dataCorporation = {
+            labels: [t('Not accepted yet'), t('Accepted')],
+            datasets: [
+              {
+                label: '# of Votes',
+                data: [
+                  responseCorporation.payload.report.numberOfInActiveCorporation as number,
+                  responseCorporation.payload.report.numberOfActiveCorporation as number,
+                ],
+                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                borderWidth: 1,
+              },
+            ],
+          }
+          setCorporationActivationReport(dataCorporation)
         }
       } catch (error) {
         toast.error('Cannot load data report')
@@ -161,9 +179,9 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   </Grid>
                   <Grid item xs={4}>
                     <PieChart
-                      title={t('Student')}
-                      fetching={fetchingReport}
-                      statusStudentReport={statusStudentReport}
+                      title={t('Corporation')}
+                      fetching={fetchCorporationReport}
+                      statusStudentReport={corporationActivationReport}
                     />
                   </Grid>
                 </Grid>

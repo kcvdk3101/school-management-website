@@ -218,7 +218,7 @@ const Students: React.FC<StudentsProps> = () => {
   const generateAccount = async () => {
     setLoadingGenerate(true)
     try {
-      const response = await studentsApi.generateStudentAccount()
+      const response = await studentsApi.generateStudentAccount(academicYear)
       if (response.status === 200) {
         toast.success(response.message)
         setLoadingGenerate(false)

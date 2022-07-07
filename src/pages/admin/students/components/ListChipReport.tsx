@@ -33,7 +33,9 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
             label={
               fetching
                 ? t('Loading')
-                : `${t("Haven't practiced")} (${report.numberOfNotInternship})`
+                : `${t("Haven't practiced")} (${
+                    report.numberOfNotInternship === undefined ? 0 : report.numberOfNotInternship
+                  })`
             }
           />
         </Grid>
@@ -41,7 +43,13 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
           <Chip
             color='info'
             variant='filled'
-            label={fetching ? t('Loading') : `${t('Practicing')} (${report.numberOfInternship})`}
+            label={
+              fetching
+                ? t('Loading')
+                : `${t('Practicing')} (${
+                    report.numberOfInternship === undefined ? 0 : report.numberOfInternship
+                  })`
+            }
           />
         </Grid>
         <Grid item>
@@ -49,7 +57,13 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
             color='success'
             variant='filled'
             label={
-              fetching ? t('Loading') : `${t('Trained')} (${report.numberOfCompletedInternship})`
+              fetching
+                ? t('Loading')
+                : `${t('Trained')} (${
+                    report.numberOfCompletedInternship === undefined
+                      ? 0
+                      : report.numberOfCompletedInternship
+                  })`
             }
           />
         </Grid>
@@ -63,7 +77,11 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
             label={
               fetching
                 ? t('Loading')
-                : `${t('No lecturer')} (${report.numberOfStudentHaveNotInstructor})`
+                : `${t('No lecturer')} (${
+                    report.numberOfStudentHaveNotInstructor === undefined
+                      ? 0
+                      : report.numberOfStudentHaveNotInstructor
+                  })`
             }
           />
         </Grid>
@@ -74,7 +92,11 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
             label={
               fetching
                 ? t('Loading')
-                : `${t('Have lecturer')} (${report.numberOfStudentHaveInstructor})`
+                : `${t('Have lecturer')} (${
+                    report.numberOfStudentHaveInstructor === undefined
+                      ? 0
+                      : report.numberOfStudentHaveInstructor
+                  })`
             }
           />
         </Grid>

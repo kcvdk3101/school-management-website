@@ -11,7 +11,7 @@ type PieChartProps = {
 const PieChart: React.FC<PieChartProps> = ({ title, fetching, statusStudentReport }) => {
   return (
     <Paper style={{ padding: 12, height: '100%' }}>
-      <Typography>{title}</Typography>
+      <Typography style={{ marginBottom: 4 }}>{title}</Typography>
       {fetching ? (
         <LinearProgress color='secondary' />
       ) : (

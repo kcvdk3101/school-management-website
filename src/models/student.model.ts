@@ -17,8 +17,13 @@ export interface StudentModel extends Common {
   academicYear?: string
   nameTeacher?: string
   slug?: string
-  internshipCertification?: string
-  internshipGrade?: string
-  internshipReport?: string
+  internshipCertification?: boolean
+  internshipReport?: boolean
+  internshipFeedback?: boolean
+  internshipSurvey?: boolean
+  internshipFirstGrade?: number
+  internshipSecondGrade?: number
+  internshipThirdGrade?: number
+  internshipFinalGrade?: number
   cv?: CVModel[]
 }
