@@ -112,5 +112,10 @@
 
   "Total number of students": "Tổng số lượng sinh viên",
   "Total number of teachers": "Tổng số lượng giảng viên hướng dẫn",
-  "Total number of corporations": "Tổng số lượng doanh nghiệp hiện tại"
+  "Total number of corporations": "Tổng số lượng doanh nghiệp hiện tại",
+
+  "Table ranking": "Bảng xếp hạng",
+  "Status Student Report": "Trạng thái của sinh viên",
+  "Student Lecturer Report": "Sinh viên - Giảng viên",
+  "Number of students": "Số lượng sinh viên"
 }

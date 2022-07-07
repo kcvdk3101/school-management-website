@@ -61,7 +61,9 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
             color='error'
             variant='filled'
             label={
-              fetching ? t('Loading') : `${t('No lecturer')} (${report.numberOfNotInstructor})`
+              fetching
+                ? t('Loading')
+                : `${t('No lecturer')} (${report.numberOfStudentHaveNotInstructor})`
             }
           />
         </Grid>
@@ -69,7 +71,11 @@ const ListChipReport: React.FC<ListChipReportProps> = ({ fetching, report }) => 
           <Chip
             color='success'
             variant='filled'
-            label={fetching ? t('Loading') : `${t('Have lecturer')} (${report.numberOfInstructor})`}
+            label={
+              fetching
+                ? t('Loading')
+                : `${t('Have lecturer')} (${report.numberOfStudentHaveInstructor})`
+            }
           />
         </Grid>
       </Grid>

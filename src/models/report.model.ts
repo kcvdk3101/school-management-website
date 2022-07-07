@@ -2,8 +2,10 @@ export interface ReportModel {
   numberOfNotInternship: number
   numberOfInternship: number
   numberOfCompletedInternship: number
-  numberOfNotInstructor: number
-  numberOfInstructor: number
-  numberOfStudentHasEnoughReport: number
-  numberOfStudentHasEnoughGrade: number
+  numberOfStudentHaveNotInstructor: number
+  numberOfStudentHaveInstructor: number
+  numberOfStudentHaveEnoughReport: number
+  numberOfStudentHaveEnoughGrade: number
+  totalOfStudentsInAcademicYear: number
+  totalOfTeachersInAcademicYear: number
 }

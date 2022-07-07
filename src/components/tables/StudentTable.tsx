@@ -25,12 +25,12 @@ interface StudentTableProps {
   handleOpenEditStudent: (id: number) => void
 }
 
-interface RowData extends StudentModel {
-  mode?: boolean
-}
+// interface RowData extends StudentModel {
+//   mode?: boolean
+// }
 
 interface HeadCell {
-  id: keyof RowData
+  id: keyof StudentModel
   label: string
 }
 
@@ -79,10 +79,6 @@ const headCells: HeadCell[] = [
     id: 'internshipGrade',
     label: 'Internship grade',
   },
-  {
-    id: 'mode',
-    label: 'Action',
-  },
 ]
 
 const useStyles = makeStyles({
@@ -127,19 +123,35 @@ const StudentTable: React.FC<StudentTableProps> = ({
                 style={{
                   backgroundColor: grey[800],
                   color: 'white',
+                  display: 'flex',
                 }}
               >
-                {t('Identity number')}
-              </TableCell>
-              <TableCell
-                align='left'
-                size='small'
-                style={{
-                  backgroundColor: grey[800],
-                  color: 'white',
-                }}
-              >
-                {t('N.O')}
+                <TableCell
+                  style={{
+                    backgroundColor: grey[800],
+                    color: 'white',
+                  }}
+                >
+                  {t('Action')}
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: grey[800],
+                    color: 'white',
+                    flexGrow: 0,
+                  }}
+                >
+                  {t('N.O')}
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: grey[800],
+                    color: 'white',
+                    flex: 1,
+                  }}
+                >
+                  {t('Identity number')}
+                </TableCell>
               </TableCell>
               {headCells.map((headCell) => (
                 <TableCell
@@ -163,12 +175,20 @@ const StudentTable: React.FC<StudentTableProps> = ({
             {students.map((row, index) => {
               return (
                 <TableRow key={index} hover role='checkbox' tabIndex={-1}>
-                  <TableCell component='th' scope='row' className={classes.sticky} size='small'>
-                    {row.identityNumber}
+                  <TableCell className={classes.sticky} size='small'>
+                    <TableCell align='left' size='small'>
+                      <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
+                        <EditIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align='center' size='small' style={{ width: '100%' }}>
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align='left' size='small' style={{ width: '100%' }}>
+                      {row.identityNumber}
+                    </TableCell>
                   </TableCell>
-                  <TableCell align='center' size='small'>
-                    {index + 1}
-                  </TableCell>
+
                   <TableCell align='left' size='small'>
                     {row.fullName}
                   </TableCell>
@@ -217,7 +237,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   <TableCell align='center' size='small'>
                     {row.internshipGrade}
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     align='left'
                     size='small'
                     sx={{
@@ -227,7 +247,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
                     <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
                       <EditIcon />
                     </IconButton>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               )
             })}

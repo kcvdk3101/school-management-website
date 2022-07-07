@@ -9,14 +9,27 @@ type Props = {}
 const VerticalBarChart = (props: Props) => {
   const { t } = useTranslation()
 
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+  const labels = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
 
   const data = {
     labels,
     datasets: [
       {
         label: t('Corporation'),
-        data: [166, 398, 931, 193, 624, 792, 726],
+        data: [166, 398, 931, 193, 624, 792, 166, 398, 931, 193, 624, 792],
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],

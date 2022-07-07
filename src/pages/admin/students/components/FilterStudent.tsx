@@ -42,8 +42,8 @@ const FilterStudent: React.FC<FilterStudentProps> = ({ setPage }) => {
   const [anchorElNameTeacher, setAnchorElNameTeacher] = useState<null | HTMLElement>(null)
 
   const [academicYearValue, setAcademicYearValue] = useState<number>(academicYear)
-  const [statusValue, setStatusValue] = useState<string>('')
-  const [termValue, setTermValue] = useState<string>('')
+  const [statusValue, setStatusValue] = useState<string>(status)
+  const [termValue, setTermValue] = useState<string>(term)
   const [nameTeacherValue, setNameTeacherValue] = useState<string>(nameTeacher)
 
   const [listTerm, setListTerm] = useState<{ Term: string }[]>([])

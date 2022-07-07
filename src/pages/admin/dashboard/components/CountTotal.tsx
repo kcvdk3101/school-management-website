@@ -1,12 +1,12 @@
-import BackpackIcon from '@mui/icons-material/Backpack'
 import { Box, Paper, Typography } from '@mui/material'
-import { red } from '@mui/material/colors'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 
 type CountTotalProps = {
+  bgColor: string
   title: string
   total: number
+  icon: React.ReactNode
 }
 
 const useStyles = makeStyles({
@@ -23,20 +23,20 @@ const useStyles = makeStyles({
   },
 })
 
-const CountTotal: React.FC<CountTotalProps> = ({ title, total }) => {
+const CountTotal: React.FC<CountTotalProps> = ({ bgColor, title, total, icon }) => {
   const classes = useStyles()
 
   return (
-    <Paper className={classes.totalCount}>
+    <Paper className={classes.totalCount} style={{ backgroundColor: bgColor }}>
       <Box className={classes.left}>
-        <Typography variant='body1'>{title}</Typography>
-        <Typography component='p' variant='h4'>
+        <Typography variant='body1' color='white'>
+          {title}
+        </Typography>
+        <Typography variant='h4' color='white'>
           {total}
         </Typography>
       </Box>
-      <Box style={{ backgroundColor: red[100], padding: 16, borderRadius: '100%' }}>
-        <BackpackIcon color='secondary' fontSize='large' />
-      </Box>
+      <Box>{icon}</Box>
     </Paper>
   )
 }

@@ -112,5 +112,10 @@
 
   "Total number of students": "Total number of students",
   "Total number of teachers": "Total number of teachers",
-  "Total number of corporations": "Total number of corporations"
+  "Total number of corporations": "Total number of corporations",
+
+  "Table ranking": "Table ranking",
+  "Status Student Report": "Status Student Report",
+  "Student Lecturer Report": "Student Lecturer Report",
+  "Number of students": "Number of students"
 }

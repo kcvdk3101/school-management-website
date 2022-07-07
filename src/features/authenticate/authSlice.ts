@@ -29,7 +29,6 @@ export const signout = createAsyncThunk('auth/signout', async () => {
 
 export const authenticate = createAsyncThunk('auth/authenticate', async () => {
   const authenticate = await userApi.authenticate()
-  console.log(authenticate)
   return authenticate
 })
 

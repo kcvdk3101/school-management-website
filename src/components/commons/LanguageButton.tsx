@@ -25,7 +25,7 @@ const languages = [
 const LanguageButton: React.FC<LanguageButtonProps> = () => {
   const { i18n } = useTranslation()
   let lang = localStorage.getItem('cft-language')
-  if (!lang) lang = 'vn'
+  if (!lang) lang = 'vi'
 
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
