@@ -1,6 +1,5 @@
-import React from 'react'
-import { Typography, Paper } from '@mui/material'
-
+import { Paper, Typography } from '@mui/material'
+import { red } from '@mui/material/colors'
 import { Bar } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 
@@ -30,7 +29,7 @@ const VerticalBarChart = (props: Props) => {
       {
         label: t('Corporation'),
         data: [166, 398, 931, 193, 624, 792, 166, 398, 931, 193, 624, 792],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        backgroundColor: red[400],
       },
     ],
   }

@@ -14,20 +14,6 @@ import { toast } from 'react-toastify'
 
 type TeacherRankProps = {}
 
-// function createData(stt: number, name: string, calories: number) {
-//   return { stt, name, calories }
-// }
-
-// const rows = [
-//   createData(1, 'Lê Thị Bảo Trân', 42),
-//   createData(2, 'Đặng Thị Kim Giao', 30),
-//   createData(3, 'Tôn Quang Toại', 20),
-//   createData(4, 'Đỗ Đức Bích Ngân', 15),
-//   createData(5, 'Nguyễn Đức Cường', 10),
-//   createData(6, 'Nguyễn Đức Cường', 10),
-//   createData(7, 'Nguyễn Đức Cường', 10),
-// ]
-
 const TeacherRank: React.FC<TeacherRankProps> = () => {
   const { t } = useTranslation()
   const date = new Date()
@@ -97,7 +83,7 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
                 <TableBody>
                   {teachers.map((teacher, idx) => (
                     <TableRow key={idx}>
-                      <TableCell component='th' scope='row'>
+                      <TableCell component='th' scope='row' align='center'>
                         {idx + 1}
                       </TableCell>
                       <TableCell align='left'>{teacher.fullName}</TableCell>

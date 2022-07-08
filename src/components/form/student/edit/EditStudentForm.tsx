@@ -17,6 +17,9 @@ type Input = {
   address: string
   phoneNumber: string
   class: string
+  internshipFirstGrade: number
+  internshipSecondGrade: number
+  internshipThirdGrade: number
 }
 
 type EditStudentFormProps = {
@@ -119,6 +122,49 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
           {...register('address')}
           error={Boolean(errors.address)}
           helperText={t(`${errors.address?.message ? errors.address?.message : ''}`)}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <TextField
+          label={t('First grade')}
+          required
+          fullWidth
+          type='number'
+          defaultValue={student.internshipFirstGrade}
+          {...register('internshipFirstGrade')}
+          error={Boolean(errors.internshipFirstGrade)}
+          helperText={t(
+            `${errors.internshipFirstGrade?.message ? errors.internshipFirstGrade?.message : ''}`
+          )}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <TextField
+          label={t('Second grade')}
+          required
+          fullWidth
+          type='number'
+          defaultValue={student.internshipSecondGrade}
+          {...register('internshipSecondGrade')}
+          error={Boolean(errors.internshipSecondGrade)}
+          helperText={t(
+            `${errors.internshipSecondGrade?.message ? errors.internshipSecondGrade?.message : ''}`
+          )}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <TextField
+          label={`${t('Third grade')} (${t('Teacher only')})`}
+          required
+          fullWidth
+          type='number'
+          disabled={true}
+          defaultValue={student.internshipThirdGrade}
+          {...register('internshipThirdGrade')}
+          error={Boolean(errors.internshipThirdGrade)}
+          helperText={t(
+            `${errors.internshipThirdGrade?.message ? errors.internshipFirstGrade?.message : ''}`
+          )}
         />
       </Grid>
       <Grid item xs={12}>

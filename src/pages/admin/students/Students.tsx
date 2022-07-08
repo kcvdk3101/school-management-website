@@ -39,6 +39,7 @@ import ListChipReport from './components/ListChipReport'
 import FilterStudent from './components/FilterStudent'
 import SearchButton from './components/SearchButton'
 import { ReportModel } from '../../../models/report.model'
+import StudentNoteManagement from '../../../components/form/student/note/StudentNoteManagement'
 
 type StudentsProps = {}
 
@@ -103,6 +104,7 @@ const Students: React.FC<StudentsProps> = () => {
   const [openEditStudent, setOpenEditStudent] = useState(false)
   const [openNewStudent, setOpenNewStudent] = useState(false)
   const [openGenerate, setOpenGenerate] = useState(false)
+  const [openProfile, setOpenProfile] = useState(false)
 
   useEffect(() => {
     ;(async () => {
@@ -156,6 +158,16 @@ const Students: React.FC<StudentsProps> = () => {
 
   const handleCloseGenerate = () => {
     setOpenGenerate(false)
+  }
+
+  function handleOpenProfile(id: number) {
+    setCurrentId(id)
+
+    setOpenProfile(true)
+  }
+
+  const handleCloseProfile = () => {
+    setOpenProfile(false)
   }
 
   const handleChangeSelectedName = (value: string) => {
@@ -319,6 +331,7 @@ const Students: React.FC<StudentsProps> = () => {
                 students={students}
                 handleChangePage={handleChangePage}
                 handleOpenEditStudent={handleOpenEditStudent}
+                handleOpenProfile={handleOpenProfile}
               />
             )}
           </Paper>
@@ -355,6 +368,13 @@ const Students: React.FC<StudentsProps> = () => {
       <Dialog open={openNewStudent} onClose={handleCloseNewStudent} maxWidth='md' fullWidth>
         <DialogContent>
           <NewStudentFormManagement open={openNewStudent} handleClose={handleCloseNewStudent} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Score profile */}
+      <Dialog open={openProfile} maxWidth='sm' fullWidth>
+        <DialogContent>
+          <StudentNoteManagement student={students[currentId]} handleClose={handleCloseProfile} />
         </DialogContent>
       </Dialog>
     </>

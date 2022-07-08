@@ -66,7 +66,7 @@ const headCells: HeadCell[] = [
     label: 'Internship status',
   },
   {
-    id: 'internshipGrade',
+    id: 'internshipFinalGrade',
     label: 'Internship grade',
   },
 ]
@@ -79,7 +79,7 @@ function createData(
   phoneNumber: string,
   term: string,
   status: string,
-  internshipGrade: number
+  internshipFinalGrade: number
 ) {
   return {
     identityNumber,
@@ -89,7 +89,7 @@ function createData(
     phoneNumber,
     term,
     status,
-    internshipGrade,
+    internshipFinalGrade,
   }
 }
 
@@ -285,7 +285,7 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = () => {
                   >
                     {row.status}
                   </TableCell>
-                  <TableCell align='left'>{row.internshipGrade}</TableCell>
+                  <TableCell align='left'>{row.internshipFinalGrade}</TableCell>
                 </TableRow>
               )
             })}

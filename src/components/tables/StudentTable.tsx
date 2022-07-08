@@ -1,4 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+
 import {
   Box,
   Table,
@@ -8,6 +10,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
 } from '@mui/material'
 import { blue, green, grey, red } from '@mui/material/colors'
 import IconButton from '@mui/material/IconButton'
@@ -23,12 +26,8 @@ interface StudentTableProps {
   page: number
   handleChangePage: (event: unknown, newPage: number) => void
   handleOpenEditStudent: (id: number) => void
+  handleOpenProfile: (id: number) => void
 }
-
-// interface RowData extends StudentModel {
-//   mode?: boolean
-// }
-
 interface HeadCell {
   id: keyof StudentModel
   label: string
@@ -76,8 +75,8 @@ const headCells: HeadCell[] = [
     label: 'Number of CVs',
   },
   {
-    id: 'internshipGrade',
-    label: 'Internship grade',
+    id: 'internshipFinalGrade',
+    label: 'Final grade',
   },
 ]
 
@@ -98,6 +97,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
   page,
   handleChangePage,
   handleOpenEditStudent,
+  handleOpenProfile,
 }) => {
   const { t } = useTranslation()
   const classes = useStyles()
@@ -122,11 +122,10 @@ const StudentTable: React.FC<StudentTableProps> = ({
                 size='small'
                 style={{
                   backgroundColor: grey[800],
-                  color: 'white',
-                  display: 'flex',
                 }}
               >
                 <TableCell
+                  align='center'
                   style={{
                     backgroundColor: grey[800],
                     color: 'white',
@@ -135,10 +134,19 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   {t('Action')}
                 </TableCell>
                 <TableCell
+                  align='center'
                   style={{
                     backgroundColor: grey[800],
                     color: 'white',
-                    flex: 1,
+                  }}
+                >
+                  {t('Profile')}
+                </TableCell>
+                <TableCell
+                  align='center'
+                  style={{
+                    backgroundColor: grey[800],
+                    color: 'white',
                   }}
                 >
                   {t('Identity number')}
@@ -165,14 +173,23 @@ const StudentTable: React.FC<StudentTableProps> = ({
           <TableBody>
             {students.map((row, index) => {
               return (
-                <TableRow key={index} hover role='checkbox' tabIndex={-1}>
-                  <TableCell className={classes.sticky} size='small'>
-                    <TableCell align='left' size='small'>
-                      <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
-                        <EditIcon />
-                      </IconButton>
+                <TableRow key={index} hover>
+                  <TableCell className={classes.sticky} size='small' align='left'>
+                    <TableCell align='center' size='small'>
+                      <Tooltip title={`${t('Edit')}`} placement='top'>
+                        <IconButton onClick={() => handleOpenEditStudent(index)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
-                    <TableCell align='left' size='small' style={{ width: '100%' }}>
+                    <TableCell align='center' size='small'>
+                      <Tooltip title={`${t('Profile sheet')}`} placement='top'>
+                        <IconButton onClick={() => handleOpenProfile(index)}>
+                          <FormatListBulletedIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell align='center' size='small'>
                       {row.identityNumber}
                     </TableCell>
                   </TableCell>
@@ -223,19 +240,8 @@ const StudentTable: React.FC<StudentTableProps> = ({
                     {row.cv && row.cv.length > 0 ? row.cv.length : 0}
                   </TableCell>
                   <TableCell align='center' size='small'>
-                    {row.internshipGrade}
+                    {row.internshipFinalGrade}
                   </TableCell>
-                  {/* <TableCell
-                    align='left'
-                    size='small'
-                    sx={{
-                      py: 1,
-                    }}
-                  >
-                    <IconButton aria-label='edit' onClick={() => handleOpenEditStudent(index)}>
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell> */}
                 </TableRow>
               )
             })}

@@ -23,6 +23,9 @@ type EditFormInput = {
   address: string
   phoneNumber: string
   class: string
+  internshipFirstGrade: number
+  internshipSecondGrade: number
+  internshipThirdGrade: number
 }
 
 const editSchema = yup.object({
@@ -54,6 +57,27 @@ const editSchema = yup.object({
       }
       return false
     })
+    .required('This field is required'),
+  internshipFirstGrade: yup
+    .number()
+    .integer()
+    .positive()
+    .min(0, 'Point must be greater than or equal to 0')
+    .max(10, 'point does not exceed 10')
+    .required('This field is required'),
+  internshipSecondGrade: yup
+    .number()
+    .integer()
+    .positive()
+    .min(0, 'Point must be greater than or equal to 0')
+    .max(10, 'point does not exceed 10')
+    .required('This field is required'),
+  internshipThirdGrade: yup
+    .number()
+    .integer()
+    .positive()
+    .min(0, 'Point must be greater than or equal to 0')
+    .max(10, 'point does not exceed 10')
     .required('This field is required'),
 })
 
@@ -102,6 +126,9 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
             phoneNumber: data.phoneNumber,
             class: data.class,
             status: selectedStatus,
+            internshipFirstGrade: data.internshipFirstGrade,
+            internshipSecondGrade: data.internshipSecondGrade,
+            internshipThirdGrade: data.internshipThirdGrade,
           },
         })
       )

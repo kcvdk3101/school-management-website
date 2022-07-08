@@ -60,11 +60,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
               {
                 label: '# of Votes',
                 data: [242, 14, 11],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                ],
+                backgroundColor: [red[400], blue[400], yellow[400]],
                 borderColor: [
                   'rgba(255, 99, 132, 1)',
                   'rgba(54, 162, 235, 1)',
@@ -83,7 +79,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   responseStudent.payload.report.numberOfStudentHaveNotInstructor as number,
                   responseStudent.payload.report.numberOfStudentHaveInstructor as number,
                 ],
-                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                backgroundColor: [red[400], blue[400]],
                 borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
                 borderWidth: 1,
               },
@@ -102,7 +98,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   responseCorporation.payload.report.numberOfInActiveCorporation as number,
                   responseCorporation.payload.report.numberOfActiveCorporation as number,
                 ],
-                backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                backgroundColor: [red[400], blue[400]],
                 borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
                 borderWidth: 1,
               },
@@ -133,7 +129,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                 <Grid item container xs={12} spacing={3}>
                   <Grid item xs={12} md={4}>
                     <CountTotal
-                      bgColor={blue[600]}
+                      bgColor={blue[500]}
                       title={t('Total number of students')}
                       total={report.totalOfStudentsInAcademicYear as number}
                       icon={<BackpackIcon fontSize='large' style={{ color: 'white' }} />}
@@ -141,7 +137,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <CountTotal
-                      bgColor={red[600]}
+                      bgColor={red[500]}
                       title={t('Total number of teachers')}
                       total={report.totalOfTeachersInAcademicYear as number}
                       icon={<SchoolIcon fontSize='large' style={{ color: 'white' }} />}
@@ -149,7 +145,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <CountTotal
-                      bgColor={yellow[600]}
+                      bgColor={yellow[500]}
                       title={t('Total number of corporations')}
                       total={reportCorp.numberOfAllCorporation as number}
                       icon={<CorporateFareIcon fontSize='large' style={{ color: 'white' }} />}
