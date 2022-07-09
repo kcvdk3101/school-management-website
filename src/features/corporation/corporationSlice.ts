@@ -6,7 +6,10 @@ import { ReportCorporationModel } from '../../models/report.corporation.model'
 export interface CorporationsSliceState {
   fetchCorporations: boolean
   fetchCorporationReport: boolean
-  reportCorp: Partial<ReportCorporationModel>
+  reportCorp: Partial<ReportCorporationModel[]>
+  totalCorporations: number
+  numberOfActiveCorporation: number
+  numberOfInActiveCorporation: number
   pagination: CorporationPagination
   corporations: CorporationModel[]
 }
@@ -18,7 +21,10 @@ export interface CorporationPagination {
 const initialState: CorporationsSliceState = {
   fetchCorporations: false,
   fetchCorporationReport: false,
-  reportCorp: {},
+  reportCorp: [],
+  totalCorporations: 0,
+  numberOfActiveCorporation: 0,
+  numberOfInActiveCorporation: 0,
   pagination: { total: 0 },
   corporations: [],
 }
@@ -89,6 +95,9 @@ const corporationSlice = createSlice({
     builder.addCase(reportCorporation.fulfilled, (state, action) => {
       state.fetchCorporationReport = false
       state.reportCorp = action.payload.report
+      state.totalCorporations = action.payload.totalCorporation
+      state.numberOfActiveCorporation = action.payload.numberOfActiveCorporation
+      state.numberOfInActiveCorporation = action.payload.numberOfInActiveCorporation
     })
     builder.addCase(reportCorporation.rejected, (state, action) => {
       state.fetchCorporationReport = false

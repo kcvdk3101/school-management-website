@@ -17,9 +17,15 @@ const corporationApi = {
   },
 
   getCorporationReport(academicYear: number) {
-    return axiosCorporation.get<string, { report: ReportCorporationModel }>(
-      `${url}/report?academicYear=${academicYear}`
-    )
+    return axiosCorporation.get<
+      string,
+      {
+        report: ReportCorporationModel[]
+        totalCorporation: number
+        numberOfActiveCorporation: number
+        numberOfInActiveCorporation: number
+      }
+    >(`${url}/report?academicYear=${academicYear}`)
   },
 }
 

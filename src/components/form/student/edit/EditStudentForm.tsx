@@ -155,7 +155,6 @@ const EditStudentForm: React.FC<EditStudentFormProps> = ({
       <Grid item xs={4}>
         <TextField
           label={`${t('Third grade')} (${t('Teacher only')})`}
-          required
           fullWidth
           type='number'
           disabled={true}

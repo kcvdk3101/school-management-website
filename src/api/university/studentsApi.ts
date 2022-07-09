@@ -1,5 +1,6 @@
 import { ReportModel } from '../../models/report.model'
 import { StudentModel } from '../../models/student.model'
+import { TeacherModel } from '../../models/teacher.model'
 import axiosUniversity from './axiosUniversity'
 
 const url = '/university/student'
@@ -31,6 +32,14 @@ type UpdateStudentFormResponse = {
   internshipFeedback: boolean
   internshipSurvey: boolean
   message: string
+}
+
+type ResultAcceptedStudent = {
+  id: string
+  studentId: string
+  teacherId: string
+  isRegistered: boolean
+  isAccepted: boolean
 }
 
 const studentsApi = {
@@ -102,6 +111,32 @@ const studentsApi = {
       `${url}/internship-update?studentId=${studentId}`,
       { ...form }
     )
+  },
+
+  acceptedStudentRegistration(teacher: { studentId: string; teacherId: string }[]) {
+    return axiosUniversity.patch<
+      string,
+      {
+        result: ResultAcceptedStudent[]
+        teacher: TeacherModel[]
+        student: StudentModel[]
+        studentWaitingAccepted: StudentModel[]
+        message: string
+      }
+    >(`${url}/accepted-registration`, { teacher })
+  },
+
+  rejectedStudentRegistration(teacher: { studentId: string; teacherId: string }[]) {
+    return axiosUniversity.patch<
+      string,
+      {
+        result: ResultAcceptedStudent[]
+        teacher: TeacherModel[]
+        student: StudentModel[]
+        studentWaitingAccepted: StudentModel[]
+        message: string
+      }
+    >(`${url}/rejected-registration`, { teacher })
   },
 }
 

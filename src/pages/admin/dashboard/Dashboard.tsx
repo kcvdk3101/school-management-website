@@ -3,7 +3,18 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare'
 import SchoolIcon from '@mui/icons-material/School'
 import { Container, Grid, LinearProgress } from '@mui/material'
 import Box from '@mui/material/Box'
-import { blue, red, yellow } from '@mui/material/colors'
+import {
+  blue,
+  red,
+  yellow,
+  green,
+  deepOrange,
+  amber,
+  teal,
+  indigo,
+  pink,
+  lightGreen,
+} from '@mui/material/colors'
 import Toolbar from '@mui/material/Toolbar'
 import { makeStyles } from '@mui/styles'
 import React, { useEffect, useState } from 'react'
@@ -42,11 +53,12 @@ const Dashboard: React.FC<DashboardProps> = () => {
 
   const dispatch = useAppDispatch()
   const { report, fetchingReport } = useAppSelector((state) => state.students)
-  const { reportCorp, fetchCorporationReport } = useAppSelector((state) => state.corps)
+  const { fetchCorporationReport, totalCorporations } = useAppSelector((state) => state.corps)
 
   const [statusStudentReport, setStatusStudentReport] = useState<any>({})
   const [studentHaveInstructorReport, setStudentHaveInstructorReport] = useState<any>({})
   const [corporationActivationReport, setCorporationActivationReport] = useState<any>({})
+  const [corporationChart, setCorporationChart] = useState<any>({})
 
   useEffect(() => {
     ;(async () => {
@@ -79,8 +91,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   responseStudent.payload.report.numberOfStudentHaveNotInstructor as number,
                   responseStudent.payload.report.numberOfStudentHaveInstructor as number,
                 ],
-                backgroundColor: [red[400], blue[400]],
-                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                backgroundColor: [pink[400], lightGreen[400]],
+                borderColor: ['rgba(233, 30, 99, 1)', 'rgba(139, 195, 74, 1)'],
                 borderWidth: 1,
               },
             ],
@@ -89,17 +101,54 @@ const Dashboard: React.FC<DashboardProps> = () => {
           setStudentHaveInstructorReport(dataHaveInstructor)
         }
         if (responseCorporation.meta.requestStatus === 'fulfilled') {
+          let arrActivate = responseCorporation.payload.report.map(
+            (m: any) => m.numberOfActiveCorporation
+          )
+          let arrInactivate = responseCorporation.payload.report.map(
+            (m: any) => m.numberOfInActiveCorporation
+          )
+          if (arrActivate.length > 0 && arrInactivate.length > 0) {
+            let dataBarChart = {
+              labels: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December',
+              ],
+              datasets: [
+                {
+                  label: t('Not activated'),
+                  data: arrInactivate,
+                  backgroundColor: deepOrange[400],
+                },
+                {
+                  label: t('Activated'),
+                  data: arrActivate,
+                  backgroundColor: teal[400],
+                },
+              ],
+            }
+            setCorporationChart(dataBarChart)
+          }
           let dataCorporation = {
             labels: [t('Not accepted yet'), t('Accepted')],
             datasets: [
               {
                 label: '# of Votes',
                 data: [
-                  responseCorporation.payload.report.numberOfInActiveCorporation as number,
-                  responseCorporation.payload.report.numberOfActiveCorporation as number,
+                  responseCorporation.payload.numberOfInActiveCorporation as number,
+                  responseCorporation.payload.numberOfActiveCorporation as number,
                 ],
-                backgroundColor: [red[400], blue[400]],
-                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                backgroundColor: [amber[400], indigo[400]],
+                borderColor: ['rgba(255, 193, 7, 1)', 'rgba(63, 81, 181, 1)'],
                 borderWidth: 1,
               },
             ],
@@ -145,9 +194,9 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   </Grid>
                   <Grid item xs={12} md={4}>
                     <CountTotal
-                      bgColor={yellow[500]}
+                      bgColor={green[500]}
                       title={t('Total number of corporations')}
-                      total={reportCorp.numberOfAllCorporation as number}
+                      total={totalCorporations as number}
                       icon={<CorporateFareIcon fontSize='large' style={{ color: 'white' }} />}
                     />
                   </Grid>
@@ -161,7 +210,11 @@ const Dashboard: React.FC<DashboardProps> = () => {
                     />
                   </Grid>
                   <Grid item xs={8}>
-                    <VerticalBarChart />
+                    <VerticalBarChart
+                      title={`${t('Corporation')} (${year})`}
+                      fetching={fetchCorporationReport}
+                      corporationChart={corporationChart}
+                    />
                   </Grid>
                   <Grid item xs={4}>
                     <TeacherRank />
@@ -175,7 +228,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                   </Grid>
                   <Grid item xs={4}>
                     <PieChart
-                      title={t('Corporation')}
+                      title={`${t('Corporation')} (${year})`}
                       fetching={fetchCorporationReport}
                       statusStudentReport={corporationActivationReport}
                     />

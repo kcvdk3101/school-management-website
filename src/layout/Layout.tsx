@@ -17,9 +17,7 @@ import logo from '../assets/images/logo.png'
 import LanguageButton from '../components/commons/LanguageButton'
 import * as Constants from '../constants/index'
 
-type LayoutProps = {}
-
-const Layout: React.FC<LayoutProps> = () => {
+const Layout: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   let navigate = useNavigate()
   const { t } = useTranslation()
@@ -76,13 +74,11 @@ const Layout: React.FC<LayoutProps> = () => {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {Constants.pages.map((page, index) => (
-                  <MenuItem key={index}>
-                    <NavLink to={`${page.path}`}>
-                      <Typography textAlign='center'>{t(`${page.title}`)}</Typography>
-                    </NavLink>
-                  </MenuItem>
-                ))}
+                <MenuItem>
+                  <NavLink to={'/job?limit=5&offset=0'}>
+                    <Typography textAlign='center'>{t('Job')}</Typography>
+                  </NavLink>
+                </MenuItem>
               </Menu>
             </Box>
 

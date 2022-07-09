@@ -1,42 +1,25 @@
-import { Paper, Typography } from '@mui/material'
-import { red } from '@mui/material/colors'
+import { LinearProgress, Paper, Typography } from '@mui/material'
 import { Bar } from 'react-chartjs-2'
-import { useTranslation } from 'react-i18next'
 
-type Props = {}
+type VerticalBarChartProps = {
+  title: string
+  corporationChart: any
+  fetching: boolean
+}
 
-const VerticalBarChart = (props: Props) => {
-  const { t } = useTranslation()
-
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
-
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: t('Corporation'),
-        data: [166, 398, 931, 193, 624, 792, 166, 398, 931, 193, 624, 792],
-        backgroundColor: red[400],
-      },
-    ],
-  }
+const VerticalBarChart: React.FC<VerticalBarChartProps> = ({
+  title,
+  corporationChart,
+  fetching,
+}) => {
   return (
     <Paper style={{ padding: 12, height: '100%' }}>
-      <Typography>Corporation Report</Typography>
-      <Bar data={data} />
+      <Typography>{title}</Typography>
+      {fetching ? (
+        <LinearProgress color='secondary' />
+      ) : (
+        <>{Object.keys(corporationChart).length && <Bar data={corporationChart} />}</>
+      )}
     </Paper>
   )
 }

@@ -1,4 +1,14 @@
 import { CssBaseline } from '@mui/material'
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from 'chart.js'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Layout from './layout/Layout'
@@ -17,16 +27,6 @@ import JobDetail from './pages/jobDetail/JobDetail'
 import Lecturer from './pages/lecturer/Lecturer'
 import LecturerLayout from './pages/lecturer/LecturerLayout'
 import NotFound from './pages/NotFound'
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-} from 'chart.js'
 ChartJS.register(ArcElement, Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
 const App: React.FC = () => {

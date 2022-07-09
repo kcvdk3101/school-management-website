@@ -1,6 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit'
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
-
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload'
 import {
   Box,
   Table,
@@ -53,10 +52,6 @@ const headCells: HeadCell[] = [
   {
     id: 'phoneNumber',
     label: 'Phone',
-  },
-  {
-    id: 'address',
-    label: 'Address',
   },
   {
     id: 'term',
@@ -185,7 +180,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
                     <TableCell align='center' size='small'>
                       <Tooltip title={`${t('Profile sheet')}`} placement='top'>
                         <IconButton onClick={() => handleOpenProfile(index)}>
-                          <FormatListBulletedIcon />
+                          <DriveFolderUploadIcon />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
@@ -209,10 +204,7 @@ const StudentTable: React.FC<StudentTableProps> = ({
                   <TableCell align='left' size='small'>
                     {row.phoneNumber}
                   </TableCell>
-                  <TableCell align='left' size='small'>
-                    {row.address}
-                  </TableCell>
-                  <TableCell align='left' size='small'>
+                  <TableCell align='center' size='small'>
                     {row.term}
                   </TableCell>
                   <TableCell

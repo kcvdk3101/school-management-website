@@ -13,6 +13,8 @@ export interface UserModel {
   student?: StudentModel
   detail?: {
     teacher: TeacherModel[]
+    studentWaitingAccepted: StudentModel[]
+    student: StudentModel[]
   }
   token?: string
 }

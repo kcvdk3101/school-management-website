@@ -1,10 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, SelectChangeEvent, Typography } from '@mui/material'
-import queryString from 'query-string'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import * as yup from 'yup'
 import { useAppDispatch } from '../../../../app/hooks'
@@ -64,21 +62,16 @@ const editSchema = yup.object({
     .positive()
     .min(0, 'Point must be greater than or equal to 0')
     .max(10, 'point does not exceed 10')
-    .required('This field is required'),
+    .required('This field is required')
+    .typeError('This field is not a number'),
   internshipSecondGrade: yup
     .number()
     .integer()
     .positive()
     .min(0, 'Point must be greater than or equal to 0')
     .max(10, 'point does not exceed 10')
-    .required('This field is required'),
-  internshipThirdGrade: yup
-    .number()
-    .integer()
-    .positive()
-    .min(0, 'Point must be greater than or equal to 0')
-    .max(10, 'point does not exceed 10')
-    .required('This field is required'),
+    .required('This field is required')
+    .typeError('This field is not a number'),
 })
 
 const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
@@ -86,15 +79,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
   handleClose,
 }) => {
   const { t } = useTranslation()
-
-  let navigate = useNavigate()
-  let { search } = useLocation()
-
   const dispatch = useAppDispatch()
-
-  let paginationQuery = queryString.parse(search)
-  const offset = paginationQuery.offset ? +paginationQuery.offset : 0
-  const status = paginationQuery.status ? (paginationQuery.status as string) : ''
 
   const { register, handleSubmit, formState } = useForm<EditFormInput>({
     mode: 'onChange',
@@ -115,7 +100,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await dispatch(
+      const response = await dispatch(
         editInfoStudent({
           id: student.id as string,
           data: {
@@ -128,15 +113,13 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
             status: selectedStatus,
             internshipFirstGrade: data.internshipFirstGrade,
             internshipSecondGrade: data.internshipSecondGrade,
-            internshipThirdGrade: data.internshipThirdGrade,
+            internshipThirdGrade: Number(student.internshipThirdGrade),
           },
         })
       )
-      navigate({
-        pathname: '/admin/students',
-        search: `?limit=8&offset=${offset}&status=${status}`,
-      })
-      toast.success('Update succeed!')
+      if (response.meta.requestStatus === 'fulfilled') {
+        toast.success('Update succeed!')
+      }
     } catch (error) {
       toast.error(error as Error)
     } finally {

@@ -123,12 +123,17 @@ const Students: React.FC<StudentsProps> = () => {
         } else {
           await dispatch(getStudents({ offset, academicYear }))
         }
-        await dispatch(reportStudent(academicYear))
       } catch (error) {
         toast.error('Cannot load student data')
       }
     })()
   }, [dispatch, selectedName, offset, status, term, academicYear, nameTeacher])
+
+  useEffect(() => {
+    ;(async () => {
+      await dispatch(reportStudent(academicYear))
+    })()
+  }, [dispatch, academicYear])
 
   const handleOnChange = (event: any) => {
     setNameFile(event.target.files[0].name)

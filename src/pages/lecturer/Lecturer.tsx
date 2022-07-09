@@ -2,8 +2,10 @@ import { Container, Grid, Paper } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useAppSelector } from '../../app/hooks'
+import { StudentModel } from '../../models/student.model'
 import LecturerInfo from './info/LecturerInfo'
-import LecturerStudent from './students/LecturerListStudent'
+import LecturerListStudent from './students/LecturerListStudent'
 
 type LecturerProps = {}
 
@@ -17,6 +19,7 @@ const useStyles = makeStyles({
 
 const Lecturer: React.FC<LecturerProps> = () => {
   const classes = useStyles()
+  const { detail } = useAppSelector((state) => state.auth.user)
 
   return (
     <>
@@ -27,7 +30,10 @@ const Lecturer: React.FC<LecturerProps> = () => {
         <Paper className={classes.container}>
           <Grid container spacing={3}>
             <LecturerInfo />
-            <LecturerStudent />
+            <LecturerListStudent
+              listStudentAccepted={detail?.student as StudentModel[]}
+              listStudentWaitingAccepted={detail?.studentWaitingAccepted as StudentModel[]}
+            />
           </Grid>
         </Paper>
       </Container>

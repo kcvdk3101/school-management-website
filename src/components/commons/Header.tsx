@@ -131,13 +131,13 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             edge='start'
             color='inherit'
             aria-label='open drawer'
-            onClick={toggleDrawer}
+            // onClick={toggleDrawer}
             sx={{
               marginRight: '36px',
               ...(open && { display: 'none' }),
             }}
           >
-            <MenuIcon />
+            <MenuIcon style={{ visibility: 'hidden' }} />
           </IconButton>
           <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
             {t(`${title}`)}

@@ -17,22 +17,22 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <HelmetProvider>
-            <I18nextProvider i18n={i18n}>
+        <I18nextProvider i18n={i18n}>
+          <ThemeProvider theme={theme}>
+            <HelmetProvider>
               <App />
-            </I18nextProvider>
-            <ToastContainer
-              position='top-right'
-              autoClose={1500}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              draggable
-            />
-          </HelmetProvider>
-        </ThemeProvider>
+              <ToastContainer
+                position='top-right'
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                draggable
+              />
+            </HelmetProvider>
+          </ThemeProvider>
+        </I18nextProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

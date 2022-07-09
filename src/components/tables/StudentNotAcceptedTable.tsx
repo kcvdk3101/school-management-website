@@ -1,16 +1,15 @@
 import {
   Box,
+  Button,
   Checkbox,
+  CircularProgress,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
-  Button,
-  CircularProgress,
   Typography,
 } from '@mui/material'
 import { blue, green, red } from '@mui/material/colors'
@@ -18,13 +17,14 @@ import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
+import studentsApi from '../../api/university/studentsApi'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { acceptedStudent } from '../../features/authenticate/authSlice'
 import { StudentModel } from '../../models/student.model'
+import NoData from '../commons/NoData'
 
 interface StudentNotAcceptedTableProps {
-  // students: StudentModel[]
-  // page: number
-  // handleChangePage: (event: unknown, newPage: number) => void
-  // handleOpenEditStudent: (id: number) => void
+  listStudentWaitingAccepted: StudentModel[]
 }
 
 interface RowData extends StudentModel {
@@ -71,81 +71,6 @@ const headCells: HeadCell[] = [
   },
 ]
 
-function createData(
-  identityNumber: string,
-  fullName: string,
-  studentClass: string,
-  email: string,
-  phoneNumber: string,
-  term: string,
-  status: string,
-  internshipFinalGrade: number
-) {
-  return {
-    identityNumber,
-    fullName,
-    studentClass,
-    email,
-    phoneNumber,
-    term,
-    status,
-    internshipFinalGrade,
-  }
-}
-
-const rows = [
-  createData(
-    '18dh110815',
-    'Vương Đình Khôi',
-    'PM1804',
-    '18dh110815@st.huflit.edu.vn',
-    '0934105563',
-    'K24',
-    'Chưa thực tập',
-    0
-  ),
-  createData(
-    '18dh110856',
-    'Mai Trung Minh Kiên',
-    'PM1804',
-    '18dh110856@st.huflit.edu.vn',
-    '0934105563',
-    'K24',
-    'Đang thực tập',
-    0
-  ),
-  createData(
-    '18dh110814',
-    'Nguyễn Vĩnh Phước',
-    'PM1804',
-    '18dh110814@st.huflit.edu.vn',
-    '0934105563',
-    'K24',
-    'Đã thực tập',
-    9
-  ),
-  createData(
-    '18dh110810',
-    'Phan Tấn Lâm',
-    'PM1804',
-    '18dh110814@st.huflit.edu.vn',
-    '0934105563',
-    'K24',
-    'Đã thực tập',
-    9
-  ),
-  createData(
-    '18dh110811',
-    'Nguyễn Trung Tín',
-    'PM1804',
-    '18dh110814@st.huflit.edu.vn',
-    '0934105563',
-    'K24',
-    'Đã thực tập',
-    9
-  ),
-]
-
 const useStyles = makeStyles({
   toolbar: {
     display: 'flex',
@@ -155,9 +80,14 @@ const useStyles = makeStyles({
   },
 })
 
-const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = () => {
+const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = ({
+  listStudentWaitingAccepted,
+}) => {
   const { t } = useTranslation()
   const classes = useStyles()
+
+  const dispatch = useAppDispatch()
+  const user = useAppSelector((state) => state.auth.user)
 
   const [selected, setSelected] = useState<readonly string[]>([])
   const [loading, setLoading] = useState(false)
@@ -185,19 +115,25 @@ const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.identityNumber)
+      const newSelecteds = listStudentWaitingAccepted.map((n) => n.id as string)
       setSelected(newSelecteds)
       return
     }
     setSelected([])
   }
 
-  const handleChangePage = () => {}
-
   const handleAcceptStudent = async () => {
     setLoading(true)
     try {
-      // api {teacherId: string, students: []}
+      let teacher = selected.map((id) => ({
+        studentId: id,
+        teacherId: user.teacherId as string,
+      }))
+      const response = await dispatch(acceptedStudent(teacher))
+      if (response.meta.requestStatus === 'fulfilled') {
+        setLoading(false)
+        toast.success('Accepted successfully')
+      }
     } catch (error) {
       toast.error(error as any)
     } finally {
@@ -222,96 +158,91 @@ const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = () => {
           {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
         </Button>
       </Box>
-      <TableContainer component={Paper}>
-        <Table
-          sx={{
-            width: 'max-content',
-          }}
-          aria-labelledby='tableTitle'
-          size={'medium'}
-          stickyHeader
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell padding='checkbox' component='th' scope='row'>
-                <Checkbox
-                  color='primary'
-                  checked={selected.length > 0}
-                  onChange={handleSelectAllClick}
-                />
-              </TableCell>
-              <TableCell align='left' size='small'>
-                {t('N.O')}
-              </TableCell>
-              {headCells.map((headCell, idx) => (
-                <TableCell
-                  key={idx}
-                  align='left'
-                  size='small'
-                  sx={{
-                    py: 1,
-                  }}
-                >
-                  {t(`${headCell.label}`)}
+      {listStudentWaitingAccepted && listStudentWaitingAccepted.length > 0 ? (
+        <TableContainer component={Paper}>
+          <Table
+            sx={{
+              width: 'max-content',
+            }}
+            aria-labelledby='tableTitle'
+            size={'medium'}
+            stickyHeader
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell padding='checkbox' component='th' scope='row'>
+                  <Checkbox
+                    color='primary'
+                    checked={selected.length > 0}
+                    onChange={handleSelectAllClick}
+                  />
                 </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row, idx) => {
-              const isItemSelected = isSelected(row.identityNumber)
-
-              return (
-                <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell padding='checkbox' component='th' scope='row'>
-                    <Checkbox
-                      color='primary'
-                      checked={isItemSelected}
-                      onClick={(event) => handleClick(event, row.identityNumber)}
-                    />
-                  </TableCell>
-                  <TableCell align='center' size='small'>
-                    {idx + 1}
-                  </TableCell>
-                  <TableCell align='left' size='small'>
-                    {row.identityNumber}
-                  </TableCell>
-                  <TableCell align='left' size='small'>
-                    {row.fullName}
-                  </TableCell>
-                  <TableCell align='left'>{row.studentClass}</TableCell>
-                  <TableCell align='left'>{row.email}</TableCell>
-                  <TableCell align='left'>{row.phoneNumber}</TableCell>
-                  <TableCell align='left'>{row.term}</TableCell>
+                <TableCell align='left' size='small'>
+                  {t('N.O')}
+                </TableCell>
+                {headCells.map((headCell, idx) => (
                   <TableCell
+                    key={idx}
                     align='left'
-                    style={{
-                      color:
-                        row.status === 'Chưa thực tập'
-                          ? red[500]
-                          : row.status === 'Đang thực tập'
-                          ? blue[500]
-                          : green['A400'],
+                    size='small'
+                    sx={{
+                      py: 1,
                     }}
                   >
-                    {row.status}
+                    {t(`${headCell.label}`)}
                   </TableCell>
-                  <TableCell align='center'>{row.internshipFinalGrade}</TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        padding='none'
-        rowsPerPageOptions={[10]}
-        component='div'
-        count={269}
-        rowsPerPage={5}
-        page={0}
-        onPageChange={handleChangePage}
-      />
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {listStudentWaitingAccepted.map((row, idx) => {
+                const isItemSelected = isSelected(row.id as string)
+
+                return (
+                  <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell padding='checkbox' component='th' scope='row'>
+                      <Checkbox
+                        color='primary'
+                        checked={isItemSelected}
+                        onClick={(event) => handleClick(event, row.id as string)}
+                      />
+                    </TableCell>
+                    <TableCell align='center' size='small'>
+                      {idx + 1}
+                    </TableCell>
+                    <TableCell align='left' size='small'>
+                      {row.identityNumber}
+                    </TableCell>
+                    <TableCell align='left' size='small'>
+                      {row.fullName}
+                    </TableCell>
+                    <TableCell align='left'>{row.class}</TableCell>
+                    <TableCell align='left'>{row.email}</TableCell>
+                    <TableCell align='left'>{row.phoneNumber}</TableCell>
+                    <TableCell align='left'>{row.term}</TableCell>
+                    <TableCell
+                      align='left'
+                      style={{
+                        color:
+                          row.status === 'Chưa thực tập'
+                            ? red[500]
+                            : row.status === 'Đang thực tập'
+                            ? blue[500]
+                            : green['A400'],
+                      }}
+                    >
+                      {row.status}
+                    </TableCell>
+                    <TableCell align='center'>{row.internshipFinalGrade}</TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <NoData />
+      )}
     </Box>
   )
 }
