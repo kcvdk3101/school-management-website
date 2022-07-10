@@ -67,7 +67,7 @@ const headCells: HeadCell[] = [
   },
   {
     id: 'internshipFinalGrade',
-    label: 'Internship grade',
+    label: 'Final grade',
   },
 ]
 

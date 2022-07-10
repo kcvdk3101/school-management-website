@@ -1,7 +1,8 @@
 import { Container, Grid, Paper } from '@mui/material'
 import { makeStyles } from '@mui/styles'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { StudentModel } from '../../models/student.model'
 import LecturerInfo from './info/LecturerInfo'
@@ -19,7 +20,15 @@ const useStyles = makeStyles({
 
 const Lecturer: React.FC<LecturerProps> = () => {
   const classes = useStyles()
+  const { i18n } = useTranslation()
+
   const { detail } = useAppSelector((state) => state.auth.user)
+
+  useEffect(() => {
+    let lang = localStorage.getItem('cft-language')
+    if (!lang) return
+    i18n.changeLanguage(lang)
+  }, [i18n])
 
   return (
     <>

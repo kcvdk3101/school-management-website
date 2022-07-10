@@ -29,11 +29,11 @@ const LanguageButton: React.FC<LanguageButtonProps> = () => {
   useEffect(() => {
     let lang = localStorage.getItem('cft-language')
     if (!lang) return
-    if (lang === 'vi') {
-      setLanguage('vn')
-    } else {
-      setLanguage(lang)
-    }
+    // if (lang === 'vn') {
+    //   setLanguage('vn')
+    // } else {
+    // }
+    setLanguage(lang)
     i18n.changeLanguage(lang)
   }, [i18n])
 
