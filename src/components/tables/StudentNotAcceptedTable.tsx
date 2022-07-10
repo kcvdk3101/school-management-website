@@ -17,7 +17,6 @@ import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
-import studentsApi from '../../api/university/studentsApi'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { acceptedStudent } from '../../features/authenticate/authSlice'
 import { StudentModel } from '../../models/student.model'
@@ -132,6 +131,7 @@ const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = ({
       const response = await dispatch(acceptedStudent(teacher))
       if (response.meta.requestStatus === 'fulfilled') {
         setLoading(false)
+        setSelected([])
         toast.success('Accepted successfully')
       }
     } catch (error) {

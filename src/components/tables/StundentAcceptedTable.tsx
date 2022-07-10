@@ -11,11 +11,19 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material'
 import { blue, green, red } from '@mui/material/colors'
 import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { rejectedStudent } from '../../features/authenticate/authSlice'
 import { StudentModel } from '../../models/student.model'
 import NoData from '../commons/NoData'
 
@@ -80,8 +88,20 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
   const { t } = useTranslation()
   const classes = useStyles()
 
+  const dispatch = useAppDispatch()
+  const user = useAppSelector((state) => state.auth.user)
+
   const [selected, setSelected] = useState<readonly string[]>([])
   const [loading, setLoading] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true)
+  }
+
+  const handleCloseAlert = () => {
+    setOpenAlert(false)
+  }
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
 
@@ -115,21 +135,21 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
 
   const handleRejectStudent = async () => {
     setLoading(true)
-    // try {
-    //   let teacher = selected.map((id) => ({
-    //     studentId: id,
-    //     teacherId: user.teacherId as string,
-    //   }))
-    //   const response = await dispatch(acceptedStudent(teacher))
-    //   if (response.meta.requestStatus === 'fulfilled') {
-    //     setLoading(false)
-    //     toast.success('Accepted successfully')
-    //   }
-    // } catch (error) {
-    //   toast.error(error as any)
-    // } finally {
-    //   setLoading(false)
-    // }
+    try {
+      let teacher = selected.map((id) => ({
+        studentId: id,
+        teacherId: user.teacherId as string,
+      }))
+      const response = await dispatch(rejectedStudent(teacher))
+      if (response.meta.requestStatus === 'fulfilled') {
+        setLoading(false)
+        toast.success('Unaccepted successfully')
+      }
+    } catch (error) {
+      toast.error(error as any)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -143,8 +163,8 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
           variant='contained'
           sx={{ mt: 3, mb: 2 }}
           type='button'
-          disabled={loading || selected.length === 0}
-          // onClick={handleRejectStudent}
+          disabled={selected.length === 0}
+          onClick={handleOpenAlert}
         >
           {loading ? <CircularProgress size={24} /> : `${t('Cancel accept')}`}
         </Button>
@@ -234,6 +254,31 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
       ) : (
         <NoData />
       )}
+
+      <Dialog open={openAlert} onClose={handleCloseAlert}>
+        <DialogTitle>{t('Unaccept student')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{t('Unaccept student content')}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant='outlined'
+            color='secondary'
+            onClick={handleCloseAlert}
+            disabled={loading}
+          >
+            {t('Close')}
+          </Button>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleRejectStudent}
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }

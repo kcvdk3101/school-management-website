@@ -17,6 +17,7 @@
   "Account": "Tài khoản",
   "No data": "Không có dữ liệu",
   "Loading": "Đang tải dữ liệu",
+  "See details": "Xem chi tiết",
 
   "Faculty office": "Văn phòng khoa",
   "Computer science": "Khoa học máy tính",
@@ -116,6 +117,8 @@
 
   "Accept corporation": "Chấp nhận tài khoản Doanh nghiệp",
   "Accept corporation content": "Bạn có chấp nhận tài khoản Doanh nghiệp này không ?",
+  "Unaccept student": "Bạn có chắc chắn muốn hủy chấp nhận hướng dẫn sinh viên này không ?",
+  "Unaccept student content": "Cảnh báo: Nếu bạn hủy chấp nhận hướng dẫn sinh viên thì hệ thống sẽ xóa bỏ sinh viên ra khỏi danh sách của Giảng viên",
 
   "Create account heading": "Tạo tài khoản cho người sử dụng",
   "Create account content": "Vui lòng tạo tài khoản cho tất cả các người sử dụng để có thể truy cập vào ứng dụng hoặc trang web",

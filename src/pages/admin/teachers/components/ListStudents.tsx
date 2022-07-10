@@ -10,6 +10,9 @@ import { StudentModel } from '../../../../models/student.model'
 import { useTranslation } from 'react-i18next'
 import { blue, green, red } from '@mui/material/colors'
 
+type ListStudentsProp = {
+  students: StudentModel[]
+}
 interface HeadCell {
   id: keyof StudentModel
   label: string
@@ -80,7 +83,7 @@ const rows = [
   ),
 ]
 
-const ListStudents = () => {
+const ListStudents: React.FC<ListStudentsProp> = ({ students }) => {
   const { t } = useTranslation()
 
   return (
@@ -103,8 +106,8 @@ const ListStudents = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.fullName} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+          {rows.map((row, index) => (
+            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component='th' scope='row'>
                 {row.fullName}
               </TableCell>
@@ -114,7 +117,7 @@ const ListStudents = () => {
                 align='left'
                 style={{
                   color:
-                    row.status === 'Chưa thực tập'
+                    row.status === 'Chưa thực tập'
                       ? red[500]
                       : row.status === 'Đang thực tập'
                       ? blue[500]

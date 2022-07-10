@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
-import { Dialog, DialogContent, DialogTitle, Button, Typography } from '@mui/material'
+import { Dialog, DialogContent, DialogTitle, Button, Typography, Box } from '@mui/material'
 import { grey, red } from '@mui/material/colors'
 
 import React, { useState } from 'react'
@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
 import { TeacherModel } from '../../models/teacher.model'
 import ListStudents from '../../pages/admin/teachers/components/ListStudents'
+import { StudentModel } from '../../models/student.model'
 
 interface TeacherTableProps {
   teachers: TeacherModel[]
@@ -97,8 +98,10 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
   const totalLecturers = useAppSelector((state) => state.teachers.pagination.total)
 
   const [openListStudents, setOpenListStudents] = useState<boolean>(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
 
-  const handleOpenListStudents = () => {
+  const handleOpenListStudents = (idx: number) => {
+    setCurrentIndex(idx)
     setOpenListStudents(true)
   }
   const handleCloseListStudents = () => {
@@ -171,8 +174,12 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
                       py: 1,
                     }}
                   >
-                    <Button variant='outlined' size='small' onClick={handleOpenListStudents}>
-                      <Typography variant='body2'>Xem chi tiết</Typography>
+                    <Button
+                      variant='outlined'
+                      size='small'
+                      onClick={() => handleOpenListStudents(index)}
+                    >
+                      <Typography variant='body2'>{t('See details')}</Typography>
                     </Button>
                   </TableCell>
                   <TableCell
@@ -202,10 +209,16 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
       />
 
       {/* List student of specific teacher */}
-      <Dialog open={openListStudents} onClose={handleCloseListStudents} maxWidth='lg'>
+      <Dialog open={openListStudents} onClose={handleCloseListStudents} maxWidth='md' fullWidth>
         <DialogTitle>{t('List students')}</DialogTitle>
         <DialogContent>
-          <ListStudents />
+          {teachers[currentIndex].students ? (
+            <ListStudents students={teachers[currentIndex]?.students as StudentModel[]} />
+          ) : (
+            <Box>
+              <Typography>{t('No data')}</Typography>
+            </Box>
+          )}
         </DialogContent>
       </Dialog>
     </>

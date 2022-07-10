@@ -10,7 +10,7 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import logo from '../assets/images/logo.png'
@@ -20,7 +20,13 @@ import * as Constants from '../constants/index'
 const Layout: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   let navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+
+  useEffect(() => {
+    let lang = localStorage.getItem('cft-language')
+    if (!lang) return
+    i18n.changeLanguage(lang)
+  }, [i18n])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)

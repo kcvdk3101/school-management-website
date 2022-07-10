@@ -17,6 +17,7 @@
   "Account": "Account",
   "No data": "No data",
   "Loading": "Loading data",
+  "See details": "See details",
 
   "Faculty office": "Faculty office",
   "Computer science": "Computer science",
@@ -116,6 +117,8 @@
 
   "Accept corporation": "Accept corporation account",
   "Accept corporation content": "Do you accept this corporation account?",
+  "Unaccept student": "Are you sure to unaccept this student ?",
+  "Unaccept student content": "Warning: If you unaccept the student, the system will remove the student from the list of teachers",
 
   "Create account heading": "Create an account for all users",
   "Create account content": "Please create accounts for all users",
