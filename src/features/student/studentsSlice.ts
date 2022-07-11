@@ -206,7 +206,6 @@ export const studentSlice = createSlice({
     })
     builder.addCase(reportStudent.fulfilled, (state, action) => {
       state.fetchingReport = false
-
       state.report = action.payload.report as ReportModel
     })
     builder.addCase(reportStudent.rejected, (state, action) => {

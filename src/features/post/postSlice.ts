@@ -19,14 +19,14 @@ const initialState: PostState = {
 }
 
 export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
-  let adminId = localStorage.getItem('id') as string
-  const response = await postApi.getAllPost(adminId)
+  // let adminId = localStorage.getItem('id') as string
+  const response = await postApi.getAllPost(1)
   return response
 })
 
 export const addNewPost = createAsyncThunk('posts/addNewPost', async (post: PostModel[]) => {
-  let adminId = localStorage.getItem('id') as string
-  const response = await postApi.addNewPost(adminId, post)
+  // let adminId = localStorage.getItem('id') as string
+  const response = await postApi.addNewPost(1, post)
   return response
 })
 

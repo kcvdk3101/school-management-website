@@ -4,13 +4,13 @@ import axiosUniveristy from './axiosUniversity'
 const url = '/post'
 
 const postApi = {
-  getAllPost(adminId: string) {
+  getAllPost(adminId: number) {
     return axiosUniveristy.get<string, { data: PostModel[]; pagination: { total: number } }>(
       `${url}/all?limit=100&offset=0&authorId=${adminId}`
     )
   },
 
-  addNewPost(adminId: string, post: PostModel[]) {
+  addNewPost(adminId: number, post: PostModel[]) {
     return axiosUniveristy.post<string, PostModel[]>(`${url}?authorId=${adminId}`, { post })
   },
 
