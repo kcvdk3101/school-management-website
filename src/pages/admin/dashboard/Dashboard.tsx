@@ -71,7 +71,11 @@ const Dashboard: React.FC<DashboardProps> = () => {
             datasets: [
               {
                 label: '# of Votes',
-                data: [242, 14, 11],
+                data: [
+                  responseStudent.payload.report.numberOfNotInternship as number,
+                  responseStudent.payload.report.numberOfInternship as number,
+                  responseStudent.payload.report.numberOfCompletedInternship as number,
+                ],
                 backgroundColor: [red[400], blue[400], yellow[400]],
                 borderColor: [
                   'rgba(255, 99, 132, 1)',

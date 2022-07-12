@@ -92,15 +92,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const getIconByTitle = (title: string) => {
   switch (title) {
     case 'Dashboard':
-      return <DashboardIcon fontSize='large' />
+      return <DashboardIcon fontSize='medium' />
     case 'Student':
-      return <GroupsIcon fontSize='large' />
+      return <GroupsIcon fontSize='medium' />
     case 'Lecturer':
-      return <LocalLibraryIcon fontSize='large' />
+      return <LocalLibraryIcon fontSize='medium' />
     case 'Corporation':
-      return <CorporateFareIcon fontSize='large' />
+      return <CorporateFareIcon fontSize='medium' />
     case 'Notice':
-      return <ArticleIcon fontSize='large' />
+      return <ArticleIcon fontSize='medium' />
     default:
       return
   }
@@ -159,11 +159,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           </IconButton>
           <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             {getIconByTitle(title)}
-            <Typography variant='h5' color='inherit' sx={{ ml: 2 }}>
+            <Typography variant='h6' color='inherit' sx={{ ml: 2 }}>
               {t(`${title}`)}
             </Typography>
           </Box>
-          <Typography variant='h4' color='inherit' sx={{ flexGrow: 1 }}>
+          <Typography variant='h5' color='inherit' sx={{ flexGrow: 1 }}>
             {t('Internship Management System')}
           </Typography>
           <LanguageButton />

@@ -34,7 +34,7 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
           toast.error('Cannot load data teacher')
         }
       } catch (error) {
-        toast.error('Cannot load data teacher')
+        // toast.error('Cannot load data teacher')
       } finally {
         setLoading(false)
       }
