@@ -85,6 +85,9 @@ const Students: React.FC<StudentsProps> = () => {
   const fullName = paginationQuery.fullName ? (paginationQuery.fullName as string) : ''
   const term = paginationQuery.term ? (paginationQuery.term as string) : ''
   const nameTeacher = paginationQuery.nameTeacher ? (paginationQuery.nameTeacher as string) : ''
+  const specialization = paginationQuery.specialization
+    ? (paginationQuery.specialization as string)
+    : ''
 
   const dispatch = useAppDispatch()
   const { fetchingStudent, fetchingReport, students, report } = useAppSelector(
@@ -109,7 +112,9 @@ const Students: React.FC<StudentsProps> = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (status || selectedName || term || academicYear || nameTeacher) {
+        if (status || selectedName || term || academicYear || nameTeacher || specialization) {
+          console.log('herer')
+
           await dispatch(
             getStudentsByFilter({
               offset,
@@ -118,6 +123,7 @@ const Students: React.FC<StudentsProps> = () => {
               term,
               academicYear,
               nameTeacher,
+              specialization,
             })
           )
         } else {
@@ -127,7 +133,7 @@ const Students: React.FC<StudentsProps> = () => {
         toast.error('Cannot load student data')
       }
     })()
-  }, [dispatch, selectedName, offset, status, term, academicYear, nameTeacher])
+  }, [dispatch, selectedName, offset, status, term, academicYear, nameTeacher, specialization])
 
   useEffect(() => {
     ;(async () => {
@@ -191,6 +197,7 @@ const Students: React.FC<StudentsProps> = () => {
             term,
             academicYear,
             nameTeacher,
+            specialization,
           })
         )
       } else {
@@ -215,6 +222,7 @@ const Students: React.FC<StudentsProps> = () => {
       if (response.meta.requestStatus === 'fulfilled') {
         ;(async () => {
           try {
+            await dispatch(reportStudent(academicYear))
             await dispatch(getStudents({ offset: 0, academicYear }))
             setSelectedFile(undefined)
             toast.success('Save successfully')
@@ -224,6 +232,8 @@ const Students: React.FC<StudentsProps> = () => {
             setIsLoading(false)
           }
         })()
+      } else {
+        toast.error('Cannot save excel file! Please try again')
       }
     } catch (error) {
       toast.error(error as any)
@@ -323,7 +333,7 @@ const Students: React.FC<StudentsProps> = () => {
 
           <Paper sx={{ p: 1, height: 'auto' }}>
             <Box className={classes.tableTop}>
-              <FilterStudent setPage={setPage} />
+              <FilterStudent setPage={setPage} isLoading={isLoading} />
               <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
             </Box>
             {fetchingStudent ? (

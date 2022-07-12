@@ -53,6 +53,7 @@ export const getStudentsByFilter = createAsyncThunk(
     term,
     academicYear,
     nameTeacher,
+    specialization,
   }: {
     offset: number
     status: string
@@ -60,6 +61,7 @@ export const getStudentsByFilter = createAsyncThunk(
     term: string
     academicYear: number
     nameTeacher: string
+    specialization: string
   }) => {
     const students = await studentsApi.filterByCondition(
       offset,
@@ -67,7 +69,8 @@ export const getStudentsByFilter = createAsyncThunk(
       fullName,
       term,
       academicYear,
-      nameTeacher
+      nameTeacher,
+      specialization
     )
     return students
   }
@@ -88,7 +91,6 @@ export const updateInternshipForm = createAsyncThunk(
       studentId,
       form
     )
-    console.log(responseUpdateInternshipForm)
     return responseUpdateInternshipForm
   }
 )

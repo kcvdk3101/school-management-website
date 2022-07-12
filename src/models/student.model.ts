@@ -16,6 +16,7 @@ export interface StudentModel extends Common {
   status: string
   academicYear?: string
   nameTeacher?: string
+  specialization?: string
   slug?: string
   internshipCertification?: boolean
   internshipReport?: boolean

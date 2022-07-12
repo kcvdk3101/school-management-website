@@ -159,7 +159,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
         toast.error('Cannot load data report')
       }
     })()
-  }, [dispatch, year])
+  }, [dispatch, t, year])
 
   return (
     <>

@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import { Dialog, DialogContent, DialogTitle, Button, Typography, Box } from '@mui/material'
 import { grey, red } from '@mui/material/colors'
-
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '../../app/hooks'
@@ -76,7 +76,7 @@ const headCells: HeadCell[] = [
     label: 'Current number of students',
   },
   {
-    id: 'students',
+    id: 'details',
     disablePadding: false,
     label: 'List students',
   },
@@ -117,6 +117,7 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
           stickyHeader
           sx={{
             width: 'max-content',
+            minWidth: '100%',
           }}
         >
           <TableHead>
@@ -161,7 +162,13 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
                   <TableCell align='left'>{row.department}</TableCell>
                   <TableCell align='left'>{row.email}</TableCell>
                   <TableCell align='left'>{row.phoneNumber}</TableCell>
-                  <TableCell align='center'>{row.maximumStudentAmount}</TableCell>
+                  <TableCell align='center'>
+                    {row.maximumStudentAmount === 0 ? (
+                      <AllInclusiveIcon fontSize='small' />
+                    ) : (
+                      row.maximumStudentAmount
+                    )}
+                  </TableCell>
                   <TableCell
                     align='center'
                     style={{ color: row.studentAmount === 0 ? red[500] : grey[900] }}
@@ -212,8 +219,13 @@ const TeacherTable: React.FC<TeacherTableProps> = ({
       <Dialog open={openListStudents} onClose={handleCloseListStudents} maxWidth='md' fullWidth>
         <DialogTitle>{t('List students')}</DialogTitle>
         <DialogContent>
-          {teachers[currentIndex].students ? (
-            <ListStudents students={teachers[currentIndex]?.students as StudentModel[]} />
+          {teachers[currentIndex] && teachers[currentIndex].details ? (
+            <ListStudents
+              students={teachers[currentIndex]?.details?.student as StudentModel[]}
+              studentWaitingAccepteds={
+                teachers[currentIndex]?.details?.studentWaitingAccepted as StudentModel[]
+              }
+            />
           ) : (
             <Box>
               <Typography>{t('No data')}</Typography>

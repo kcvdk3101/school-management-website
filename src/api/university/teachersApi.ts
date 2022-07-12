@@ -68,6 +68,18 @@ const teachersApi = {
       `${url}/fullName?academicYear=${academicYear}`
     )
   },
+
+  getListDepartment(academicYear: number) {
+    return axiosUniveristy.get<string, { department: string }[]>(
+      `${url}/department?academicYear=${academicYear}`
+    )
+  },
+
+  getListPosition(academicYear: number) {
+    return axiosUniveristy.get<string, { position: string }[]>(
+      `${url}/position?academicYear=${academicYear}`
+    )
+  },
 }
 
 export default teachersApi

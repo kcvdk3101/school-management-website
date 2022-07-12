@@ -65,10 +65,11 @@ const studentsApi = {
     fullName: string,
     term: string,
     academicYear: number,
-    nameTeacher: string
+    nameTeacher: string,
+    specialization: string
   ) {
     return axiosUniversity.get<string, { data: StudentModel[]; pagination: { total: number } }>(
-      `${url}/filter?limit=10&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}`
+      `${url}/filter?limit=10&offset=${offset}&identityNumber=&status=${status}&fullName=${fullName}&term=${term}&academicYear=${academicYear}&nameTeacher=${nameTeacher}&specialization=${specialization}`
     )
   },
 
@@ -97,6 +98,12 @@ const studentsApi = {
   getListClass(academicYear: number) {
     return axiosUniversity.get<string, { class: string }[]>(
       `${url}/class?academicYear=${academicYear}`
+    )
+  },
+
+  getListSpecialization(academicYear: number) {
+    return axiosUniversity.get<string, { specialization: string }[]>(
+      `${url}/specialization?academicYear=${academicYear}`
     )
   },
 

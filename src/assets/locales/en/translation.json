@@ -1,4 +1,5 @@
 {
+  "Internship Management System": "Internship Management System",
   "Admin": "Admin",
   "Home - JOBHUB": "Home - JOBHUB",
   "Recruitment News": "Recruitment News",
@@ -56,6 +57,7 @@
   "Password": "Password",
   "Identity number": "Identity number",
   "Email": "Email",
+  "Specialization": "Specialization",
   "Address": "Address",
   "Class": "Class",
   "Phone": "Phone number",

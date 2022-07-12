@@ -10,8 +10,13 @@ export interface TeacherModel extends Common {
   department: string
   email: string
   phoneNumber: string
+  academicYear: string
   studentAmount: number
   maximumStudentAmount: number
-  students?: StudentModel[]
+  details?: {
+    teacher: TeacherModel[]
+    student: StudentModel[]
+    studentWaitingAccepted: StudentModel[]
+  }
   slug?: string
 }

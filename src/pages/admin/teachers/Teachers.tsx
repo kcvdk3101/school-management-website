@@ -163,7 +163,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
         await dispatch(getAllTeachers({ offset: newPage, academicYear }))
       }
     } catch (error) {
-      console.log(error)
+      toast.error(error as any)
     } finally {
       navigate({
         pathname: '/admin/teachers',
@@ -191,7 +191,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
           }
         })()
       } else {
-        toast.error('Something wrong')
+        toast.error('Cannot save excel file! Please try again')
       }
     } catch (error) {
       toast.error(error as any)
@@ -288,7 +288,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
 
           <Paper sx={{ p: 1, height: 'auto' }}>
             <Box className={classes.tableTop}>
-              <FilterTeacher setPage={setPage} />
+              <FilterTeacher setPage={setPage} isLoading={isLoading} />
               <SearchButton handleChangeSelectedName={handleChangeSelectedName} setPage={setPage} />
             </Box>
             {fetchingTeacher ? (

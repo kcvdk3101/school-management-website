@@ -1,11 +1,15 @@
 import AccountCircle from '@mui/icons-material/AccountCircle'
+import ArticleIcon from '@mui/icons-material/Article'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import CorporateFareIcon from '@mui/icons-material/CorporateFare'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import GroupsIcon from '@mui/icons-material/Groups'
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
+  Avatar,
   Box,
+  Button,
   CssBaseline,
   Divider,
   IconButton,
@@ -14,24 +18,22 @@ import {
   ListItemIcon,
   ListItemText,
   Menu,
-  MenuItem,
   Toolbar,
   Tooltip,
   Typography,
 } from '@mui/material'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
+import { grey } from '@mui/material/colors'
 import MuiDrawer from '@mui/material/Drawer'
 import { styled } from '@mui/material/styles'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import logo from '../../assets/images/logo.png'
-import LanguageButton from './LanguageButton'
-import ArticleIcon from '@mui/icons-material/Article'
-import CorporateFareIcon from '@mui/icons-material/CorporateFare'
 import { signout } from '../../features/authenticate/authSlice'
-import { toast } from 'react-toastify'
+import LanguageButton from './LanguageButton'
 
 type HeaderProps = {
   title: string
@@ -87,12 +89,29 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   })
 )
 
+const getIconByTitle = (title: string) => {
+  switch (title) {
+    case 'Dashboard':
+      return <DashboardIcon fontSize='large' />
+    case 'Student':
+      return <GroupsIcon fontSize='large' />
+    case 'Lecturer':
+      return <LocalLibraryIcon fontSize='large' />
+    case 'Corporation':
+      return <CorporateFareIcon fontSize='large' />
+    case 'Notice':
+      return <ArticleIcon fontSize='large' />
+    default:
+      return
+  }
+}
+
 const Header: React.FC<HeaderProps> = ({ title }) => {
   let navigate = useNavigate()
   const { t } = useTranslation()
 
   const dispatch = useAppDispatch()
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth)
 
   const [open, setOpen] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -121,7 +140,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
     <>
       <CssBaseline />
-      <AppBar position='absolute' open={open} color='primary'>
+      <AppBar position='absolute' open={open} color='secondary'>
         <Toolbar
           sx={{
             pr: '24px',
@@ -131,7 +150,6 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             edge='start'
             color='inherit'
             aria-label='open drawer'
-            // onClick={toggleDrawer}
             sx={{
               marginRight: '36px',
               ...(open && { display: 'none' }),
@@ -139,8 +157,14 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           >
             <MenuIcon style={{ visibility: 'hidden' }} />
           </IconButton>
-          <Typography component='h1' variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
-            {t(`${title}`)}
+          <Box style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            {getIconByTitle(title)}
+            <Typography variant='h5' color='inherit' sx={{ ml: 2 }}>
+              {t(`${title}`)}
+            </Typography>
+          </Box>
+          <Typography variant='h4' color='inherit' sx={{ flexGrow: 1 }}>
+            {t('Internship Management System')}
           </Typography>
           <LanguageButton />
 
@@ -171,7 +195,25 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleLogout}>{t('Signout')}</MenuItem>
+                <Box
+                  style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+                  sx={{ px: 2, py: 1 }}
+                >
+                  <Box
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Avatar sx={{ bgcolor: grey[500], width: 32, height: 32 }}>
+                      {user.firstName?.split('')[0]}
+                    </Avatar>
+                    <Typography variant='body1'>{user.firstName}</Typography>
+                  </Box>
+                  <Button onClick={handleLogout}>{t('Signout')}</Button>
+                </Box>
               </Menu>
             </div>
           )}
@@ -208,7 +250,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             <ListItemButton
               onClick={() =>
                 navigate(
-                  `/admin/students?limit=8&offset=0&identityNumber=&status=&fullName=&term=&academicYear=${year}&nameTeacher=`
+                  `/admin/students?limit=8&offset=0&identityNumber=&status=&fullName=&term=&academicYear=${year}&nameTeacher=&specialization=`
                 )
               }
             >
@@ -221,7 +263,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 
           <Tooltip title={t('Lecturer') as React.ReactChild} placement='right' arrow>
             <ListItemButton
-              onClick={() => navigate(`/admin/teachers?limit=8&offset=0&academicYear=${year}`)}
+              onClick={() =>
+                navigate(
+                  `/admin/teachers?limit=8&position=&fullName=&academicYear=${year}&department=`
+                )
+              }
             >
               <ListItemIcon>
                 <LocalLibraryIcon />

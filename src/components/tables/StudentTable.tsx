@@ -42,6 +42,10 @@ const headCells: HeadCell[] = [
     label: 'Class',
   },
   {
+    id: 'specialization',
+    label: 'Specialization',
+  },
+  {
     id: 'birthDate',
     label: 'Birthday',
   },
@@ -64,10 +68,6 @@ const headCells: HeadCell[] = [
   {
     id: 'nameTeacher',
     label: 'Lecturer',
-  },
-  {
-    id: 'cv',
-    label: 'Number of CVs',
   },
   {
     id: 'internshipFinalGrade',
@@ -196,6 +196,9 @@ const StudentTable: React.FC<StudentTableProps> = ({
                     {row.class}
                   </TableCell>
                   <TableCell align='left' size='small'>
+                    {row.specialization}
+                  </TableCell>
+                  <TableCell align='left' size='small'>
                     {convertDateString(row.birthDate as string)}
                   </TableCell>
                   <TableCell align='left' size='small'>
@@ -227,9 +230,6 @@ const StudentTable: React.FC<StudentTableProps> = ({
                     style={{ color: row.nameTeacher === '' ? red[500] : green['A400'] }}
                   >
                     {row.nameTeacher === '' ? 'Chưa có' : row.nameTeacher}
-                  </TableCell>
-                  <TableCell align='center' size='small'>
-                    {row.cv && row.cv.length > 0 ? row.cv.length : 0}
                   </TableCell>
                   <TableCell align='center' size='small'>
                     {row.internshipFinalGrade}

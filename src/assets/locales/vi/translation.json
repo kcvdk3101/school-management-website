@@ -1,4 +1,5 @@
 {
+  "Internship Management System": "Hệ thống Quản lý Thực tập",
   "Admin": "Quản trị viên",
   "Home - JOBHUB": "Trang chủ - JOBHUB",
   "Recruitment News": "Tin tức tuyển dụng",
@@ -56,6 +57,7 @@
   "Password": "Mật khẩu",
   "Identity number": "Mã số sinh viên",
   "Email": "Địa chỉ email",
+  "Specialization": "Chuyên ngành",
   "Address": "Địa chỉ",
   "Class": "Lớp",
   "Phone": "Số điện thoại",

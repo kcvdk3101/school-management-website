@@ -58,8 +58,12 @@ const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
   handleClose,
 }) => {
   const { t } = useTranslation()
-  const dispatch = useAppDispatch()
   let { search } = useLocation()
+
+  const date = new Date()
+  let year = date.getFullYear()
+
+  const dispatch = useAppDispatch()
 
   let paginationQuery = queryString.parse(search)
   const academicYear = paginationQuery.academicYear ? +paginationQuery.academicYear : 0
@@ -83,6 +87,7 @@ const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
       department: data.department,
       phoneNumber: data.phoneNumber,
       studentAmount: 0,
+      academicYear: year.toString(),
       maximumStudentAmount: 0,
     })
 
