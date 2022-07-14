@@ -23,6 +23,7 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
   const classes = useStyles()
 
   let navigate = useNavigate()
+
   const dispatch = useAppDispatch()
   const { detail, lastName, firstName, email, phoneNumber } = useAppSelector(
     (state) => state.auth.user
@@ -65,25 +66,47 @@ const LecturerInfo: React.FC<LecturerInfoProps> = () => {
             </Box>
           </Box>
         </Grid>
-        <Grid item container>
-          <Grid item container xs={12} spacing={3}>
-            <Grid item xs={4}>
-              <Typography>{t('Full name')}:</Typography>
+        <Grid item container spacing={3}>
+          <Grid item container xs={12}>
+            <Grid item xs={3}>
+              <Typography>{t('Last name')}:</Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography>{`${lastName} ${firstName}`}</Typography>
+            <Grid item xs={3}>
+              <Typography fontWeight={600}>{lastName}</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
+              <Typography>{t('First name')}:</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography fontWeight={600}>{firstName}</Typography>
+            </Grid>
+          </Grid>
+          <Grid item container xs={12}>
+            <Grid item xs={3}>
               <Typography>{t('Email')}:</Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography>{email}</Typography>
+            <Grid item xs={3}>
+              <Typography fontWeight={600}>{email}</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography>{t('Phone')}:</Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography>{phoneNumber}</Typography>
+            <Grid item xs={3}>
+              <Typography fontWeight={600}>{phoneNumber}</Typography>
+            </Grid>
+          </Grid>
+          <Grid item container xs={12}>
+            <Grid item xs={3}>
+              <Typography>{t('Position')}:</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography fontWeight={600}>{detail?.teacher[0].position}</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography>{t('Department')}:</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography fontWeight={600}>{detail?.teacher[0].department}</Typography>
             </Grid>
           </Grid>
         </Grid>

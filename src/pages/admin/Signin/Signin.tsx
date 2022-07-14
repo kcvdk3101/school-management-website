@@ -108,11 +108,11 @@ const Signin: React.FC<SigninProps> = () => {
     if (response.meta.requestStatus === 'fulfilled') {
       if (response.payload.user.role === 'teacher') {
         navigate('/lecturer')
-        toast.success('Login successfully')
+        toast.success(t('Login successfully !'))
       }
       if (response.payload.user.role === 'admin') {
         navigate('/admin/dashboard')
-        toast.success('Login successfully')
+        toast.success(t('Login successfully !'))
       }
     } else {
       toast.error(error)

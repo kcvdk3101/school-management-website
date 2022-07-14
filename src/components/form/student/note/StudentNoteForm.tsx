@@ -83,7 +83,6 @@ const StudentNoteForm: React.FC<StudentNoteFormProps> = ({
           <Typography>{t('Feedback form')}</Typography>
           <Checkbox
             size='medium'
-            // defaultChecked={student.internshipFeedback}
             checked={form.internshipFeedback === 'yes' ? true : false}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               hanldeChangeStatusForm(
@@ -99,7 +98,6 @@ const StudentNoteForm: React.FC<StudentNoteFormProps> = ({
           <Typography>{t('Survey form')}</Typography>
           <Checkbox
             size='medium'
-            // defaultChecked={student.internshipSurvey}
             checked={form.internshipSurvey === 'yes' ? true : false}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               hanldeChangeStatusForm(

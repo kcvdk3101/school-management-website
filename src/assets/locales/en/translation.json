@@ -29,9 +29,9 @@
   "Student information": "Student Information",
   "Lecturer information": "Lecturer Information",
   "Notice information": "Notice information",
-
   "Edit student title": "Edit student information",
   "Edit lecturer title": "Edit lecturer information",
+  "Edit third grade": "Edit third grade",
 
   "Signin": "Signin",
   "Signout": "Singout",
@@ -132,5 +132,8 @@
   "Table ranking": "Table ranking",
   "Status Student Report": "Status Student Report",
   "Student Lecturer Report": "Student Lecturer Report",
-  "Number of students": "Number of students"
+  "Number of students": "Number of students",
+
+  "Update successfully !": "Update successfully !",
+  "Login successfully !": "Update successfully !"
 }

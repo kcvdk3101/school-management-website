@@ -1,4 +1,4 @@
-import { LinearProgress, Paper, Typography } from '@mui/material'
+import { LinearProgress, Paper } from '@mui/material'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -28,13 +28,13 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
       try {
         const response = await teachersApi.getAllTeachersNoPagination(year)
         if (response.data.length > 0) {
-          let firstSevenEle = response.data.splice(0, 7)
+          let firstSevenEle = response.data.splice(0, 8)
           setTeachers(firstSevenEle)
         } else {
           toast.error('Cannot load data teacher')
         }
       } catch (error) {
-        // toast.error('Cannot load data teacher')
+        toast.error('Cannot load data teacher')
       } finally {
         setLoading(false)
       }
@@ -43,7 +43,6 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
 
   return (
     <Paper style={{ padding: 12, height: '100%' }}>
-      <Typography style={{ marginBottom: 4 }}>{t('Table ranking')}</Typography>
       {loading ? (
         <LinearProgress color='secondary' />
       ) : (
@@ -58,6 +57,7 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
                         backgroundColor: grey[800],
                         color: 'white',
                       }}
+                      size='small'
                     >
                       {t('N.O')}
                     </TableCell>
@@ -66,6 +66,7 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
                         backgroundColor: grey[800],
                         color: 'white',
                       }}
+                      size='small'
                     >
                       {t('Lecturer')}
                     </TableCell>
@@ -75,6 +76,7 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
                         backgroundColor: grey[800],
                         color: 'white',
                       }}
+                      size='small'
                     >
                       {t('Number of students')}
                     </TableCell>
@@ -86,8 +88,12 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
                       <TableCell component='th' scope='row' align='center'>
                         {idx + 1}
                       </TableCell>
-                      <TableCell align='left'>{teacher.fullName}</TableCell>
-                      <TableCell align='center'>{teacher.studentAmount}</TableCell>
+                      <TableCell align='left' size='small'>
+                        {teacher.fullName}
+                      </TableCell>
+                      <TableCell align='center' size='small'>
+                        {teacher.studentAmount}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -35,7 +35,7 @@ const Lecturer: React.FC<LecturerProps> = () => {
       <Helmet>
         <title>Lecturer</title>
       </Helmet>
-      <Container maxWidth='md'>
+      <Container maxWidth='lg'>
         <Paper className={classes.container}>
           <Grid container spacing={3}>
             <LecturerInfo />

@@ -2,7 +2,7 @@ import { Box, Grid, Tab, Tabs, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import StundentNotAcceptedTable from '../../../components/tables/StudentNotAcceptedTable'
-import StundentAcceptedTable from '../../../components/tables/StundentAcceptedTable'
+import StundentAcceptedTable from '../../../components/tables/StudentAcceptedTable'
 import { StudentModel } from '../../../models/student.model'
 
 type LecturerListStudentProps = {

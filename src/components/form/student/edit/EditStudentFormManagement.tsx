@@ -104,6 +104,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
         editInfoStudent({
           id: student.id as string,
           data: {
+            ...student,
             firstName: data.firstName,
             lastName: data.lastName,
             address: data.address,
@@ -118,7 +119,7 @@ const EditStudentFormManagement: React.FC<EditStudentFormManagementProps> = ({
         })
       )
       if (response.meta.requestStatus === 'fulfilled') {
-        toast.success('Update succeed!')
+        toast.success(t('Update successfully !'))
       }
     } catch (error) {
       toast.error(error as Error)

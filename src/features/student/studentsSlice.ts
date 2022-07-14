@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import studentsApi, {
-  EditStudentData,
-  UpdateStudentFormResquest,
-} from '../../api/university/studentsApi'
+import studentsApi, { UpdateStudentFormResquest } from '../../api/university/studentsApi'
 import { ReportModel } from '../../models/report.model'
 import { StudentModel } from '../../models/student.model'
 
@@ -78,7 +75,7 @@ export const getStudentsByFilter = createAsyncThunk(
 
 export const editInfoStudent = createAsyncThunk(
   'students/editInfoStudent',
-  async ({ id, data }: { id: string; data: EditStudentData }) => {
+  async ({ id, data }: { id: string; data: StudentModel }) => {
     const response = await studentsApi.editInfoStudent(id, data)
     return response
   }

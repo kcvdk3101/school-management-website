@@ -44,12 +44,21 @@ const StudentNoteManagement: React.FC<StudentNoteManagementProps> = ({ student, 
           editInfoStudent({
             id: student.id as string,
             data: {
+              ...student,
               firstName: student.firstName,
               lastName: student.lastName,
               address: student.address,
               birthDate: student.birthDate,
               phoneNumber: student.phoneNumber,
-              status: form.internshipCertification === 'yes' ? 'Đang thực tập' : 'Chưa thực tập',
+              status:
+                form.internshipCertification === 'yes' &&
+                form.internshipReport === 'yes' &&
+                form.internshipFeedback === 'yes' &&
+                form.internshipSurvey === 'yes'
+                  ? 'Đã thực tập'
+                  : form.internshipCertification === 'yes'
+                  ? 'Đang thực tập'
+                  : 'Chưa thực tập',
               class: student.class,
               internshipFirstGrade:
                 student.internshipFirstGrade === undefined ? 0 : student.internshipFirstGrade,
@@ -60,7 +69,7 @@ const StudentNoteManagement: React.FC<StudentNoteManagementProps> = ({ student, 
             },
           })
         )
-        toast.success(response.payload.message as string)
+        toast.success(t('Update successfully !'))
       }
     } catch (error) {
       toast.error('Cannot update student internship form')

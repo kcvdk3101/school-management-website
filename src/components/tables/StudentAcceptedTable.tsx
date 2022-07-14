@@ -16,6 +16,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Tooltip,
+  IconButton,
+  Grid,
+  TextField,
 } from '@mui/material'
 import { blue, green, red } from '@mui/material/colors'
 import { makeStyles } from '@mui/styles'
@@ -26,6 +30,11 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { rejectedStudent } from '../../features/authenticate/authSlice'
 import { StudentModel } from '../../models/student.model'
 import NoData from '../commons/NoData'
+import EditIcon from '@mui/icons-material/Edit'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { editInfoStudent } from '../../features/student/studentsSlice'
 
 interface StudentAcceptedTableProps {
   listStudentAccepted: StudentModel[]
@@ -38,6 +47,10 @@ interface RowData extends StudentModel {
 interface HeadCell {
   id: keyof RowData
   label: string
+}
+
+type EditFormInput = {
+  internshipThirdGrade: number
 }
 
 const headCells: HeadCell[] = [
@@ -84,6 +97,17 @@ const useStyles = makeStyles({
   },
 })
 
+const thirdGradeSchema = yup.object({
+  internshipThirdGrade: yup
+    .number()
+    .integer()
+    .positive()
+    .min(0, 'Point must be greater than or equal to 0')
+    .max(10, 'point does not exceed 10')
+    .required('This field is required')
+    .typeError('This field is not a number'),
+})
+
 const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudentAccepted }) => {
   const { t } = useTranslation()
   const classes = useStyles()
@@ -91,9 +115,23 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EditFormInput>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    resolver: yupResolver(thirdGradeSchema),
+  })
+
   const [selected, setSelected] = useState<readonly string[]>([])
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [loading, setLoading] = useState(false)
+  const [loadingThirdGrade, setLoadingThirdGrade] = useState(false)
+
   const [openAlert, setOpenAlert] = useState(false)
+  const [thirdgradeForm, setThirdgradeForm] = useState(false)
 
   const handleOpenAlert = () => {
     setOpenAlert(true)
@@ -101,6 +139,15 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
 
   const handleCloseAlert = () => {
     setOpenAlert(false)
+  }
+
+  const handleOpenThirdgradeForm = (idx: number) => {
+    setCurrentIndex(idx)
+    setThirdgradeForm(true)
+  }
+
+  const handleCloseThirdgradeForm = () => {
+    setThirdgradeForm(false)
   }
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
@@ -152,6 +199,31 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
     }
   }
 
+  const onSubmit = async (data: EditFormInput) => {
+    let student = listStudentAccepted[currentIndex]
+    setLoadingThirdGrade(true)
+    try {
+      const response = await dispatch(
+        editInfoStudent({
+          id: student.id as string,
+          data: {
+            ...student,
+            internshipThirdGrade: data.internshipThirdGrade,
+          },
+        })
+      )
+      if (response.meta.requestStatus === 'fulfilled') {
+        setLoadingThirdGrade(false)
+        toast.success('Updated successfully')
+      }
+    } catch (error) {
+      toast.error('Cannot update student grade')
+    } finally {
+      setLoadingThirdGrade(false)
+      handleCloseThirdgradeForm()
+    }
+  }
+
   return (
     <Box>
       <Box className={classes.toolbar}>
@@ -189,7 +261,7 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
                   />
                 </TableCell>
                 <TableCell align='left' size='small'>
-                  {t('N.O')}
+                  {t('Third grade')}
                 </TableCell>
                 {headCells.map((headCell, idx) => (
                   <TableCell
@@ -219,7 +291,11 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
                       />
                     </TableCell>
                     <TableCell align='center' size='small'>
-                      {idx + 1}
+                      <Tooltip title={`${t('Edit')}`} placement='top'>
+                        <IconButton onClick={() => handleOpenThirdgradeForm(idx)}>
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                     <TableCell align='left' size='small'>
                       {row.identityNumber}
@@ -244,7 +320,7 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
                     >
                       {row.status}
                     </TableCell>
-                    <TableCell align='left'>{row.internshipFinalGrade}</TableCell>
+                    <TableCell align='center'>{row.internshipFinalGrade}</TableCell>
                   </TableRow>
                 )
               })}
@@ -275,9 +351,56 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
             onClick={handleRejectStudent}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
+            {loading ? <CircularProgress size={24} /> : t('Accept')}
           </Button>
         </DialogActions>
+      </Dialog>
+
+      <Dialog open={thirdgradeForm} onClose={handleCloseThirdgradeForm} maxWidth='xs' fullWidth>
+        <DialogTitle>{t('Third grade')}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ my: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  label={t('Third grade')}
+                  fullWidth
+                  type='number'
+                  defaultValue={listStudentAccepted[currentIndex].internshipThirdGrade}
+                  {...register('internshipThirdGrade')}
+                  error={Boolean(errors.internshipThirdGrade)}
+                  helperText={t(
+                    `${
+                      errors.internshipThirdGrade?.message
+                        ? errors.internshipThirdGrade?.message
+                        : ''
+                    }`
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type='button'
+                  variant='outlined'
+                  color='secondary'
+                  disabled={loadingThirdGrade}
+                  onClick={handleCloseThirdgradeForm}
+                >
+                  {loadingThirdGrade ? <CircularProgress size={24} /> : t('Cancel')}
+                </Button>
+                <Button
+                  type='button'
+                  variant='contained'
+                  sx={{ ml: 1 }}
+                  disabled={loadingThirdGrade}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  {loadingThirdGrade ? <CircularProgress size={24} /> : t('Update')}
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </DialogContent>
       </Dialog>
     </Box>
   )

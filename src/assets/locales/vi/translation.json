@@ -49,6 +49,7 @@
   "Notice information": "Thông tin thông báo",
   "Edit student title": "Chỉnh sửa thông tin sinh viên",
   "Edit lecturer title": "Chỉnh sửa thông tin giảng viên",
+  "Edit third grade": "Chỉnh sửa điểm cho Sinh viên",
 
   "N.O": "Số thứ tự",
   "Last name": "Họ và tên đệm",
@@ -132,5 +133,8 @@
   "Table ranking": "Bảng xếp hạng",
   "Status Student Report": "Trạng thái của sinh viên",
   "Student Lecturer Report": "Sinh viên - Giảng viên",
-  "Number of students": "Số lượng sinh viên"
+  "Number of students": "Số lượng sinh viên",
+
+  "Update successfully !": "Cập nhật thành công !",
+  "Login successfully !": "Đăng nhập thành công !"
 }

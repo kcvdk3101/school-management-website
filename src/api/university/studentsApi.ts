@@ -5,18 +5,18 @@ import axiosUniversity from './axiosUniversity'
 
 const url = '/university/student'
 
-export interface EditStudentData {
-  firstName: string
-  lastName: string
-  address: string
-  birthDate: string
-  phoneNumber: string
-  status: string
-  class: string
-  internshipFirstGrade: number
-  internshipSecondGrade: number
-  internshipThirdGrade: number
-}
+// export interface EditStudentData {
+//   firstName: string
+//   lastName: string
+//   address: string
+//   birthDate: string
+//   phoneNumber: string
+//   status: string
+//   class: string
+//   internshipFirstGrade: number
+//   internshipSecondGrade: number
+//   internshipThirdGrade: number
+// }
 
 export interface UpdateStudentFormResquest {
   internshipCertification: string
@@ -73,7 +73,7 @@ const studentsApi = {
     )
   },
 
-  editInfoStudent(id: string, data: EditStudentData) {
+  editInfoStudent(id: string, data: StudentModel) {
     return axiosUniversity.patch<string, StudentModel>(`${url}?id=${id}`, data)
   },
 
