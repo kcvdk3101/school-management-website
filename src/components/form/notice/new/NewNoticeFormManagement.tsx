@@ -45,7 +45,7 @@ const NewNoticeFormManagement: React.FC<NewNoticeFormManagementProps> = ({
     try {
       await dispatch(addNewPost(newPost))
       await dispatch(getAllPosts())
-      toast.success('Add successfully!')
+      toast.success(t('Add successfully!'))
     } catch (error) {
       toast.error('Cannot access this function')
     } finally {

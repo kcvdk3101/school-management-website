@@ -19,6 +19,7 @@
   "No data": "Không có dữ liệu",
   "Loading": "Đang tải dữ liệu",
   "See details": "Xem chi tiết",
+  "Reason": "Lý do",
 
   "Faculty office": "Văn phòng khoa",
   "Computer science": "Khoa học máy tính",
@@ -135,6 +136,10 @@
   "Student Lecturer Report": "Sinh viên - Giảng viên",
   "Number of students": "Số lượng sinh viên",
 
+  "Add successfully !": "Lưu thành công !",
+  "Accepted successfully !": "Đã chấp nhận thành công !",
+  "Unaccepted successfully !": "Đã hủy chấp nhận thành công !",
   "Update successfully !": "Cập nhật thành công !",
-  "Login successfully !": "Đăng nhập thành công !"
+  "Login successfully !": "Đăng nhập thành công !",
+  "Save successfully": "Lưu thành công !"
 }

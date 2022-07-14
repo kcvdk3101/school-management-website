@@ -100,7 +100,7 @@ const EditTeacherFormManagement: React.FC<EditTeacherFormManagementProps> = ({
         pathname: '/admin/students',
         search: `?limit=8&offset=${offset}&status=${status}`,
       })
-      toast.success('Updated successfully!')
+      toast.success(t('Update successfully !'))
     } catch (error) {
       toast.error(error as Error)
     } finally {

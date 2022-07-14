@@ -118,7 +118,7 @@ const NewStudentFormManagement: React.FC<NewStudentFormManagementProps> = ({
     try {
       await dispatch(addNewStudent(students))
       await dispatch(getStudents({ offset, academicYear }))
-      toast.success('Add successfully!')
+      toast.success(t('Add successfully!'))
     } catch (error) {
       toast.error(error as Error)
     } finally {

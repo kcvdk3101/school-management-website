@@ -182,7 +182,7 @@ const Lecturers: React.FC<TeachersProps> = () => {
         ;(async () => {
           try {
             await dispatch(getAllTeachers({ offset: 0, academicYear }))
-            toast.success('Save successfully')
+            toast.success(t('Save successfully'))
             setSelectedFile(undefined)
           } catch (error) {
             toast.error(error as any)

@@ -79,7 +79,7 @@ const CorporationCard: React.FC<CorporationCardProps> = ({ corporation }) => {
     try {
       const response = await dispatch(activateCorporation(corporation.id))
       if (response.meta.requestStatus === 'fulfilled') {
-        toast.success('Updated successfully!')
+        toast.success(t('Update successfully !'))
       }
     } catch (error) {
       toast.error('Cannot accept this corporation')

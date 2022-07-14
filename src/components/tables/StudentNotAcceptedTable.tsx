@@ -11,6 +11,11 @@ import {
   TableHead,
   TableRow,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Grid,
+  TextField,
 } from '@mui/material'
 import { blue, green, red } from '@mui/material/colors'
 import { makeStyles } from '@mui/styles'
@@ -18,9 +23,12 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { acceptedStudent } from '../../features/authenticate/authSlice'
+import { acceptedStudent, rejectedStudent } from '../../features/authenticate/authSlice'
 import { StudentModel } from '../../models/student.model'
 import NoData from '../commons/NoData'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
 
 interface StudentNotAcceptedTableProps {
   listStudentWaitingAccepted: StudentModel[]
@@ -33,6 +41,10 @@ interface RowData extends StudentModel {
 interface HeadCell {
   id: keyof RowData
   label: string
+}
+
+type EditFormInput = {
+  reason: string
 }
 
 const headCells: HeadCell[] = [
@@ -79,19 +91,45 @@ const useStyles = makeStyles({
   },
 })
 
+const reasonSchema = yup.object({
+  reason: yup.string().required('This field is required'),
+})
+
 const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = ({
   listStudentWaitingAccepted,
 }) => {
   const { t } = useTranslation()
   const classes = useStyles()
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EditFormInput>({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    resolver: yupResolver(reasonSchema),
+  })
+
   const dispatch = useAppDispatch()
   const user = useAppSelector((state) => state.auth.user)
 
   const [selected, setSelected] = useState<readonly string[]>([])
+
   const [loading, setLoading] = useState(false)
+  const [loadingReject, setLoadingReject] = useState(false)
+
+  const [openReasonForm, setOpenReasonForm] = useState(false)
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
+
+  const handleOpenReasonForm = () => {
+    setOpenReasonForm(true)
+  }
+
+  const handleCloseReasonForm = () => {
+    setOpenReasonForm(false)
+  }
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
     const selectedIndex = selected.indexOf(name)
@@ -132,7 +170,27 @@ const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = ({
       if (response.meta.requestStatus === 'fulfilled') {
         setLoading(false)
         setSelected([])
-        toast.success('Accepted successfully')
+        toast.success(t('Accepted successfully !'))
+      }
+    } catch (error) {
+      toast.error(error as any)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const onSubmit = async (data: EditFormInput) => {
+    setLoadingReject(true)
+    try {
+      let teacher = selected.map((id) => ({
+        studentId: id,
+        teacherId: user.teacherId as string,
+        reason: data.reason,
+      }))
+      const response = await dispatch(rejectedStudent(teacher))
+      if (response.meta.requestStatus === 'fulfilled') {
+        setLoading(false)
+        toast.success(t('Unaccepted successfully !'))
       }
     } catch (error) {
       toast.error(error as any)
@@ -147,16 +205,28 @@ const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = ({
         <Typography>
           {selected.length === 0 ? '' : `${selected.length} sinh viên được chọn`}
         </Typography>
-        <Button
-          color='primary'
-          variant='contained'
-          sx={{ mt: 3, mb: 2 }}
-          type='button'
-          disabled={loading || selected.length === 0}
-          onClick={handleAcceptStudent}
-        >
-          {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
-        </Button>
+        <Box>
+          <Button
+            color='secondary'
+            variant='contained'
+            sx={{ mt: 3, mb: 2, mr: 2 }}
+            type='button'
+            disabled={loading || selected.length === 0}
+            onClick={handleOpenReasonForm}
+          >
+            {loading ? <CircularProgress size={24} /> : `${t('Cancel accept')}`}
+          </Button>
+          <Button
+            color='primary'
+            variant='contained'
+            sx={{ mt: 3, mb: 2 }}
+            type='button'
+            disabled={loading || selected.length === 0}
+            onClick={handleAcceptStudent}
+          >
+            {loading ? <CircularProgress size={24} /> : `${t('Accept')}`}
+          </Button>
+        </Box>
       </Box>
       {listStudentWaitingAccepted && listStudentWaitingAccepted.length > 0 ? (
         <TableContainer component={Paper}>
@@ -243,6 +313,47 @@ const StudentNotAcceptedTable: React.FC<StudentNotAcceptedTableProps> = ({
       ) : (
         <NoData />
       )}
+
+      {/* Edit lecturer form */}
+      <Dialog open={openReasonForm} onClose={handleCloseReasonForm} maxWidth='sm' fullWidth>
+        <DialogTitle>{t('Reason')}</DialogTitle>
+        <DialogContent>
+          <Box sx={{ my: 2 }}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  label={t('Reason')}
+                  fullWidth
+                  type='text'
+                  {...register('reason')}
+                  error={Boolean(errors.reason)}
+                  helperText={t(`${errors.reason?.message ? errors.reason?.message : ''}`)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type='button'
+                  variant='outlined'
+                  color='secondary'
+                  disabled={loadingReject}
+                  onClick={handleCloseReasonForm}
+                >
+                  {loadingReject ? <CircularProgress size={24} /> : t('Cancel')}
+                </Button>
+                <Button
+                  type='button'
+                  variant='contained'
+                  sx={{ ml: 1 }}
+                  disabled={loadingReject}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  {loadingReject ? <CircularProgress size={24} /> : t('Confirm')}
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </Box>
   )
 }

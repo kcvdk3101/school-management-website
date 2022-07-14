@@ -30,11 +30,9 @@ const TeacherRank: React.FC<TeacherRankProps> = () => {
         if (response.data.length > 0) {
           let firstSevenEle = response.data.splice(0, 8)
           setTeachers(firstSevenEle)
-        } else {
-          toast.error('Cannot load data teacher')
         }
       } catch (error) {
-        toast.error('Cannot load data teacher')
+        // toast.error('Cannot load data teacher')
       } finally {
         setLoading(false)
       }

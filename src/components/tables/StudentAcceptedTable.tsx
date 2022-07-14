@@ -190,7 +190,7 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
       const response = await dispatch(rejectedStudent(teacher))
       if (response.meta.requestStatus === 'fulfilled') {
         setLoading(false)
-        toast.success('Unaccepted successfully')
+        toast.success(t('Unaccepted successfully !'))
       }
     } catch (error) {
       toast.error(error as any)
@@ -214,7 +214,7 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
       )
       if (response.meta.requestStatus === 'fulfilled') {
         setLoadingThirdGrade(false)
-        toast.success('Updated successfully')
+        toast.success(t('Update successfully !'))
       }
     } catch (error) {
       toast.error('Cannot update student grade')
@@ -366,7 +366,6 @@ const StudentAcceptedTable: React.FC<StudentAcceptedTableProps> = ({ listStudent
                   label={t('Third grade')}
                   fullWidth
                   type='number'
-                  defaultValue={listStudentAccepted[currentIndex].internshipThirdGrade}
                   {...register('internshipThirdGrade')}
                   error={Boolean(errors.internshipThirdGrade)}
                   helperText={t(

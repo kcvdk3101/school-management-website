@@ -225,7 +225,7 @@ const Students: React.FC<StudentsProps> = () => {
             await dispatch(reportStudent(academicYear))
             await dispatch(getStudents({ offset: 0, academicYear }))
             setSelectedFile(undefined)
-            toast.success('Save successfully')
+            toast.success(t('Save successfully'))
           } catch (error) {
             console.log(error)
           } finally {

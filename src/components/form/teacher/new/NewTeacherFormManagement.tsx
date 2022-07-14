@@ -94,7 +94,7 @@ const NewTeacherFormManagement: React.FC<NewTeacherFormManagementProps> = ({
     try {
       await dispatch(addNewTeacher(lectures))
       await dispatch(getAllTeachers({ offset, academicYear }))
-      toast.success('Add successfully!')
+      toast.success(t('Add successfully!'))
     } catch (error) {
       toast.error(error as Error)
     } finally {
